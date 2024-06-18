@@ -5,12 +5,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Text,
 } from "react-native";
 import { Input } from "@rneui/themed";
 import CustomButton from "@/src/components/custom-widgets/CustomButton";
 import { COLORS } from "@/src/constants/colors";
 import CustomText from "@/src/components/custom-widgets/CustomText";
 import { Formik } from "formik";
+import Icon from "react-native-vector-icons/Ionicons";
 
 //context API
 
@@ -170,30 +172,42 @@ const Login = () => {
                   )}
                 </View>
                 <CustomButton
-                  label="LOGIN"
+                  label="Login"
                   customStyle={styles.buttonStyle}
+                  customTextStyle={{
+                    fontFamily: "DMSansSemiBold",
+                    color: "#fff",
+                  }}
                   onPress={() => handleSubmit()}
                 />
-                {/* <CustomButton
-                  label="SIGN IN WITH GOOGLE"
-                  onPress={() =>
-                    onGoogleButtonPress().then(() =>
-                      console.log("Signed in with Google!")
-                    )
-                  }
+                <CustomButton
+                  label="Log in with Google"
+                  // onPress={() =>
+                  //   onGoogleButtonPress().then(() =>
+                  //     console.log("Signed in with Google!")
+                  //   )
+                  // }
                   customStyle={[
                     styles.buttonStyle,
-                    { backgroundColor: COLORS.pink },
+                    {
+                      borderWidth: 1,
+                      borderColor: "#2EB5FA",
+                      backgroundColor: COLORS.light,
+                    },
                   ]}
+                  customTextStyle={{
+                    color: COLORS.primary,
+                    fontFamily: "DMSansSemiBold",
+                  }}
                   icon={
                     <Icon
-                      style={{ fontSize: 20, color: "#fff" }}
-                      onPress={onGoogleButtonPress}
+                      style={{ fontSize: 20, color: COLORS.primary }}
+                      // onPress={onGoogleButtonPress}
                       name="logo-google"
                       size={40}
                     />
                   }
-                /> */}
+                />
                 <View style={styles.loginFooter}>
                   <CustomText
                     label="You don't have account yet?"
@@ -203,7 +217,7 @@ const Login = () => {
                     <CustomText
                       label="Sign Up"
                       customStyle={{
-                        color: COLORS.yellow,
+                        color: COLORS.primary,
                         textDecorationLine: "underline",
                       }}
                     />
@@ -253,11 +267,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     paddingVertical: 40,
     color: COLORS.title,
-    fontFamily: "DMSans-Black",
+    fontFamily: "DMSansSemiBold",
   },
   errorText: {
     fontSize: 13,
-    marginTop: -10,
+    marginTop: -25,
     marginLeft: "4.9%",
     marginBottom: 20,
     color: COLORS.error,

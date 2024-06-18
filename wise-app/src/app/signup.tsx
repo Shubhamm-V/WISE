@@ -12,6 +12,7 @@ import CustomButton from "@/src/components/custom-widgets/CustomButton";
 import CustomText from "@/src/components/custom-widgets/CustomText";
 import { COLORS } from "@/src/constants/colors";
 import { Formik } from "formik";
+import Icon from "react-native-vector-icons/Ionicons";
 
 import { object, string, ref } from "yup";
 
@@ -101,7 +102,7 @@ const SignUp = () => {
   };
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
-      <SafeAreaView style={{ width: "100%", height: "100%" }}>
+      <SafeAreaView style={{ flex: 1 }}>
         <Formik
           initialValues={{
             name: "",
@@ -204,19 +205,41 @@ const SignUp = () => {
                   )}
                 </View>
 
-                <CustomButton label="SIGN UP" onPress={() => handleSubmit()} />
-                {/* <CustomButton
-                  label="SIGN IN WITH GOOGLE"
-                  onPress={() => onGoogleButtonPress()}
-                  customStyle={{backgroundColor: COLORS.pink}}
+                <CustomButton
+                  label="Sign Up"
+                  customTextStyle={{
+                    fontFamily: "DMSansSemiBold",
+                    color: "#fff",
+                  }}
+                  onPress={() => handleSubmit()}
+                />
+                <CustomButton
+                  label="Log in with Google"
+                  // onPress={() =>
+                  //   onGoogleButtonPress().then(() =>
+                  //     console.log("Signed in with Google!")
+                  //   )
+                  // }
+                  customStyle={[
+                    {
+                      borderWidth: 1,
+                      borderColor: "#2EB5FA",
+                      backgroundColor: COLORS.light,
+                    },
+                  ]}
+                  customTextStyle={{
+                    color: COLORS.primary,
+                    fontFamily: "DMSansSemiBold",
+                  }}
                   icon={
                     <Icon
-                      style={{fontSize: 20, color: '#fff'}}
+                      style={{ fontSize: 20, color: COLORS.primary }}
+                      // onPress={onGoogleButtonPress}
                       name="logo-google"
                       size={40}
                     />
                   }
-                /> */}
+                />
                 <View style={styles.signupFooter}>
                   <CustomText
                     label="Already have an account?"
@@ -226,7 +249,7 @@ const SignUp = () => {
                     <CustomText
                       label="Sign In"
                       customStyle={{
-                        color: COLORS.yellow,
+                        color: COLORS.primary,
                         textDecorationLine: "underline",
                       }}
                     />
@@ -246,6 +269,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 25,
   },
   inputStyle: {
     padding: 5,
@@ -272,7 +296,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     paddingVertical: 40,
     color: COLORS.title,
-    fontFamily: "DMSans-Black",
+    fontFamily: "DMSansBlack",
   },
   errorText: {
     fontSize: 13,
