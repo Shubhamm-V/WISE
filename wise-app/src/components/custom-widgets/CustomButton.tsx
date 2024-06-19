@@ -14,7 +14,7 @@ const CustomButton = ({
       {icon && icon}
       <CustomText
         label={label}
-        customStyle={[customTextStyle, customTextStyle]}
+        customStyle={[{ color: COLORS.white }, customTextStyle]}
       />
     </TouchableOpacity>
   );
@@ -32,11 +32,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
     width: "90%",
-  },
-  buttonText: {
-    textAlign: "center",
-    fontWeight: "700",
-    fontSize: 16,
-    color: COLORS.white,
   },
 });
