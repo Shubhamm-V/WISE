@@ -5,6 +5,10 @@ import { AuthContextProvider, useAuth } from "../context/authContext";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { FONTS } from "../constants/fonts";
+import { Provider } from "react-redux";
+import { store } from "../redux/store";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { getAuth } from "firebase/auth";
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -15,6 +19,13 @@ const MainLayout = () => {
   const segments = useSegments();
   const [fontsLoaded, fontError] = useFonts(FONTS);
   const [appIsReady, setAppIsReady] = useState(false);
+  const auth = getAuth();
+
+  const checkEmailVerified = async () => {
+    const user: any = auth.currentUser;
+    await user.reload(); // Refresh user data
+    return user.emailVerified;
+  };
 
   useEffect(() => {
     // Initialize the app
@@ -39,13 +50,20 @@ const MainLayout = () => {
 
     const inApp = segments[0] === "(app)";
 
-    if (isAuthenticated && !inApp) {
-      // Redirect to home
-      router.replace("home");
-    } else if (!isAuthenticated) {
-      // Redirect to login
-      router.replace("login");
-    }
+    const handleAuthRedirects = async () => {
+      if (isAuthenticated) {
+        const isEmailVerified = await checkEmailVerified();
+        if (isEmailVerified && !inApp) {
+          router.replace("home");
+        } else if (!isEmailVerified && !inApp) {
+          router.replace("email-verification");
+        }
+      } else {
+        router.replace("login");
+      }
+    };
+
+    handleAuthRedirects();
   }, [isAuthenticated, appIsReady]);
 
   const onLayoutRootView = useCallback(async () => {
@@ -60,7 +78,15 @@ const MainLayout = () => {
 
   return (
     <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
-      <Slot />
+      <Provider store={store}>
+        {segments[0] === "login" || segments[0] === "signup" ? (
+          <SafeAreaView>
+            <Slot />
+          </SafeAreaView>
+        ) : (
+          <Slot />
+        )}
+      </Provider>
     </View>
   );
 };
@@ -74,5 +100,3 @@ const RootLayout = () => {
 };
 
 export default RootLayout;
-
-const styles = StyleSheet.create({});

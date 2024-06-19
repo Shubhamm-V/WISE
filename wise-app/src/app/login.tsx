@@ -112,11 +112,15 @@ const Login = () => {
   };
 
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      contentContainerStyle={styles.container}
-    >
-      <SafeAreaView style={{ width: "100%", height: "100%" }}>
+    <SafeAreaView>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+        contentContainerStyle={styles.container}
+      >
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={loginSchema}
@@ -227,14 +231,15 @@ const Login = () => {
             </>
           )}
         </Formik>
-      </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: "100%",
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -254,8 +259,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     color: COLORS.text,
-    paddingLeft: "4.8%",
-    paddingBottom: 5,
+    paddingLeft: "5.5%",
   },
   loginFooter: {
     gap: 5,
