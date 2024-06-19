@@ -3,14 +3,14 @@ import React from "react";
 
 type Props = {};
 
-const index = (props: Props) => {
+const _layout = (props: Props) => {
   return (
     <View>
-      <Text>index</Text>
+      <Text>_layout</Text>
     </View>
   );
 };
 
-export default index;
+export default _layout;
 
 const styles = StyleSheet.create({});

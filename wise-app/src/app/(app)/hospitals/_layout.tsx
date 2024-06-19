@@ -1,14 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-const temp = () => {
+type Props = {};
+
+const _layout = (props: Props) => {
   return (
     <View>
-      <Text>temp</Text>
+      <Text>_layout</Text>
     </View>
   );
 };
 
-export default temp;
+export default _layout;
 
 const styles = StyleSheet.create({});
