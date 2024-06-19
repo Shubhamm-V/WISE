@@ -7,13 +7,15 @@ import {
 } from "react";
 import {
   createUserWithEmailAndPassword,
+  getAuth,
   onAuthStateChanged,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
 import { auth, db } from "../../firebaseConfig";
-
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { Alert } from "react-native";
 interface AuthContextProps {
   user: any;
   isAuthenticated: boolean;
@@ -88,6 +90,12 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
         email,
         password
       );
+
+      const currentAuth: any = getAuth();
+      sendEmailVerification(currentAuth.currentUser).then(() => {
+        // Email verification sent!
+        // ...
+      });
       console.log("Response user: ", response?.user);
 
       await setDoc(doc(db, "users", response?.user?.uid), {

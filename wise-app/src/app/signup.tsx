@@ -102,164 +102,159 @@ const SignUp = () => {
   };
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
-      <SafeAreaView style={{ flex: 1 }}>
-        <Formik
-          initialValues={{
-            name: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-          }}
-          validationSchema={signupSchema}
-          onSubmit={(values) => {
-            handleSignupSubmit(values);
-          }}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            isValid,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            handleReset,
-            /* and other goodies */
-          }) => (
-            <>
-              <View style={[styles.container]}>
-                <CustomText
-                  label="Create An Account"
-                  customStyle={styles.header}
+      <Formik
+        initialValues={{
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        }}
+        validationSchema={signupSchema}
+        onSubmit={(values) => {
+          handleSignupSubmit(values);
+        }}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          isValid,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          handleReset,
+          /* and other goodies */
+        }) => (
+          <>
+            <View style={[styles.container]}>
+              <CustomText
+                label="Create An Account"
+                customStyle={styles.header}
+              />
+              <View style={{ width: "100%" }}>
+                <CustomText label="Full Name" customStyle={styles.inputText} />
+                <Input
+                  placeholder="Enter full name"
+                  value={values.name}
+                  inputContainerStyle={styles.inputStyle}
+                  onChangeText={handleChange("name")}
                 />
-                <View style={{ width: "100%" }}>
+                {touched.name && errors.name && (
                   <CustomText
-                    label="Full Name"
-                    customStyle={styles.inputText}
+                    customStyle={styles.errorText}
+                    label={errors.name}
                   />
-                  <Input
-                    placeholder="Enter full name"
-                    value={values.name}
-                    inputContainerStyle={styles.inputStyle}
-                    onChangeText={handleChange("name")}
-                  />
-                  {touched.name && errors.name && (
-                    <CustomText
-                      customStyle={styles.errorText}
-                      label={errors.name}
-                    />
-                  )}
-                </View>
-
-                <View style={{ width: "100%" }}>
-                  <CustomText label="Email" customStyle={styles.inputText} />
-                  <Input
-                    placeholder="Enter email"
-                    value={values.email}
-                    inputContainerStyle={styles.inputStyle}
-                    style={{ borderBottomWidth: 0 }}
-                    onChangeText={handleChange("email")}
-                  />
-                  {touched.email && errors.email && (
-                    <CustomText
-                      customStyle={styles.errorText}
-                      label={errors.email}
-                    />
-                  )}
-                </View>
-                <View style={{ width: "100%" }}>
-                  <CustomText label="Password" customStyle={styles.inputText} />
-
-                  <Input
-                    placeholder="Enter password"
-                    value={values.password}
-                    inputContainerStyle={styles.inputStyle}
-                    onChangeText={handleChange("password")}
-                    secureTextEntry
-                  />
-                  {touched.password && errors.password && (
-                    <CustomText
-                      customStyle={styles.errorText}
-                      label={errors.password}
-                    />
-                  )}
-                </View>
-                <View style={{ width: "100%" }}>
-                  <CustomText
-                    label="Confirm Password"
-                    customStyle={styles.inputText}
-                  />
-
-                  <Input
-                    placeholder="Enter confirm password"
-                    value={values.confirmPassword}
-                    inputContainerStyle={styles.inputStyle}
-                    onChangeText={handleChange("confirmPassword")}
-                    secureTextEntry
-                  />
-                  {touched.confirmPassword && errors.confirmPassword && (
-                    <CustomText
-                      customStyle={styles.errorText}
-                      label={errors.confirmPassword}
-                    />
-                  )}
-                </View>
-
-                <CustomButton
-                  label="Sign Up"
-                  customTextStyle={{
-                    fontFamily: "DMSansSemiBold",
-                    color: "#fff",
-                  }}
-                  onPress={() => handleSubmit()}
-                />
-                <CustomButton
-                  label="Log in with Google"
-                  // onPress={() =>
-                  //   onGoogleButtonPress().then(() =>
-                  //     console.log("Signed in with Google!")
-                  //   )
-                  // }
-                  customStyle={[
-                    {
-                      borderWidth: 1,
-                      borderColor: "#2EB5FA",
-                      backgroundColor: COLORS.light,
-                    },
-                  ]}
-                  customTextStyle={{
-                    color: COLORS.primary,
-                    fontFamily: "DMSansSemiBold",
-                  }}
-                  icon={
-                    <Icon
-                      style={{ fontSize: 20, color: COLORS.primary }}
-                      // onPress={onGoogleButtonPress}
-                      name="logo-google"
-                      size={40}
-                    />
-                  }
-                />
-                <View style={styles.signupFooter}>
-                  <CustomText
-                    label="Already have an account?"
-                    customStyle={{ color: COLORS.text }}
-                  />
-                  <TouchableOpacity onPress={() => router.push("/login")}>
-                    <CustomText
-                      label="Sign In"
-                      customStyle={{
-                        color: COLORS.primary,
-                        textDecorationLine: "underline",
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
+                )}
               </View>
-            </>
-          )}
-        </Formik>
-      </SafeAreaView>
+
+              <View style={{ width: "100%" }}>
+                <CustomText label="Email" customStyle={styles.inputText} />
+                <Input
+                  placeholder="Enter email"
+                  value={values.email}
+                  inputContainerStyle={styles.inputStyle}
+                  style={{ borderBottomWidth: 0 }}
+                  onChangeText={handleChange("email")}
+                />
+                {touched.email && errors.email && (
+                  <CustomText
+                    customStyle={styles.errorText}
+                    label={errors.email}
+                  />
+                )}
+              </View>
+              <View style={{ width: "100%" }}>
+                <CustomText label="Password" customStyle={styles.inputText} />
+
+                <Input
+                  placeholder="Enter password"
+                  value={values.password}
+                  inputContainerStyle={styles.inputStyle}
+                  onChangeText={handleChange("password")}
+                  secureTextEntry
+                />
+                {touched.password && errors.password && (
+                  <CustomText
+                    customStyle={styles.errorText}
+                    label={errors.password}
+                  />
+                )}
+              </View>
+              <View style={{ width: "100%" }}>
+                <CustomText
+                  label="Confirm Password"
+                  customStyle={styles.inputText}
+                />
+
+                <Input
+                  placeholder="Enter confirm password"
+                  value={values.confirmPassword}
+                  inputContainerStyle={styles.inputStyle}
+                  onChangeText={handleChange("confirmPassword")}
+                  secureTextEntry
+                />
+                {touched.confirmPassword && errors.confirmPassword && (
+                  <CustomText
+                    customStyle={styles.errorText}
+                    label={errors.confirmPassword}
+                  />
+                )}
+              </View>
+
+              <CustomButton
+                label="Sign Up"
+                customTextStyle={{
+                  fontFamily: "DMSansSemiBold",
+                  color: "#fff",
+                }}
+                onPress={() => handleSubmit()}
+              />
+              <CustomButton
+                label="Log in with Google"
+                // onPress={() =>
+                //   onGoogleButtonPress().then(() =>
+                //     console.log("Signed in with Google!")
+                //   )
+                // }
+                customStyle={[
+                  {
+                    borderWidth: 1,
+                    borderColor: "#2EB5FA",
+                    backgroundColor: COLORS.light,
+                  },
+                ]}
+                customTextStyle={{
+                  color: COLORS.primary,
+                  fontFamily: "DMSansSemiBold",
+                }}
+                icon={
+                  <Icon
+                    style={{ fontSize: 20, color: COLORS.primary }}
+                    // onPress={onGoogleButtonPress}
+                    name="logo-google"
+                    size={40}
+                  />
+                }
+              />
+              <View style={styles.signupFooter}>
+                <CustomText
+                  label="Already have an account?"
+                  customStyle={{ color: COLORS.text }}
+                />
+                <TouchableOpacity onPress={() => router.push("/login")}>
+                  <CustomText
+                    label="Sign In"
+                    customStyle={{
+                      color: COLORS.primary,
+                      textDecorationLine: "underline",
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </>
+        )}
+      </Formik>
     </ScrollView>
   );
 };
@@ -269,7 +264,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 25,
   },
   inputStyle: {
     padding: 5,
