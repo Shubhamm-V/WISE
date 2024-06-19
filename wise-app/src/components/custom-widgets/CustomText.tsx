@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { COLORS } from "@/src/constants/colors";
 
 type TextType = {
   label: string;
@@ -12,6 +13,7 @@ const CustomText = ({ label, customStyle }: TextType) => {
       style={[
         {
           fontFamily: "DMSansMedium",
+          color: COLORS.dark,
         },
         customStyle,
       ]}
