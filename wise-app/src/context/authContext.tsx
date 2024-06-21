@@ -76,7 +76,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       console.log("Logging out");
       await signOut(auth);
       return { success: true };
-      // Implement logout logic here
     } catch (err: any) {
       console.error(err);
       return { success: false, msg: err.message, error: err };
@@ -94,7 +93,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       const currentAuth: any = getAuth();
       sendEmailVerification(currentAuth.currentUser).then(() => {
         // Email verification sent!
-        // ...
       });
       console.log("Response user: ", response?.user);
 

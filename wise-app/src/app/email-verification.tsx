@@ -52,7 +52,13 @@ const EmailVerificationScreen = () => {
         label=" Please verify your email. Check your inbox and click on the verification link."
         customStyle={{ textAlign: "center", paddingVertical: 20 }}
       />
-      <Pressable onPress={checkVerificationStatus}>
+      <Pressable
+        onPress={async () => {
+          const isVerified = await checkEmailVerified();
+          if (isVerified) Alert.alert("Email is Verified");
+          else Alert.alert("Email is not verified yet");
+        }}
+      >
         <CustomText
           label="Check Verification Status"
           customStyle={{
