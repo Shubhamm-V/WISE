@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StatusBar, StyleSheet, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Slot, useRouter, useSegments } from "expo-router";
 import { AuthContextProvider, useAuth } from "../context/authContext";
@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import { store } from "../redux/store";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAuth } from "firebase/auth";
+import { COLORS } from "../constants/colors";
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -28,10 +29,9 @@ const MainLayout = () => {
   };
 
   useEffect(() => {
-    // Initialize the app
     async function prepare() {
       try {
-        // Check if fonts are loaded
+        // Checking if fonts are loaded
         if (fontsLoaded || fontError) {
           await SplashScreen.hideAsync();
           setAppIsReady(true);
@@ -45,7 +45,6 @@ const MainLayout = () => {
   }, [fontsLoaded, fontError]);
 
   useEffect(() => {
-    // Check user is authenticated or not
     if (typeof isAuthenticated === "undefined" || !appIsReady) return;
 
     const inApp = segments[0] === "(app)";
@@ -95,6 +94,7 @@ const RootLayout = () => {
   return (
     <AuthContextProvider>
       <MainLayout />
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.light} />
     </AuthContextProvider>
   );
 };
