@@ -27,6 +27,7 @@ import { object, string } from "yup";
 import { useDispatch } from "react-redux";
 import { router } from "expo-router";
 import { useAuth } from "../context/authContext";
+import { googleLogin, signInWithGoogle } from "../context/googleSignIn";
 
 // GoogleSignin.configure({
 //   webClientId:
@@ -54,56 +55,7 @@ type User = {
 };
 
 const Login = () => {
-  const [initializing, setInitializing] = useState(true);
   const { login } = useAuth();
-  // const dispatch = useDispatch();
-  // const onGoogleButtonPress = async () => {
-  //   try {
-  //     // Check if your device supports Google Play
-  //     await GoogleSignin.hasPlayServices({
-  //       showPlayServicesUpdateDialog: true,
-  //     });
-  //     // Get the users ID token
-  //     const { idToken } = await GoogleSignin.signIn();
-
-  //     // Create a Google credential with the token
-  //     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-  //     // Sign-in the user with the credential
-  //     return auth().signInWithCredential(googleCredential);
-  //   } catch (error: any) {
-  //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-  //       // user cancelled the login flow
-  //     } else if (error.code === statusCodes.IN_PROGRESS) {
-  //       // operation (e.g. sign in) is in progress already
-  //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-  //       // play services not available or outdated
-  //     } else {
-  //       // some other error happened
-  //     }
-  //   }
-  // };
-
-  function onAuthStateChanged(user: any) {
-    if (user) {
-      const { displayName: name, email, photoURL } = user;
-      // dispatch(
-      //   setGoogleLoginUser({ name, email, photoURL, isGoogleLoggedIn: true })
-      // );
-      // dispatch(setProfileData({ name, email, photoURL }));
-
-      // Snackbar.show({
-      //   text: "Login Success",
-      //   duration: Snackbar.LENGTH_SHORT,
-      // });
-      if (initializing) setInitializing(false);
-    }
-  }
-
-  // useEffect(() => {
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
 
   const handleLoginSubmit = async (values: User) => {
     const { email, password } = values;
@@ -111,6 +63,11 @@ const Login = () => {
     if (!response.success) console.log(response.msg);
   };
 
+  const loginGooglePress = async () => {
+    googleLogin();
+    console.log("Started");
+    // const res: any = await signInWithGoogle();
+  };
   return (
     <SafeAreaView>
       <ScrollView
@@ -186,11 +143,7 @@ const Login = () => {
                 />
                 <CustomButton
                   label="Log in with Google"
-                  // onPress={() =>
-                  //   onGoogleButtonPress().then(() =>
-                  //     console.log("Signed in with Google!")
-                  //   )
-                  // }
+                  onPress={loginGooglePress}
                   customStyle={[
                     styles.buttonStyle,
                     {
@@ -206,7 +159,6 @@ const Login = () => {
                   icon={
                     <Icon
                       style={{ fontSize: 20, color: COLORS.primary }}
-                      // onPress={onGoogleButtonPress}
                       name="logo-google"
                       size={40}
                     />
