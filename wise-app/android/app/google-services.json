@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "999945649944",
+    "project_id": "women-health-empowerment",
+    "storage_bucket": "women-health-empowerment.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999945649944:android:295418230acca611dd286d",
+        "android_client_info": {
+          "package_name": "com.wise_women_heath.wise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "999945649944-8he22f9ddebl6n1qbet3uc8lr5hgatdu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCljsyWnLmmcJb-Pu4PEZysnTTD1JyFHT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999945649944-8he22f9ddebl6n1qbet3uc8lr5hgatdu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
