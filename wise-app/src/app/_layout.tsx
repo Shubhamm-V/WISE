@@ -10,12 +10,12 @@ import { store } from "../redux/store";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAuth } from "firebase/auth";
 import { COLORS } from "../constants/colors";
-
+import "expo-dev-client";
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
 
 const MainLayout = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const router = useRouter();
   const segments = useSegments();
   const [fontsLoaded, fontError] = useFonts(FONTS);
@@ -51,11 +51,11 @@ const MainLayout = () => {
 
     const handleAuthRedirects = async () => {
       if (isAuthenticated) {
-        const isEmailVerified = await checkEmailVerified();
-        if (isEmailVerified && !inApp) {
+        // const isEmailVerified = await checkEmailVerified();
+        if (!inApp) {
           router.replace("home");
-        } else if (!isEmailVerified && !inApp) {
-          router.replace("email-verification");
+        } else if (!inApp) {
+          // router.replace("email-verification");
         }
       } else {
         router.replace("login");
@@ -78,13 +78,7 @@ const MainLayout = () => {
   return (
     <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <Provider store={store}>
-        {segments[0] === "login" || segments[0] === "signup" ? (
-          <SafeAreaView>
-            <Slot />
-          </SafeAreaView>
-        ) : (
-          <Slot />
-        )}
+        <Slot />
       </Provider>
     </View>
   );

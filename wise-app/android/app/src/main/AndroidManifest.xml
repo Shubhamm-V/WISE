@@ -25,7 +25,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
-        <data android:scheme="wise.women.health"/>
+        <data android:scheme="com.shubhammv.wiseapp"/>
         <data android:scheme="exp+wise-app"/>
       </intent-filter>
     </activity>

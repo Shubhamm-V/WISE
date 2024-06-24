@@ -13,7 +13,9 @@ import { COLORS } from "@/src/constants/colors";
 import CustomText from "@/src/components/custom-widgets/CustomText";
 import { Formik } from "formik";
 import Icon from "react-native-vector-icons/Ionicons";
-
+import auth from "@react-native-firebase/auth";
+import { db } from "@/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 //context API
 
 import { object, string } from "yup";
@@ -23,20 +25,16 @@ import { object, string } from "yup";
 //   statusCodes,
 // } from "@react-native-google-signin/google-signin";
 
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+
 // import auth from "@react-native-firebase/auth";
 import { useDispatch } from "react-redux";
 import { router } from "expo-router";
 import { useAuth } from "../context/authContext";
-import { googleLogin, signInWithGoogle } from "../context/googleSignIn";
-
-// GoogleSignin.configure({
-//   webClientId:
-//     "253538465352-shfd8ienlql9h2irh6co898j24p1a93q.apps.googleusercontent.com",
-// });
-
-// import { setGoogleLoginUser } from "../../redux/slices/userSlice";
-// import axios from "axios";
-// import { setProfileData } from "../../redux/slices/profileSlice";
 
 let loginSchema = object({
   email: string()
@@ -56,6 +54,56 @@ type User = {
 
 const Login = () => {
   const { login } = useAuth();
+  const [initializing, setInitializing] = useState(true);
+  const { setUser, setIsAuthenticated, user, setIsGoogleLogin } = useAuth();
+
+  GoogleSignin.configure({
+    webClientId:
+      "999945649944-8he22f9ddebl6n1qbet3uc8lr5hgatdu.apps.googleusercontent.com",
+  });
+
+  function onAuthStateChanged(user: any) {
+    if (user) {
+      const { displayName: name, email, uid } = user;
+      setUser({ ...user, name, email, uid });
+      setIsGoogleLogin(true);
+      setIsAuthenticated(true);
+    }
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+  ``;
+  if (initializing) return null;
+
+  const setUserData = async (name: string, email: string, uid: string) => {
+    await setDoc(doc(db, "users", uid), {
+      name,
+      email,
+      userId: uid,
+    });
+  };
+  async function onGoogleButtonPress() {
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    const { idToken } = await GoogleSignin.signIn();
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+    const user_sign_in = auth().signInWithCredential(googleCredential);
+    user_sign_in
+      .then((response: any) => {
+        const { displayName: name, email, uid } = response.user;
+        if (response?.additionalUserInfo?.isNewUser === true) {
+          setUserData(name, email, uid);
+        }
+        setUser({ ...user, name, userId: uid });
+        setIsAuthenticated(true);
+        setIsGoogleLogin(true);
+      })
+      .catch((error) => console.log("ERRRORRR :: ", error));
+  }
 
   const handleLoginSubmit = async (values: User) => {
     const { email, password } = values;
@@ -63,11 +111,6 @@ const Login = () => {
     if (!response.success) console.log(response.msg);
   };
 
-  const loginGooglePress = async () => {
-    googleLogin();
-    console.log("Started");
-    // const res: any = await signInWithGoogle();
-  };
   return (
     <SafeAreaView>
       <ScrollView
@@ -143,7 +186,7 @@ const Login = () => {
                 />
                 <CustomButton
                   label="Log in with Google"
-                  onPress={loginGooglePress}
+                  onPress={onGoogleButtonPress}
                   customStyle={[
                     styles.buttonStyle,
                     {

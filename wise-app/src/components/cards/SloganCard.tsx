@@ -14,7 +14,7 @@ const SloganCard = () => {
       end={{ x: 1, y: 1 }}
       style={styles.card}
     >
-      <View style={{ width: "75%" }}>
+      <View style={{ width: "68%" }}>
         <CustomText
           label="Quote of the Day"
           customStyle={{ fontSize: 18, fontFamily: "DMSansBold" }}
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   card: {
     shadowOffset: { width: 0, height: 2 },
     elevation: 5,
-    marginTop: 5,
+    marginTop: 12,
     borderRadius: 8,
     shadowRadius: 0.84,
     shadowOpacity: 0.15,
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     paddingHorizontal: 13,
-    paddingVertical: 20,
+    paddingVertical: 15,
     backgroundColor: COLORS.light,
     justifyContent: "space-between",
   },

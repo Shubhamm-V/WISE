@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import CustomButton from "@/src/components/custom-widgets/CustomButton";
 import { useAuth } from "@/src/context/authContext";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -12,6 +12,9 @@ type Props = {};
 
 const Header = (props: Props) => {
   const { logout, user } = useAuth();
+  useEffect(() => {
+    console.log("MY name ", user?.name);
+  }, []);
   const handleLogout = async () => {
     await logout();
   };
@@ -20,19 +23,15 @@ const Header = (props: Props) => {
       <View style={styles.header}>
         <View>
           <CustomText label="Hello," customStyle={styles.textStyle} />
-          <CustomText label={user.name} customStyle={styles.headerTextStyle} />
+          <CustomText label={user?.name} customStyle={styles.headerTextStyle} />
         </View>
-        <TouchableOpacity
-        // onPress={() => onDisplayNotification()}
-        >
+        <TouchableOpacity onPress={handleLogout}>
           <Image
             style={styles.profileImage}
             source={require("../../../assets/images/illustrations/profile1.png")}
           />
         </TouchableOpacity>
       </View>
-
-      <CustomButton label="Logout" onPress={handleLogout} />
     </SafeAreaView>
   );
 };
@@ -46,7 +45,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: "100%",
-    padding: 12,
+    paddingHorizontal: 12,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
