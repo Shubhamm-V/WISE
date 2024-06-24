@@ -13,15 +13,20 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import googleAuth from "@react-native-firebase/auth";
 import { auth, db } from "../../firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { Alert } from "react-native";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 interface AuthContextProps {
   user: any;
   isAuthenticated: boolean;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  setUser: React.Dispatch<React.SetStateAction<any>>;
   login: (email: string, password: string) => Promise<{}>;
   logout: () => Promise<{}>;
   signup: (email: string, password: string, name: string) => Promise<{}>;
+  isGoogleLogin: boolean;
+  setIsGoogleLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -37,6 +42,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
 }) => {
   const [user, setUser] = useState<any>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isGoogleLogin, setIsGoogleLogin] = useState<boolean>(false);
 
   useEffect(() => {
     // Simulate authentication check
@@ -72,9 +78,19 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   };
 
   const logout = async () => {
+    console.log("USER : ", user);
+    console.log("isGOogle login ", isGoogleLogin);
+    console.log("isAuthenticated : ", isAuthenticated);
+
     try {
-      console.log("Logging out");
-      await signOut(auth);
+      if (isGoogleLogin) {
+        await GoogleSignin.revokeAccess();
+        await googleAuth().signOut();
+      } else {
+        await signOut(auth);
+      }
+      setUser(null);
+      setIsAuthenticated(false);
       return { success: true };
     } catch (err: any) {
       console.error(err);
@@ -94,8 +110,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       sendEmailVerification(currentAuth.currentUser).then(() => {
         // Email verification sent!
       });
-      console.log("Response user: ", response?.user);
-
       await setDoc(doc(db, "users", response?.user?.uid), {
         name,
         email,
@@ -119,7 +133,17 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, signup, logout }}
+      value={{
+        user,
+        isAuthenticated,
+        setIsAuthenticated,
+        setUser,
+        login,
+        signup,
+        logout,
+        isGoogleLogin,
+        setIsGoogleLogin,
+      }}
     >
       {children}
     </AuthContext.Provider>

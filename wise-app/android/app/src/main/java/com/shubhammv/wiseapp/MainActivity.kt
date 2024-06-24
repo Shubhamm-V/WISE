@@ -1,4 +1,4 @@
-package wise.women.health
+package com.shubhammv.wiseapp
 
 import android.os.Build
 import android.os.Bundle

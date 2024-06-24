@@ -18,6 +18,14 @@ import { object, string, ref } from "yup";
 
 import { router } from "expo-router";
 import { useAuth } from "../context/authContext";
+import auth from "@react-native-firebase/auth";
+import { db } from "@/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 
 let signupSchema = object({
   name: string()
@@ -47,50 +55,50 @@ type User = {
 
 const SignUp = () => {
   const [initializing, setInitializing] = useState(true);
-  const { signup } = useAuth();
-  // const dispatch = useDispatch();
 
-  // const onGoogleButtonPress = async () => {
-  //   try {
-  //     // Check if your device supports Google Play
-  //     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-  //     // Get the users ID token
-  //     const {idToken} = await GoogleSignin.signIn();
+  const { signup, setUser, setIsAuthenticated, user, setIsGoogleLogin } =
+    useAuth();
 
-  //     // Create a Google credential with the token
-  //     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+  GoogleSignin.configure({
+    webClientId:
+      "999945649944-8he22f9ddebl6n1qbet3uc8lr5hgatdu.apps.googleusercontent.com",
+  });
 
-  //     // Sign-in the user with the credential
-  //     return auth().signInWithCredential(googleCredential);
-  //   } catch (error: any) {
-  //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-  //       // user cancelled the login flow
-  //     } else if (error.code === statusCodes.IN_PROGRESS) {
-  //       // operation (e.g. sign in) is in progress already
-  //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-  //       // play services not available or outdated
-  //     } else {
-  //       // some other error happened
-  //     }
-  //   }
-  // };
+  function onAuthStateChanged(user: any) {
+    if (user) {
+      const { displayName: name, email, uid } = user;
+      setUser({ ...user, name, email, uid });
+      setIsGoogleLogin(true);
+      setIsAuthenticated(true);
+    }
+    if (initializing) setInitializing(false);
+  }
 
-  // function onAuthStateChanged(user: any) {
-  //   if (user) {
-  //     const {displayName: name, email, photoURL} = user;
-  //     dispatch(
-  //       setGoogleLoginUser({name, email, photoURL, isGoogleLoggedIn: true}),
-  //     );
-  //     setIsLoggedIn(true);
+  const setUserData = async (name: string, email: string, uid: string) => {
+    await setDoc(doc(db, "users", uid), {
+      name,
+      email,
+      userId: uid,
+    });
+  };
+  async function onGoogleButtonPress() {
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    const { idToken } = await GoogleSignin.signIn();
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
-  //     if (initializing) setInitializing(false);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
+    const user_sign_in = auth().signInWithCredential(googleCredential);
+    user_sign_in
+      .then((response: any) => {
+        const { displayName: name, email, uid } = response.user;
+        if (response?.additionalUserInfo?.isNewUser === true) {
+          setUserData(name, email, uid);
+        }
+        setUser({ ...user, name, userId: uid });
+        setIsAuthenticated(true);
+        setIsGoogleLogin(true);
+      })
+      .catch((error) => console.log("ERRRORRR :: ", error));
+  }
 
   const handleSignupSubmit = async (values: User) => {
     const { email, password, name } = values;
@@ -211,11 +219,7 @@ const SignUp = () => {
               />
               <CustomButton
                 label="Log in with Google"
-                // onPress={() =>
-                //   onGoogleButtonPress().then(() =>
-                //     console.log("Signed in with Google!")
-                //   )
-                // }
+                onPress={onGoogleButtonPress}
                 customStyle={[
                   {
                     borderWidth: 1,
