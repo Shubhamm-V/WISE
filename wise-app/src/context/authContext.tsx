@@ -6,6 +6,7 @@ import {
   ReactNode,
 } from "react";
 import {
+  AuthError,
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
@@ -17,6 +18,7 @@ import googleAuth from "@react-native-firebase/auth";
 import { auth, db } from "../../firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { Alert } from "react-native";
 interface AuthContextProps {
   user: any;
   isAuthenticated: boolean;
@@ -71,19 +73,19 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log("RESPONSE : ", response);
       return { success: true };
-    } catch (err) {
-      console.error(err);
-      return { success: false, msg: err };
+    } catch (err: any) {
+      return { success: false, msg: err.message };
     }
   };
 
   const logout = async () => {
     console.log("USER : ", user);
-    console.log("isGOogle login ", isGoogleLogin);
+    console.log("isGoogle login ", isGoogleLogin);
     console.log("isAuthenticated : ", isAuthenticated);
 
     try {
       if (isGoogleLogin) {
+        setIsGoogleLogin(false);
         await GoogleSignin.revokeAccess();
         await googleAuth().signOut();
       } else {
@@ -93,7 +95,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       setIsAuthenticated(false);
       return { success: true };
     } catch (err: any) {
-      console.error(err);
+      let msg = err.message;
       return { success: false, msg: err.message, error: err };
     }
   };
@@ -123,7 +125,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     } catch (err: any) {
       let msg = err.message;
       if (msg.includes("(auth/email-already-in-use)"))
-        msg = "This email is already in use";
+        Alert.alert("Email is already in use");
       return {
         success: false,
         msg: err.message,

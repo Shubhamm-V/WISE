@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Text,
+  Alert,
 } from "react-native";
 import { Input } from "@rneui/themed";
 import CustomButton from "@/src/components/custom-widgets/CustomButton";
@@ -108,7 +109,12 @@ const Login = () => {
   const handleLoginSubmit = async (values: User) => {
     const { email, password } = values;
     const response: any = await login(email, password);
-    if (!response.success) console.log(response.msg);
+    if (!response.success) {
+      let { msg } = response;
+      console.log(response.message);
+      if (msg && !msg.includes("(auth/invalid-credential)"))
+        Alert.alert("Invalid email or passwords");
+    }
   };
 
   return (

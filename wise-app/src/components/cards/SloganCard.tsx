@@ -9,7 +9,7 @@ import { color } from "@rneui/base";
 const SloganCard = () => {
   return (
     <LinearGradient
-      colors={["#D6F0FD", "#E6F4FA", COLORS.light]}
+      colors={["#E0F2F1", COLORS.light]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.card}
@@ -32,7 +32,7 @@ const SloganCard = () => {
       >
         <Image
           style={styles.image}
-          source={require("../../../assets/images/illustrations/image.png")}
+          source={require("../../../assets/images/illustrations/slogan-women.png")}
         />
       </View>
     </LinearGradient>

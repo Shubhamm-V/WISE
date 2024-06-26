@@ -79,6 +79,7 @@ const MainLayout = () => {
     <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <Provider store={store}>
         <Slot />
+        <StatusBar barStyle="dark-content" backgroundColor={COLORS.light} />
       </Provider>
     </View>
   );
@@ -88,7 +89,6 @@ const RootLayout = () => {
   return (
     <AuthContextProvider>
       <MainLayout />
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.light} />
     </AuthContextProvider>
   );
 };
