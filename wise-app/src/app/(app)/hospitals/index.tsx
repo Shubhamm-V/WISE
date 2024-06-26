@@ -1,16 +1,17 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import HospitalCard from "@/src/components/cards/HospitalCard";
 
 type Props = {};
 
-const index = (props: Props) => {
+const NearByHospitals = (props: Props) => {
   return (
     <View>
-      <Text>index</Text>
+      <HospitalCard />
     </View>
   );
 };
 
-export default index;
+export default NearByHospitals;
 
 const styles = StyleSheet.create({});
