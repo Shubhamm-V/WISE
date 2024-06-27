@@ -26,7 +26,7 @@ const TrackCards = () => {
             <View style={{ width: "38%" }}>
               <Image
                 style={styles.image}
-                source={require("../../../assets/images/illustrations/water-intake/image.png")}
+                source={require("../../../assets/images/illustrations/water-intake/card-image.png")}
               />
             </View>
             <View style={{ width: "51%", flexDirection: "column" }}>
