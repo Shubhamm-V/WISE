@@ -26,24 +26,24 @@ const HospitalCard: React.FC<ChildProps> = ({ hospitalData }) => {
       </View>
 
       <Divider />
-      <View style={styles.contactHeader}>
+      <View style={styles.hospitalLabel}>
         <CustomText label="Address" customStyle={styles.infoLabel} />
         <CustomText label={address} customStyle={styles.infoText} />
       </View>
 
       <Divider />
-      <View style={styles.contactHeader}>
+      <View style={styles.hospitalLabel}>
         <CustomText label="Doctor Name" customStyle={styles.infoLabel} />
         <CustomText label={doctor} customStyle={styles.infoText} />
       </View>
       <Divider />
 
-      <View style={styles.contactHeader}>
+      <View style={styles.hospitalLabel}>
         <CustomText label="Contact No." customStyle={styles.infoLabel} />
         <CustomText label={contact} customStyle={styles.infoText} />
       </View>
       <Divider />
-      <View style={styles.contactHeader}>
+      <View style={styles.hospitalLabel}>
         <CustomText label="Distance" customStyle={styles.infoLabel} />
         <CustomText label={distance} customStyle={styles.infoText} />
       </View>
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     fontFamily: "DMSansBold",
   },
-  contactHeader: {
+  hospitalLabel: {
     paddingVertical: 5,
     paddingHorizontal: 10,
     flexDirection: "row",

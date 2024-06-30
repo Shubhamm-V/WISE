@@ -40,7 +40,6 @@ const NearByHospitals = (props: Props) => {
       return (
         hospital.name.toLowerCase().includes(value) ||
         hospital.doctor.toLowerCase().includes(value) ||
-        hospital.distance.toLowerCase().includes(value) ||
         hospital.address.toLowerCase().includes(value)
       );
     });
@@ -60,7 +59,7 @@ const NearByHospitals = (props: Props) => {
           style={{ paddingVertical: 5, paddingHorizontal: 10 }}
         />
         <TextInput
-          placeholder="Search by Role, Company, etc."
+          placeholder="Search by hospital name, address, doctor, etc."
           onChangeText={(value: string) => filterResults(value)}
           placeholderTextColor={COLORS.dark}
           style={{ flex: 1, paddingVertical: 0, color: "#364F6B" }}
@@ -97,7 +96,7 @@ const NearByHospitals = (props: Props) => {
           <View style={{ width: "80%" }}>
             <CustomText
               customStyle={{ textAlign: "center" }}
-              label="Sorry..! No nearby hospital is registered on our App"
+              label="Sorry..! No nearby hospitals are registered on our App"
             />
           </View>
         </View>
