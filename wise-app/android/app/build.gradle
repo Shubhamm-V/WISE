@@ -83,7 +83,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.shubhammv.wiseapp'
+    namespace "com.wiseapp"
     defaultConfig {
         applicationId 'com.shubhammv.wiseapp'
         minSdkVersion rootProject.ext.minSdkVersion
