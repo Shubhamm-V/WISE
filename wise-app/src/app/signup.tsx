@@ -20,17 +20,18 @@ import { router } from "expo-router";
 import { useAuth } from "../context/authContext";
 import auth from "@react-native-firebase/auth";
 import { db } from "@/firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import Loading from "../components/custom-widgets/Loading";
 
 let signupSchema = object({
   name: string()
     .matches(/\S/, "Name cannot be only spaces")
-    .required("Name is required"),
+    .required("Full name is required"),
   email: string()
     .email("Please enter valid email address")
     .required("Please enter email address"),
@@ -54,8 +55,8 @@ type User = {
 };
 
 const SignUp = () => {
-  const [initializing, setInitializing] = useState(true);
-
+  const [initializing, setInitializing] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const { signup, setUser, setIsAuthenticated, user, setIsGoogleLogin } =
     useAuth();
 
@@ -81,6 +82,15 @@ const SignUp = () => {
       userId: uid,
     });
   };
+
+  const updateUserData = async (userId: any) => {
+    const docRef = doc(db, "users", userId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      let data = docSnap.data();
+      setUser({ ...user, name: data?.name, userId: data?.userId });
+    }
+  };
   async function onGoogleButtonPress() {
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
     const { idToken } = await GoogleSignin.signIn();
@@ -92,8 +102,10 @@ const SignUp = () => {
         const { displayName: name, email, uid } = response.user;
         if (response?.additionalUserInfo?.isNewUser === true) {
           setUserData(name, email, uid);
+          setUser({ ...user, name, userId: uid });
+        } else {
+          updateUserData(uid);
         }
-        setUser({ ...user, name, userId: uid });
         setIsAuthenticated(true);
         setIsGoogleLogin(true);
       })
@@ -101,13 +113,18 @@ const SignUp = () => {
   }
 
   const handleSignupSubmit = async (values: User) => {
+    setLoading(true);
     const { email, password, name } = values;
     let response: any = await signup(email, password, name);
+    setLoading(false);
     console.log("Got Signup  Result ", response);
     if (!response.success) {
       Alert.alert("Sign Up", response.msg);
     }
   };
+
+  if (loading) return <Loading />;
+
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
       <Formik

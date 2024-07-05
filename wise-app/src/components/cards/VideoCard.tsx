@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   thumbnail: {
-    height: 80,
+    height: 75,
     borderRadius: 10,
     width: "auto",
   },

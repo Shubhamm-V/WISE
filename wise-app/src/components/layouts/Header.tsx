@@ -1,12 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect } from "react";
-import CustomButton from "@/src/components/custom-widgets/CustomButton";
 import { useAuth } from "@/src/context/authContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomText from "@/src/components/custom-widgets/CustomText";
-import { Avatar } from "@rneui/base";
 import { COLORS } from "@/src/constants/colors";
 import { Image } from "react-native";
+import { router } from "expo-router";
 
 type Props = {};
 
@@ -25,7 +24,7 @@ const Header = (props: Props) => {
           <CustomText label="Hello," customStyle={styles.textStyle} />
           <CustomText label={user?.name} customStyle={styles.headerTextStyle} />
         </View>
-        <TouchableOpacity onPress={handleLogout}>
+        <TouchableOpacity onPress={() => router.navigate("/home/profile")}>
           <Image
             style={styles.profileImage}
             source={require("../../../assets/images/illustrations/profile1.png")}

@@ -19,7 +19,12 @@ const VideoScreen = () => {
         <TouchableOpacity onPress={() => router.back()}>
           <Icon
             name="arrow-back-outline"
-            style={{ marginTop: 35, fontSize: 30, paddingHorizontal: 1 }}
+            style={{
+              marginTop: 35,
+              fontSize: 30,
+              paddingHorizontal: 1,
+              marginBottom: 10,
+            }}
           />
         </TouchableOpacity>
         <CustomText
@@ -48,7 +53,10 @@ const VideoScreen = () => {
               paddingVertical: 5,
             }}
           />
-          <CustomText label={params.description} />
+          <CustomText
+            label={params.description}
+            customStyle={{ textAlign: "justify", paddingBottom: 20 }}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

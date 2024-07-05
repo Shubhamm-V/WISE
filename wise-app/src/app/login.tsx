@@ -16,7 +16,7 @@ import { Formik } from "formik";
 import Icon from "react-native-vector-icons/Ionicons";
 import auth from "@react-native-firebase/auth";
 import { db } from "@/firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 //context API
 
 import { object, string } from "yup";
@@ -28,7 +28,6 @@ import { object, string } from "yup";
 
 import {
   GoogleSignin,
-  GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
 
@@ -36,6 +35,8 @@ import {
 import { useDispatch } from "react-redux";
 import { router } from "expo-router";
 import { useAuth } from "../context/authContext";
+import { isLoading } from "expo-font";
+import Loading from "../components/custom-widgets/Loading";
 
 let loginSchema = object({
   email: string()
@@ -57,16 +58,28 @@ const Login = () => {
   const { login } = useAuth();
   const [initializing, setInitializing] = useState(true);
   const { setUser, setIsAuthenticated, user, setIsGoogleLogin } = useAuth();
+  const [language, setLanguage] = useState("English");
+  const [choosedLanguage, setchoosedLanguage] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   GoogleSignin.configure({
     webClientId:
       "999945649944-8he22f9ddebl6n1qbet3uc8lr5hgatdu.apps.googleusercontent.com",
   });
 
+  const updateUserData = async (userId: any) => {
+    const docRef = doc(db, "users", userId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      let data = docSnap.data();
+      setUser({ ...user, name: data?.name, userId: data?.userId });
+    }
+  };
+
   function onAuthStateChanged(user: any) {
     if (user) {
-      const { displayName: name, email, uid } = user;
-      setUser({ ...user, name, email, uid });
+      const { uid } = user;
+      updateUserData(uid);
       setIsGoogleLogin(true);
       setIsAuthenticated(true);
     }
@@ -98,8 +111,10 @@ const Login = () => {
         const { displayName: name, email, uid } = response.user;
         if (response?.additionalUserInfo?.isNewUser === true) {
           setUserData(name, email, uid);
+          setUser({ ...user, name, userId: uid });
+        } else {
+          updateUserData(uid);
         }
-        setUser({ ...user, name, userId: uid });
         setIsAuthenticated(true);
         setIsGoogleLogin(true);
       })
@@ -107,8 +122,10 @@ const Login = () => {
   }
 
   const handleLoginSubmit = async (values: User) => {
+    setLoading(true);
     const { email, password } = values;
     const response: any = await login(email, password);
+    setLoading(false);
     if (!response.success) {
       let { msg } = response;
       console.log(response.message);
@@ -116,6 +133,13 @@ const Login = () => {
         Alert.alert("Invalid email or passwords");
     }
   };
+
+  if (!choosedLanguage) {
+  }
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <SafeAreaView>

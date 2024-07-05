@@ -75,7 +75,7 @@ const NearByHospitals = (props: Props) => {
           style={{ paddingVertical: 5, paddingHorizontal: 10 }}
         />
         <TextInput
-          placeholder="Search by Title, Description, etc."
+          placeholder="Search by title, description, etc."
           onChangeText={(value: string) => filterResults(value)}
           placeholderTextColor={COLORS.dark}
           style={{ flex: 1, paddingVertical: 0, color: "#364F6B" }}

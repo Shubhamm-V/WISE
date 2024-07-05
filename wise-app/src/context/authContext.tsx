@@ -79,10 +79,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   };
 
   const logout = async () => {
-    console.log("USER : ", user);
-    console.log("isGoogle login ", isGoogleLogin);
-    console.log("isAuthenticated : ", isAuthenticated);
-
     try {
       if (isGoogleLogin) {
         setIsGoogleLogin(false);
@@ -96,7 +92,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       return { success: true };
     } catch (err: any) {
       let msg = err.message;
-      return { success: false, msg: err.message, error: err };
+      return { success: false, msg, error: err };
     }
   };
 
