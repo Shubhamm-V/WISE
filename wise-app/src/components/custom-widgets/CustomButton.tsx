@@ -7,14 +7,27 @@ const CustomButton = ({
   onPress,
   customStyle,
   customTextStyle,
+  isDisabled,
   icon,
 }: any) => {
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.button, customStyle]}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[
+        styles.button,
+        customStyle,
+        isDisabled && { borderColor: "lightgray" },
+      ]}
+      disabled={isDisabled}
+    >
       {icon && icon}
       <CustomText
         label={label}
-        customStyle={[{ color: COLORS.white }, customTextStyle]}
+        customStyle={[
+          { color: COLORS.white },
+          customTextStyle,
+          isDisabled && { color: "lightgray" },
+        ]}
       />
     </TouchableOpacity>
   );
@@ -32,5 +45,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
     width: "90%",
+  },
+  disabled: {
+    borderColor: "gray",
   },
 });

@@ -27,7 +27,7 @@ const CircularChart = () => {
   ];
   return (
     <View style={{ margin: 10 }}>
-      <CustomText label="Your Next Lecture" customStyle={styles.title} />
+      <CustomText label="Your Next Period" customStyle={styles.title} />
       <View style={styles.sectionWrapper}>
         <DonutChart
           data={DATA}

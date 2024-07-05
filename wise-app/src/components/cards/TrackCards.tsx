@@ -43,7 +43,39 @@ const TrackCards = () => {
             </View>
           </LinearGradient>
         </Pressable>
-        <View style={styles.card}></View>
+        <Pressable
+          style={styles.card}
+          onPress={() => router.push("/remainders/water-remainder")}
+        >
+          <LinearGradient
+            colors={["#E0F7FA", COLORS.light]}
+            style={{
+              paddingHorizontal: 13,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              paddingTop: 15,
+            }}
+          >
+            <View style={{ width: "38%" }}>
+              <Image
+                style={styles.image}
+                source={require("../../../assets/images/illustrations/education/image.png")}
+              />
+            </View>
+            <View style={{ width: "51%", flexDirection: "column" }}>
+              <CustomText
+                label="Health Education"
+                customStyle={{ flex: 1, flexShrink: 1, color: COLORS.dark }}
+              />
+              <Icon
+                name="arrow-forward-outline"
+                size={25}
+                color={COLORS.primary}
+                style={{ textAlign: "right", paddingBottom: 5 }}
+              />
+            </View>
+          </LinearGradient>
+        </Pressable>
       </View>
     </View>
   );
@@ -77,5 +109,6 @@ const styles = StyleSheet.create({
   image: {
     height: 75,
     width: 63,
+    marginLeft: -5,
   },
 });

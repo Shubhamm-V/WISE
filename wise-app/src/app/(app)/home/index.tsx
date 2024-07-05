@@ -5,6 +5,7 @@ import SloganCard from "@/src/components/cards/SloganCard";
 import TrackCards from "@/src/components/cards/TrackCards";
 import CircularChart from "@/src/components/charts/CircularChart";
 import { ScrollView } from "react-native";
+import Dropdown from "@/src/components/custom-widgets/Dropdown";
 
 type Props = {};
 

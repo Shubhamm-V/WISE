@@ -10,6 +10,8 @@ import { store } from "../redux/store";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAuth } from "firebase/auth";
 import { COLORS } from "../constants/colors";
+import { RootSiblingParent } from "react-native-root-siblings";
+
 import "expo-dev-client";
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -78,8 +80,10 @@ const MainLayout = () => {
   return (
     <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <Provider store={store}>
-        <Slot />
-        <StatusBar barStyle="dark-content" backgroundColor={COLORS.light} />
+        <RootSiblingParent>
+          <Slot />
+          <StatusBar barStyle="dark-content" backgroundColor={COLORS.light} />
+        </RootSiblingParent>
       </Provider>
     </View>
   );

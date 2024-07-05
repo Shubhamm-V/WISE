@@ -1,7 +1,7 @@
 export const DUMMY_HOSPITALS = [
   {
     name: "Sigma Hospital",
-    doctor: "Dr. Sunil Kuyare",
+    doctor: "Dr. Vijay Kumar",
     address: "123 MG Road, Bangalore",
     contact: "+91 9043434343",
     distance: "1 KM",
