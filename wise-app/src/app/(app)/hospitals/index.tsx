@@ -46,61 +46,73 @@ const NearByHospitals = (props: Props) => {
     setallHospitals(data);
   };
   return (
-    <SafeAreaView style={{ marginHorizontal: "2.3%" }}>
-      <CustomText
-        label="Neareby Hospitals"
-        customStyle={{ fontSize: 23, fontFamily: "DMSansBold", marginTop: 20 }}
-      />
-      <View style={styles.searchInput}>
-        <Icon
-          name="search"
-          size={20}
-          color="#364F6B"
-          style={{ paddingVertical: 5, paddingHorizontal: 10 }}
-        />
-        <TextInput
-          placeholder="Search by hospital name, address, doctor, etc."
-          onChangeText={(value: string) => filterResults(value)}
-          placeholderTextColor={COLORS.dark}
-          style={{ flex: 1, paddingVertical: 0, color: "#364F6B" }}
-        />
-      </View>
-      {allHospitals && allHospitals.length > 0 && (
-        <View>
-          <View>
-            {allHospitals.length > 0 && (
-              <FlatList
-                data={allHospitals}
-                keyExtractor={(item) => item?.uid} // You can use a unique key here
-                renderItem={({ item }) => {
-                  return <HospitalCard hospitalData={item} />;
-                }}
-              />
-            )}
-          </View>
-        </View>
-      )}
-
-      {allHospitals.length == 0 && (
-        <View
-          style={{
-            height: "80%",
-            alignItems: "center",
-            justifyContent: "center",
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: COLORS.light,
+      }}
+    >
+      <View style={{ paddingHorizontal: "2%", flex: 1 }}>
+        <CustomText
+          label="Neareby Hospitals"
+          customStyle={{
+            fontSize: 23,
+            fontFamily: "DMSansBold",
+            marginTop: 15,
           }}
-        >
-          <Image
-            style={{ height: 200, width: 200 }}
-            source={require("../../../../assets/images/illustrations/hospitals/finding-hospital.png")}
+        />
+        <View style={styles.searchInput}>
+          <Icon
+            name="search"
+            size={20}
+            color="#364F6B"
+            style={{ paddingVertical: 5, paddingHorizontal: 10 }}
           />
-          <View style={{ width: "80%" }}>
-            <CustomText
-              customStyle={{ textAlign: "center" }}
-              label="Sorry..! No nearby hospitals are registered on our App"
-            />
-          </View>
+          <TextInput
+            placeholder="Search by hospital name, address, doctor, etc."
+            onChangeText={(value: string) => filterResults(value)}
+            placeholderTextColor={COLORS.dark}
+            style={{ flex: 1, paddingVertical: 0, color: "#364F6B" }}
+          />
         </View>
-      )}
+        {allHospitals && allHospitals.length > 0 && (
+          <View style={{ flex: 1 }}>
+            <View>
+              {allHospitals.length > 0 && (
+                <FlatList
+                  data={allHospitals}
+                  contentContainerStyle={{ paddingBottom: 5 }}
+                  keyExtractor={(item) => item?.uid} // You can use a unique key here
+                  renderItem={({ item }) => {
+                    return <HospitalCard hospitalData={item} />;
+                  }}
+                />
+              )}
+            </View>
+          </View>
+        )}
+
+        {allHospitals.length == 0 && (
+          <View
+            style={{
+              height: "80%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              style={{ height: 200, width: 200 }}
+              source={require("../../../../assets/images/illustrations/hospitals/finding-hospital.png")}
+            />
+            <View style={{ width: "80%" }}>
+              <CustomText
+                customStyle={{ textAlign: "center" }}
+                label="Sorry..! No nearby hospitals are registered on our App"
+              />
+            </View>
+          </View>
+        )}
+      </View>
     </SafeAreaView>
   );
 };
@@ -111,7 +123,7 @@ const styles = StyleSheet.create({
   searchInput: {
     borderRadius: 10,
     paddingVertical: 10,
-    marginTop: 20,
+    marginTop: 15,
     marginBottom: 5,
     borderBottomWidth: 1,
     flexDirection: "row",

@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
   cardContainer: {
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
-    marginTop: 12,
-    borderRadius: 8,
+    marginTop: 1,
+    borderRadius: 3,
     shadowRadius: 0.84,
     shadowOpacity: 0.15,
     paddingVertical: 12,

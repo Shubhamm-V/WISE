@@ -1,11 +1,10 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { COLORS } from "@/src/constants/colors";
 import CustomText from "../custom-widgets/CustomText";
 import LinearGradient from "react-native-linear-gradient";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useAuth } from "@/src/context/authContext";
-import { Avatar } from "@rneui/base";
 import { router } from "expo-router";
 const ProfileHeader = () => {
   const { logout, user } = useAuth();

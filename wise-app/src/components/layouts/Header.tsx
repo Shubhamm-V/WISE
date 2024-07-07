@@ -11,12 +11,7 @@ type Props = {};
 
 const Header = (props: Props) => {
   const { logout, user } = useAuth();
-  useEffect(() => {
-    console.log("MY name ", user?.name);
-  }, []);
-  const handleLogout = async () => {
-    await logout();
-  };
+
   return (
     <SafeAreaView>
       <View style={styles.header}>

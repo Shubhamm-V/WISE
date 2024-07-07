@@ -62,54 +62,65 @@ const NearByHospitals = (props: Props) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, marginHorizontal: "2.3%" }}>
-      <CustomText
-        label="Educational Health Videos"
-        customStyle={{ fontSize: 23, fontFamily: "DMSansBold", marginTop: 20 }}
-      />
-      <View style={styles.searchInput}>
-        <Icon
-          name="search"
-          size={20}
-          color="#364F6B"
-          style={{ paddingVertical: 5, paddingHorizontal: 10 }}
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: COLORS.light,
+      }}
+    >
+      <View style={{ flex: 1, paddingHorizontal: "2.3%" }}>
+        <CustomText
+          label="Educational Health Videos"
+          customStyle={{
+            fontSize: 23,
+            fontFamily: "DMSansBold",
+            marginTop: 15,
+          }}
         />
-        <TextInput
-          placeholder="Search by title, description, etc."
-          onChangeText={(value: string) => filterResults(value)}
-          placeholderTextColor={COLORS.dark}
-          style={{ flex: 1, paddingVertical: 0, color: "#364F6B" }}
-        />
-      </View>
-      {allVideos.length > 0 ? (
-        <View style={{ flex: 1 }}>
-          <FlatList
-            data={allVideos}
-            contentContainerStyle={{ paddingBottom: 20 }}
-            keyExtractor={(item) => item.uid}
-            renderItem={({ item }) => <VideoCard youtubeData={item} />}
+        <View style={styles.searchInput}>
+          <Icon
+            name="search"
+            size={20}
+            color="#364F6B"
+            style={{ paddingVertical: 5, paddingHorizontal: 10 }}
+          />
+          <TextInput
+            placeholder="Search by title, description, etc."
+            onChangeText={(value: string) => filterResults(value)}
+            placeholderTextColor={COLORS.dark}
+            style={{ flex: 1, paddingVertical: 0, color: "#364F6B" }}
           />
         </View>
-      ) : (
-        <View
-          style={{
-            height: "80%",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Image
-            style={{ height: 200, width: 200 }}
-            source={require("../../../../assets/images/illustrations/hospitals/finding-hospital.png")}
-          />
-          <View style={{ width: "80%" }}>
-            <CustomText
-              customStyle={{ textAlign: "center" }}
-              label="Sorry..! No nearby hospitals are registered on our App"
+        {allVideos.length > 0 ? (
+          <View style={{ flex: 1 }}>
+            <FlatList
+              data={allVideos}
+              contentContainerStyle={{ paddingBottom: 5 }}
+              keyExtractor={(item) => item.uid}
+              renderItem={({ item }) => <VideoCard youtubeData={item} />}
             />
           </View>
-        </View>
-      )}
+        ) : (
+          <View
+            style={{
+              height: "80%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              style={{ height: 200, width: 200 }}
+              source={require("../../../../assets/images/illustrations/hospitals/finding-hospital.png")}
+            />
+            <View style={{ width: "80%" }}>
+              <CustomText
+                customStyle={{ textAlign: "center" }}
+                label="Sorry..! No nearby hospitals are registered on our App"
+              />
+            </View>
+          </View>
+        )}
+      </View>
     </SafeAreaView>
   );
 };
@@ -120,8 +131,8 @@ const styles = StyleSheet.create({
   searchInput: {
     borderRadius: 10,
     paddingVertical: 10,
-    marginTop: 20,
-    marginBottom: 5,
+    marginTop: 10,
+    marginBottom: 1,
     borderBottomWidth: 1,
     flexDirection: "row",
     borderBottomColor: "#ccc",

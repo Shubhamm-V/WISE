@@ -8,11 +8,11 @@ import { router } from "expo-router";
 const TrackCards = () => {
   return (
     <View style={{ paddingHorizontal: 10, marginVertical: 10 }}>
-      <CustomText label="Set Remainders" customStyle={styles.title} />
+      <CustomText label="Set Reminders" customStyle={styles.title} />
       <View style={styles.cardContainer}>
         <Pressable
           style={styles.card}
-          onPress={() => router.push("/remainders/water-remainder")}
+          onPress={() => router.push("/water-reminder")}
         >
           <LinearGradient
             colors={["#E0F7FA", COLORS.light]}
@@ -31,7 +31,7 @@ const TrackCards = () => {
             </View>
             <View style={{ width: "51%", flexDirection: "column" }}>
               <CustomText
-                label="Water Remainder"
+                label="Water Reminder"
                 customStyle={{ flex: 1, flexShrink: 1, color: COLORS.dark }}
               />
               <Icon
@@ -45,7 +45,7 @@ const TrackCards = () => {
         </Pressable>
         <Pressable
           style={styles.card}
-          onPress={() => router.push("/remainders/water-remainder")}
+          onPress={() => router.push("/reminders/water-reminder")}
         >
           <LinearGradient
             colors={["#E0F7FA", COLORS.light]}

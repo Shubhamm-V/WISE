@@ -13,8 +13,14 @@ export const TABS: Tab[] = [
     focusIcon: "home",
   },
   {
-    name: "remainders",
-    title: "Remainders",
+    name: "water-reminder",
+    title: "water-reminder",
+    icon: "water-outline",
+    focusIcon: "water",
+  },
+  {
+    name: "period-tracker",
+    title: "period-tracker",
     icon: "calendar-clear-outline",
     focusIcon: "calendar-clear",
   },
