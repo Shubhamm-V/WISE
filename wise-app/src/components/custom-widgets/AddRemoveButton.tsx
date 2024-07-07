@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { View, TouchableOpacity, Text, Animated } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS } from "@/src/constants/colors";
 
 interface Water {
@@ -39,7 +39,7 @@ export const AddRemoveButton = ({
           justifyContent: "center",
         }}
       >
-        <MaterialCommunityIcons
+        <Icon
           name="bottle-soda"
           size={24}
           color={operation == "add" ? COLORS.primary : "red"}

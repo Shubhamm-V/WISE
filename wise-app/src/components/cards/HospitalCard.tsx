@@ -54,14 +54,16 @@ const HospitalCard: React.FC<ChildProps> = ({ hospitalData }) => {
 const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: COLORS.light,
-    borderRadius: 10,
+    borderRadius: 4,
     paddingVertical: 20,
     paddingHorizontal: 6,
-    marginVertical: 8,
+    marginVertical: 0,
     shadowOffset: { width: 0, height: 2 },
-    elevation: 5,
+    elevation: 2,
     shadowRadius: 0.84,
     shadowOpacity: 0.15,
+    borderBottomColor: "lightgray",
+    borderBottomWidth: 1,
     shadowColor: "#52006A",
   },
 
