@@ -2,7 +2,20 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Calendar } from "react-native-calendars";
-
+import { COLORS } from "@/src/constants/colors";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import CustomText from "@/src/components/custom-widgets/CustomText";
+import Icon from "react-native-vector-icons/Ionicons";
+import {
+  getFormattedDate,
+  getDateMonth,
+  calculateDaysBetween,
+} from "@/src/utils/dateFormatting";
+import PeriodCard from "@/src/components/cards/PeriodCard";
+import CustomButton from "@/src/components/custom-widgets/CustomButton";
+import PeriodData from "@/src/components/trackdata/PeriodData";
+import FeelingData from "@/src/components/trackdata/Feelings";
+import SymptomsData from "@/src/components/trackdata/SymptomsData";
 interface CycleDetails {
   cycleLength: string;
   periodLength: string;
@@ -18,14 +31,18 @@ interface MarkedDates {
   };
 }
 
-const App = () => {
-  const [selected, setSelected] = useState("");
+const TrackMenustralCycle = () => {
+  const [selected, setSelected] = useState<string>("");
+  const [daysBetween, setDaysBetween] = useState<string>("");
+  const [periodDayMonth, setPeriodDayMonth] = useState<string[]>([]);
+  const [selectedDay, setSelectedDay] = useState("");
   const [cycleDetails, setCycleDetails] = useState<CycleDetails>({
     cycleLength: "",
     periodLength: "",
     lastPeriod: "",
   });
 
+  // Fetching cycle detail from local storage
   useEffect(() => {
     const fetchCycleDetails = async () => {
       const cycleLength = await AsyncStorage.getItem("cycleLength");
@@ -41,32 +58,35 @@ const App = () => {
 
     fetchCycleDetails();
   }, []);
+
   const markPeriodDates = (): MarkedDates => {
     const { cycleLength, periodLength, lastPeriod } = cycleDetails;
     if (!cycleLength || !periodLength || !lastPeriod) return {};
 
     const startDate = new Date(lastPeriod);
     const nextPeriodDate = new Date(startDate);
-    nextPeriodDate.setDate(startDate.getDate() + parseInt(cycleLength)); // Calculate next period date
+    // calculating next period date
+    nextPeriodDate.setDate(startDate.getDate() + parseInt(cycleLength));
 
-    const markedDates: MarkedDates = {};
+    let markedDates: MarkedDates = {};
 
     // Mark each day of the period
+    let periodDates: string[] = [];
     let endPeriodString = "";
     for (let i = 0; i < parseInt(periodLength); i++) {
       const date = new Date(nextPeriodDate);
       date.setDate(nextPeriodDate.getDate() + i);
       const dateString = date.toISOString().split("T")[0];
+      periodDates.push(dateString);
       markedDates[dateString] = {
         marked: true,
         // @ts-ignore
-        color: "#E0F7FA",
+        color: "#CBF7FD",
         dotColor: "transparent",
       };
       endPeriodString = dateString;
     }
 
-    // Add startingDay: true to the first day if it doesn't exist
     if (Object.keys(markedDates).length > 0) {
       const firstDay = Object.keys(markedDates)[0];
       //@ts-ignore
@@ -76,7 +96,6 @@ const App = () => {
       }
     }
 
-    // Add endingDay: true to the last day if it doesn't exist
     if (endPeriodString !== "") {
       // @ts-ignore
       if (!markedDates[endPeriodString].endingDay) {
@@ -85,20 +104,134 @@ const App = () => {
       }
     }
 
+    // Setting Days between today and Next Period
+    const todayDate = getFormattedDate();
+    const totalBetweenDays = calculateDaysBetween(todayDate, periodDates[0]);
+    if (daysBetween == "") setDaysBetween(totalBetweenDays.toString());
+
+    // Marking Dot on today's date in calendar
+    markedDates[todayDate] = {
+      marked: true,
+      // @ts-ignore
+      dotColor: COLORS.primary,
+    };
+
+    // Formatting period dates (e.g 20 July) for tracking periods
+    const formattedPeriods = periodDates.map(getDateMonth);
+    if (periodDayMonth && periodDayMonth.length == 0)
+      setPeriodDayMonth(formattedPeriods);
+    if (selectedDay.length === 0) setSelectedDay(formattedPeriods[0]);
     return markedDates;
   };
 
+  const handleDateSelect = (periodDay: string) => {
+    setSelectedDay(periodDay);
+  };
   return (
-    <SafeAreaView>
-      <Calendar
-        onDayPress={(day: any) => {
-          setSelected(day.dateString);
-        }}
-        markingType={"period"}
-        markedDates={markPeriodDates()}
-      />
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.light }}>
+      <ScrollView>
+        <View style={styles.header}>
+          <CustomText label="Track Periods" customStyle={styles.title} />
+          <CustomButton
+            label="Edit"
+            customStyle={styles.editButton}
+            customTextStyle={{
+              color: COLORS.primary,
+              fontFamily: "DMSansSemiBold",
+            }}
+            icon={
+              <Icon
+                style={{ fontSize: 16, color: COLORS.primary }}
+                name="create-outline"
+                size={40}
+              />
+            }
+          />
+        </View>
+        <View style={styles.calendarContainer}>
+          <Calendar
+            style={{ borderRadius: 5 }}
+            onDayPress={(day: any) => {
+              setSelected(day.dateString);
+            }}
+            markingType={"period"}
+            markedDates={markPeriodDates()}
+          />
+        </View>
+        <PeriodCard periodDayMonth={periodDayMonth} daysBetween={daysBetween} />
+        <View style={styles.tagContainer}>
+          {periodDayMonth.map((periodDay, ind) => (
+            <TouchableOpacity
+              onPress={() => handleDateSelect(periodDay)}
+              style={[
+                styles.tag,
+                {
+                  backgroundColor:
+                    selectedDay === periodDay ? "#D7F5FD" : "transparent",
+                },
+              ]}
+              key={ind}
+            >
+              <CustomText
+                label={periodDay}
+                customStyle={{
+                  color: COLORS.primary,
+                  fontFamily: "DMSansBold",
+                }}
+              />
+            </TouchableOpacity>
+          ))}
+        </View>
+        <PeriodData />
+        {/* <SpottingData /> */}
+        <FeelingData />
+        <SymptomsData />
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default App;
+export default TrackMenustralCycle;
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 25,
+    fontFamily: "DMSansBold",
+    marginVertical: 10,
+  },
+  calendarContainer: {
+    borderWidth: 1,
+    borderColor: "lightgray",
+    borderRadius: 5,
+    marginHorizontal: "1%",
+  },
+  header: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+
+    padding: "1%",
+  },
+  editButton: {
+    borderWidth: 1,
+    width: 100,
+    marginTop: 10,
+    paddingVertical: 7,
+    borderColor: "#2EB5FA",
+    backgroundColor: COLORS.light,
+  },
+  tagContainer: {
+    gap: 10,
+    display: "flex",
+    flexDirection: "row",
+    paddingHorizontal: "1%",
+    paddingVertical: "2%",
+  },
+  tag: {
+    borderColor: COLORS.primary,
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+  },
+});
