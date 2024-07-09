@@ -1,0 +1,129 @@
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useState } from "react";
+import CustomText from "../custom-widgets/CustomText";
+import { COLORS } from "@/src/constants/colors";
+
+const data = [
+  { label: "All Good", index: "1" },
+  { label: "Headache", index: "2" },
+  { label: "Acne", index: "3" },
+  { label: "Cramp", index: "4" },
+  { label: "Fatigue", index: "5" },
+];
+
+// Map indices to image paths
+const symptomsImageMap: any = {
+  "1": require("../../../assets/images/illustrations/period-tracker/symptoms/symptom1.png"),
+  "2": require("../../../assets/images/illustrations/period-tracker/symptoms/symptom2.png"),
+  "3": require("../../../assets/images/illustrations/period-tracker/symptoms/symptom3.png"),
+  "4": require("../../../assets/images/illustrations/period-tracker/symptoms/symptom4.png"),
+  "5": require("../../../assets/images/illustrations/period-tracker/symptoms/symptom5.png"),
+};
+
+const SymptomsData = () => {
+  const [selected, setSelected] = useState<string[]>([]);
+
+  const handleSelected = (value: string) => {
+    if (!selected.includes(value)) {
+      setSelected((prev) => [...prev, value]);
+    } else {
+      const afterRemove = selected.filter((label) => label !== value);
+      setSelected(afterRemove);
+    }
+  };
+
+  return (
+    <View style={{ padding: "2%" }}>
+      <CustomText
+        label="Symptoms"
+        customStyle={{ fontSize: 19, fontFamily: "DMSansBold" }}
+      />
+
+      <View style={styles.symptomsContainer}>
+        <ScrollView
+          horizontal={true}
+          style={{ flex: 1 }}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {data.map((value, ind) => {
+            return (
+              <TouchableOpacity
+                key={ind}
+                onPress={() => handleSelected(value.label)}
+              >
+                <View
+                  style={[
+                    styles.symptoms,
+                    {
+                      backgroundColor: selected.includes(value.label)
+                        ? "#CDEEF6"
+                        : "transparent",
+                      marginLeft: ind === 0 ? -10 : 10,
+                      marginRight: ind == 4 ? 0 : 10,
+                    },
+                  ]}
+                >
+                  <Image
+                    style={styles.image}
+                    source={symptomsImageMap[value.index]}
+                  />
+                </View>
+                <CustomText
+                  label={value.label}
+                  customStyle={[
+                    styles.label,
+                    {
+                      marginLeft: ind === 0 ? -10 : 10,
+                      marginRight: ind == 4 ? 0 : 10,
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      </View>
+    </View>
+  );
+};
+
+export default SymptomsData;
+
+const styles = StyleSheet.create({
+  symptomsContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  scrollContent: {
+    alignItems: "center",
+    paddingHorizontal: 10,
+  },
+  symptoms: {
+    borderRadius: 150,
+    height: 60,
+    width: 60,
+    borderWidth: 2,
+    borderColor: "#CDEEF6",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  image: {
+    height: 70,
+    width: 70,
+  },
+  label: {
+    fontSize: 10,
+    textAlign: "center",
+    lineHeight: 19,
+    marginTop: 5,
+  },
+});
