@@ -1,16 +1,33 @@
 import { DonutChart } from "react-native-circular-chart";
-
-import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
-import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StyleSheet, View, useWindowDimensions } from "react-native";
+import React, { useEffect, useState } from "react";
 import { COLORS } from "@/src/constants/colors";
 import CustomText from "../custom-widgets/CustomText";
 
 const CircularChart = () => {
+  const [cycleDetails, setCycleDetails] = useState({});
   const { width, height } = useWindowDimensions();
   const padding = 18;
+
+  useEffect(() => {
+    const fetchCycleDetails = async () => {
+      const cycleLength = await AsyncStorage.getItem("cycleLength");
+      const periodLength = await AsyncStorage.getItem("periodLength");
+      const lastPeriod = await AsyncStorage.getItem("lastPeriod");
+      setCycleDetails({
+        cycleLength: cycleLength ?? "",
+        periodLength: periodLength ?? "",
+        lastPeriod: lastPeriod ?? "",
+      });
+    };
+
+    fetchCycleDetails();
+  }, []);
+
   const DATA = [
     {
-      name: "Days Remaining",
+      name: "Period Days",
       value: 18,
       color: COLORS.primary,
     },

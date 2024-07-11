@@ -47,7 +47,7 @@ const getData = async (key: any, setValue: any) => {
 
 async function setWaterReminder(hours: number, doRepeat: boolean) {
   const permission = await Notifications.requestPermissionsAsync();
-  const seconds = hours * 60;
+  const seconds = hours * 3600;
   if (permission.status === "granted") {
     const notificationId = await Notifications.scheduleNotificationAsync({
       content: {
@@ -55,7 +55,7 @@ async function setWaterReminder(hours: number, doRepeat: boolean) {
         subtitle: "Your body needs water!",
       },
       trigger: {
-        repeats: true,
+        repeats: doRepeat,
         seconds, // Convert hours to seconds
       },
     });

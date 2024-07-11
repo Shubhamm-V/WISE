@@ -3,9 +3,16 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Calendar } from "react-native-calendars";
 import { COLORS } from "@/src/constants/colors";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import CustomText from "@/src/components/custom-widgets/CustomText";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { Overlay } from "@rneui/themed";
+import CustomText from "@/src/components/custom-widgets/CustomText";
 import {
   getFormattedDate,
   getDateMonth,
@@ -16,6 +23,8 @@ import CustomButton from "@/src/components/custom-widgets/CustomButton";
 import PeriodData from "@/src/components/trackdata/PeriodData";
 import FeelingData from "@/src/components/trackdata/Feelings";
 import SymptomsData from "@/src/components/trackdata/SymptomsData";
+import { router } from "expo-router";
+import Loading from "@/src/components/custom-widgets/Loading";
 interface CycleDetails {
   cycleLength: string;
   periodLength: string;
@@ -32,15 +41,30 @@ interface MarkedDates {
 }
 
 const TrackMenustralCycle = () => {
-  const [selected, setSelected] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [isOverlayVisible, setIsOverlayVisible] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [daysBetween, setDaysBetween] = useState<string>("");
   const [periodDayMonth, setPeriodDayMonth] = useState<string[]>([]);
   const [selectedDay, setSelectedDay] = useState("");
+  const [isPeriodEnded, setIsPeriodEnded] = useState<boolean>(false);
   const [cycleDetails, setCycleDetails] = useState<CycleDetails>({
     cycleLength: "",
     periodLength: "",
     lastPeriod: "",
   });
+
+  // Removing passed dates from localstorage
+  const removePeriodDays = async () => {
+    const keysToRemove = periodDayMonth.map((periodDay) => {
+      return periodDay.replace(/\s+/g, "");
+    });
+    for (const key of keysToRemove) {
+      await AsyncStorage.removeItem(`${key}-flow`);
+      await AsyncStorage.removeItem(`${key}-feelings`);
+      await AsyncStorage.removeItem(`${key}-symptoms`);
+    }
+  };
 
   // Fetching cycle detail from local storage
   useEffect(() => {
@@ -48,7 +72,6 @@ const TrackMenustralCycle = () => {
       const cycleLength = await AsyncStorage.getItem("cycleLength");
       const periodLength = await AsyncStorage.getItem("periodLength");
       const lastPeriod = await AsyncStorage.getItem("lastPeriod");
-
       setCycleDetails({
         cycleLength: cycleLength ?? "",
         periodLength: periodLength ?? "",
@@ -81,7 +104,9 @@ const TrackMenustralCycle = () => {
       markedDates[dateString] = {
         marked: true,
         // @ts-ignore
-        color: "#CBF7FD",
+        selected: true,
+        // @ts-ignore
+        color: "#F8BABA",
         dotColor: "transparent",
       };
       endPeriodString = dateString;
@@ -106,6 +131,7 @@ const TrackMenustralCycle = () => {
 
     // Setting Days between today and Next Period
     const todayDate = getFormattedDate();
+
     const totalBetweenDays = calculateDaysBetween(todayDate, periodDates[0]);
     if (daysBetween == "") setDaysBetween(totalBetweenDays.toString());
 
@@ -113,13 +139,23 @@ const TrackMenustralCycle = () => {
     markedDates[todayDate] = {
       marked: true,
       // @ts-ignore
-      dotColor: COLORS.primary,
+      dotColor: "transparent",
+      // @ts-ignore
+      color: "#CBF7FD",
     };
 
     // Formatting period dates (e.g 20 July) for tracking periods
     const formattedPeriods = periodDates.map(getDateMonth);
     if (periodDayMonth && periodDayMonth.length == 0)
       setPeriodDayMonth(formattedPeriods);
+
+    // Checking if period is already done or not
+    const date1 = new Date();
+    const date2 = new Date(endPeriodString);
+
+    if (date1 > date2) {
+      if (!isPeriodEnded) setIsPeriodEnded(true);
+    }
     if (selectedDay.length === 0) setSelectedDay(formattedPeriods[0]);
     return markedDates;
   };
@@ -127,13 +163,44 @@ const TrackMenustralCycle = () => {
   const handleDateSelect = (periodDay: string) => {
     setSelectedDay(periodDay);
   };
+
+  if (loading) return <Loading />;
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.light }}>
       <ScrollView>
+        <Overlay isVisible={isOverlayVisible}>
+          <CustomText
+            label="Are you sure you want to edit period dates?"
+            customStyle={{ padding: 10, fontSize: 18 }}
+          />
+          <View style={styles.overlayOptions}>
+            <TouchableOpacity
+              onPress={() => {
+                removePeriodDays();
+                router.navigate("/period-tracker/info-screens/info-screen-1");
+              }}
+            >
+              <CustomText
+                label="Yes"
+                customStyle={{ color: COLORS.primary, fontSize: 18 }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setIsOverlayVisible(false)}>
+              <CustomText
+                label="No"
+                customStyle={{ color: COLORS.primary, fontSize: 18 }}
+              />
+            </TouchableOpacity>
+          </View>
+        </Overlay>
         <View style={styles.header}>
           <CustomText label="Track Periods" customStyle={styles.title} />
           <CustomButton
             label="Edit"
+            onPress={() => {
+              setIsOverlayVisible(true);
+            }}
             customStyle={styles.editButton}
             customTextStyle={{
               color: COLORS.primary,
@@ -152,40 +219,54 @@ const TrackMenustralCycle = () => {
           <Calendar
             style={{ borderRadius: 5 }}
             onDayPress={(day: any) => {
-              setSelected(day.dateString);
+              setSelectedDate(day.dateString);
             }}
             markingType={"period"}
             markedDates={markPeriodDates()}
           />
         </View>
-        <PeriodCard periodDayMonth={periodDayMonth} daysBetween={daysBetween} />
+        <PeriodCard
+          periodDayMonth={periodDayMonth}
+          daysBetween={daysBetween}
+          isPeriodEnded={isPeriodEnded}
+        />
+
         <View style={styles.tagContainer}>
-          {periodDayMonth.map((periodDay, ind) => (
-            <TouchableOpacity
-              onPress={() => handleDateSelect(periodDay)}
-              style={[
-                styles.tag,
-                {
-                  backgroundColor:
-                    selectedDay === periodDay ? "#D7F5FD" : "transparent",
-                },
-              ]}
-              key={ind}
-            >
-              <CustomText
-                label={periodDay}
-                customStyle={{
-                  color: COLORS.primary,
-                  fontFamily: "DMSansBold",
-                }}
-              />
-            </TouchableOpacity>
-          ))}
+          <ScrollView
+            horizontal={true}
+            contentContainerStyle={{
+              alignItems: "center",
+              paddingHorizontal: 10,
+            }}
+          >
+            {periodDayMonth.map((periodDay, ind) => (
+              <TouchableOpacity
+                onPress={() => handleDateSelect(periodDay)}
+                style={[
+                  styles.tag,
+                  {
+                    backgroundColor:
+                      selectedDay === periodDay ? "#D7F5FD" : "transparent",
+                    marginLeft: ind === 0 ? -10 : 5,
+                    marginRight: ind == periodDay.length - 1 ? 0 : 5,
+                  },
+                ]}
+                key={ind}
+              >
+                <CustomText
+                  label={periodDay}
+                  customStyle={{
+                    color: COLORS.primary,
+                    fontFamily: "DMSansBold",
+                  }}
+                />
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
-        <PeriodData />
-        {/* <SpottingData /> */}
-        <FeelingData />
-        <SymptomsData />
+        <PeriodData selectedDay={selectedDay} />
+        <FeelingData selectedDay={selectedDay} />
+        <SymptomsData selectedDay={selectedDay} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -233,5 +314,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     padding: 10,
+  },
+  overlayOptions: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    gap: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
   },
 });
