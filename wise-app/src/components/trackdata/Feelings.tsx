@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import CustomText from "../custom-widgets/CustomText";
 import { COLORS } from "@/src/constants/colors";
-import { after } from "node:test";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 const data = [
   { label: "Normal", index: "1", icon: "emoticon-neutral" },
@@ -19,15 +19,46 @@ const data = [
   { label: "Mood Swing", index: "5", icon: "emoticon-confused" },
 ];
 
-const FeelingData = () => {
+interface FeelingsProps {
+  selectedDay: string;
+}
+
+const FeelingData: FC<FeelingsProps> = ({ selectedDay }) => {
   const [selected, setSelected] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const day = selectedDay.replace(/\s+/g, "");
+      const storedFeelings = await AsyncStorage.getItem(`${day}-feelings`);
+      if (storedFeelings) {
+        setSelected(storedFeelings.split(","));
+      } else {
+        setSelected([]);
+      }
+    };
+
+    fetchData();
+  }, [selectedDay]);
+
   const handleSelected = (value: string) => {
-    if (!selected.includes(value)) setSelected((prev) => [...prev, value]);
-    else {
-      const afterRemove = selected.filter((label) => label !== value);
-      setSelected(afterRemove);
-    }
+    setSelected((prev) => {
+      if (!prev.includes(value)) {
+        return [...prev, value];
+      } else {
+        return prev.filter((label) => label !== value);
+      }
+    });
   };
+
+  useEffect(() => {
+    const storeData = async () => {
+      const day = selectedDay.replace(/\s+/g, "");
+      const stringSelected = selected.join(",");
+      await AsyncStorage.setItem(`${day}-feelings`, stringSelected);
+    };
+
+    storeData();
+  }, [selected, selectedDay]);
 
   return (
     <View style={{ padding: "2%" }}>

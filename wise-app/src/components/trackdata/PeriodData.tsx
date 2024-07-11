@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import CustomText from "../custom-widgets/CustomText";
 import { COLORS } from "@/src/constants/colors";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const data = [
   { label: "Low", index: "1" },
   { label: "Medium", index: "2" },
@@ -27,9 +27,25 @@ const periodsImageMap: any = {
   "5": require("../../../assets/images/illustrations/period-tracker/period-quantity/period5.png"),
 };
 
-const PeriodData = () => {
+interface PeriodDataProps {
+  selectedDay: string;
+}
+
+const PeriodData: FC<PeriodDataProps> = ({ selectedDay }) => {
   const [selected, setSelected] = useState("");
-  const handleSelected = (value: string) => {
+
+  useEffect(() => {
+    const getPeriodsData = async () => {
+      const day = selectedDay.replace(/\s+/g, "");
+      const value = await AsyncStorage.getItem(`${day}-flow`);
+      setSelected(value || "");
+    };
+    getPeriodsData();
+  }, [selectedDay]);
+
+  const handleSelected = async (value: string) => {
+    const day = selectedDay.replace(/\s+/g, "");
+    await AsyncStorage.setItem(`${day}-flow`, value);
     setSelected(value);
   };
   return (
@@ -46,9 +62,11 @@ const PeriodData = () => {
         >
           {data.map((value, ind) => {
             return (
-              <TouchableOpacity onPress={() => handleSelected(value.label)}>
+              <TouchableOpacity
+                onPress={() => handleSelected(value.label)}
+                key={ind}
+              >
                 <View
-                  key={ind}
                   style={[
                     styles.period,
                     {
