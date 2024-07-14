@@ -9,7 +9,7 @@ import { color } from "@rneui/base";
 const SloganCard = () => {
   return (
     <LinearGradient
-      colors={["#E0F2F1", COLORS.light]}
+      colors={[COLORS.lightPrimary, COLORS.light]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.card}
@@ -59,9 +59,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   image: {
-    marginTop: 25,
-    height: 100,
-    width: 100,
+    marginTop: 30,
+    height: 85,
+    width: 85,
   },
   slogan: {
     fontSize: 15,

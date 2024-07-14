@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { View, TouchableOpacity, Text, Animated } from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Icon from "react-native-vector-icons/FontAwesome6";
 import { COLORS } from "@/src/constants/colors";
 
 interface Water {
@@ -31,7 +31,7 @@ export const AddRemoveButton = ({
       <View
         style={{
           borderWidth: 1,
-          borderColor: operation == "add" ? COLORS.primary : "red",
+          borderColor: operation == "add" ? COLORS.primary : "#FE5B7D",
           width: 60,
           height: 60,
           borderRadius: 5,
@@ -40,9 +40,9 @@ export const AddRemoveButton = ({
         }}
       >
         <Icon
-          name="bottle-soda"
+          name="glass-water"
           size={24}
-          color={operation == "add" ? COLORS.primary : "red"}
+          color={operation == "add" ? COLORS.primary : "#FE5B7D"}
         />
       </View>
       <Text style={{ color: "#5a595b", fontWeight: "600" }}>{amount} mL</Text>

@@ -13,7 +13,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { COLORS } from "@/src/constants/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomText from "@/src/components/custom-widgets/CustomText";
-
+import { DISTANCE } from "@/src/constants/dropdown";
+import Dropdown from "@/src/components/custom-widgets/Dropdown";
 export interface Hospital {
   name: string;
   doctor: string;
@@ -45,6 +46,8 @@ const NearByHospitals = (props: Props) => {
     });
     setallHospitals(data);
   };
+
+  const handleDistanceSelect = () => {};
   return (
     <SafeAreaView
       style={{
@@ -53,14 +56,25 @@ const NearByHospitals = (props: Props) => {
       }}
     >
       <View style={{ paddingHorizontal: "2%", flex: 1 }}>
-        <CustomText
-          label="Neareby Hospitals"
-          customStyle={{
-            fontSize: 23,
-            fontFamily: "DMSansBold",
-            marginTop: 15,
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
-        />
+        >
+          <CustomText label="Neareby Hospitals" customStyle={styles.header} />
+          <View style={styles.dropdown}>
+            <Dropdown
+              options={DISTANCE}
+              onSelect={handleDistanceSelect}
+              placeholder="25 KM"
+              isEditing={true}
+              height={27}
+            />
+          </View>
+        </View>
         <View style={styles.searchInput}>
           <Icon
             name="search"
@@ -123,11 +137,25 @@ const styles = StyleSheet.create({
   searchInput: {
     borderRadius: 10,
     paddingVertical: 10,
-    marginTop: 15,
     marginBottom: 5,
     borderBottomWidth: 1,
     flexDirection: "row",
     borderBottomColor: "#ccc",
     backgroundColor: "#fbfbfb",
+  },
+  dropdown: {
+    width: "32%",
+    borderWidth: 1,
+    marginTop: 15,
+    borderRadius: 5,
+    borderColor: COLORS.dark700,
+  },
+  header: {
+    fontSize: 23,
+    fontFamily: "DMSansBold",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 15,
   },
 });

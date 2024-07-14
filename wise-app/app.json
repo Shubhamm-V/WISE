@@ -21,6 +21,9 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
+      "notification": {
+        "icon": "./assets/images/icon.png"
+      },
       "package": "com.shubhammv.wiseapp"
     },
     "web": {

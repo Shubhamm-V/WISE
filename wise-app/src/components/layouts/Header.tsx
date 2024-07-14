@@ -22,7 +22,7 @@ const Header = (props: Props) => {
         <TouchableOpacity onPress={() => router.navigate("/home/profile")}>
           <Image
             style={styles.profileImage}
-            source={require("../../../assets/images/illustrations/profile1.png")}
+            source={require("../../../assets/images/illustrations/profile.png")}
           />
         </TouchableOpacity>
       </View>
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     height: 45,
     width: 45,
-    borderColor: "#75AABF",
+    borderColor: COLORS.primary,
     borderWidth: 1,
   },
 });

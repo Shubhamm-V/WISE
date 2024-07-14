@@ -52,6 +52,7 @@ async function setWaterReminder(hours: number, doRepeat: boolean) {
     const notificationId = await Notifications.scheduleNotificationAsync({
       content: {
         title: "💧 Water Reminder",
+        sound: "default",
         subtitle: "Your body needs water!",
       },
       trigger: {
@@ -251,7 +252,7 @@ export default function App() {
               style={{
                 height: progressPercent,
                 borderRadius: 25,
-                backgroundColor: "#5abcd8",
+                backgroundColor: COLORS.primary,
               }}
             />
           </View>
@@ -306,7 +307,7 @@ export default function App() {
                 {
                   borderWidth: 1,
                   width: "97.5%",
-                  borderColor: "#2EB5FA",
+                  borderColor: COLORS.primary,
                   backgroundColor: COLORS.light,
                 },
               ]}
@@ -452,7 +453,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 5,
     width: "50%",
-    borderColor: "#2EB5FA",
+    borderColor: COLORS.primary,
     backgroundColor: COLORS.light,
   },
   reset: {

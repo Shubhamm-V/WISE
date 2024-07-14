@@ -8,7 +8,8 @@ interface DropdownProps {
   options: string[];
   onSelect: (item: string, index: number) => void;
   placeholder: string;
-  isEditing: boolean;
+  isEditing?: boolean;
+  height?: number;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -16,6 +17,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   onSelect,
   placeholder,
   isEditing,
+  height,
 }) => {
   const setItem = (item: string, index: number) => {
     onSelect(item, index);
@@ -30,7 +32,12 @@ const Dropdown: React.FC<DropdownProps> = ({
       }}
       renderButton={(selectedItem, isOpened) => {
         return (
-          <View style={styles.dropdownButtonStyle}>
+          <View
+            style={[
+              styles.dropdownButtonStyle,
+              { height: height ? height : 50 },
+            ]}
+          >
             <Text
               style={[
                 styles.dropdownButtonTxtStyle,

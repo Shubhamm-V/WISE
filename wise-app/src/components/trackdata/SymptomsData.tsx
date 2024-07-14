@@ -9,6 +9,7 @@ import {
 import React, { FC, useState, useEffect } from "react";
 import CustomText from "../custom-widgets/CustomText";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { COLORS } from "@/src/constants/colors";
 
 const data = [
   { label: "All Good", index: "1" },
@@ -16,6 +17,8 @@ const data = [
   { label: "Acne", index: "3" },
   { label: "Cramp", index: "4" },
   { label: "Fatigue", index: "5" },
+  { label: "Back Pain", index: "6" },
+  { label: "Breasts Pain", index: "7" },
 ];
 
 // Map indices to image paths
@@ -25,6 +28,8 @@ const symptomsImageMap: any = {
   "3": require("../../../assets/images/illustrations/period-tracker/symptoms/symptom3.png"),
   "4": require("../../../assets/images/illustrations/period-tracker/symptoms/symptom4.png"),
   "5": require("../../../assets/images/illustrations/period-tracker/symptoms/symptom5.png"),
+  "6": require("../../../assets/images/illustrations/period-tracker/symptoms/symptom6.png"),
+  "7": require("../../../assets/images/illustrations/period-tracker/symptoms/symptom7.png"),
 };
 
 interface SymptomProps {
@@ -92,10 +97,10 @@ const SymptomsData: FC<SymptomProps> = ({ selectedDay }) => {
                     styles.symptoms,
                     {
                       backgroundColor: selected.includes(value.label)
-                        ? "#CDEEF6"
+                        ? COLORS.lightPrimary
                         : "transparent",
                       marginLeft: ind === 0 ? -10 : 10,
-                      marginRight: ind == 4 ? 0 : 10,
+                      marginRight: ind == 6 ? 0 : 10,
                     },
                   ]}
                 >
@@ -110,7 +115,7 @@ const SymptomsData: FC<SymptomProps> = ({ selectedDay }) => {
                     styles.label,
                     {
                       marginLeft: ind === 0 ? -10 : 10,
-                      marginRight: ind == 4 ? 0 : 10,
+                      marginRight: ind == 6 ? 0 : 10,
                     },
                   ]}
                 />
@@ -141,7 +146,7 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderWidth: 2,
-    borderColor: "#CDEEF6",
+    borderColor: COLORS.lightPrimary,
     justifyContent: "center",
     alignItems: "center",
   },

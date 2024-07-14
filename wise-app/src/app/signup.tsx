@@ -240,7 +240,7 @@ const SignUp = () => {
                 customStyle={[
                   {
                     borderWidth: 1,
-                    borderColor: "#2EB5FA",
+                    borderColor: COLORS.primary,
                     backgroundColor: COLORS.light,
                   },
                 ]}
