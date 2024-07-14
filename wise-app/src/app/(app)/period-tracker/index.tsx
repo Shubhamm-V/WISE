@@ -106,7 +106,7 @@ const TrackMenustralCycle = () => {
         // @ts-ignore
         selected: true,
         // @ts-ignore
-        color: "#F8BABA",
+        color: "#FDADBE",
         dotColor: "transparent",
       };
       endPeriodString = dateString;
@@ -141,7 +141,7 @@ const TrackMenustralCycle = () => {
       // @ts-ignore
       dotColor: "transparent",
       // @ts-ignore
-      color: "#CBF7FD",
+      color: "#F5DFFC",
     };
 
     // Formatting period dates (e.g 20 July) for tracking periods
@@ -246,7 +246,9 @@ const TrackMenustralCycle = () => {
                   styles.tag,
                   {
                     backgroundColor:
-                      selectedDay === periodDay ? "#D7F5FD" : "transparent",
+                      selectedDay === periodDay
+                        ? COLORS.lightPrimary
+                        : "transparent",
                     marginLeft: ind === 0 ? -10 : 5,
                     marginRight: ind == periodDay.length - 1 ? 0 : 5,
                   },
@@ -299,7 +301,7 @@ const styles = StyleSheet.create({
     width: 100,
     marginTop: 10,
     paddingVertical: 7,
-    borderColor: "#2EB5FA",
+    borderColor: COLORS.primary,
     backgroundColor: COLORS.light,
   },
   tagContainer: {

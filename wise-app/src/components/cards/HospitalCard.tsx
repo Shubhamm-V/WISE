@@ -15,11 +15,25 @@ const HospitalCard: React.FC<ChildProps> = ({ hospitalData }) => {
     hospitalData;
   return (
     <View style={styles.cardContainer}>
-      <View style={{ flexDirection: "row", gap: 5 }}>
-        <Image
-          style={styles.image}
-          source={require("../../../assets/images/illustrations/hospitals/hospital.png")}
-        />
+      <View
+        style={{
+          flexDirection: "row",
+          gap: 3,
+          padding: 5,
+        }}
+      >
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: COLORS.primary,
+            borderRadius: 10,
+          }}
+        >
+          <Image
+            style={styles.image}
+            source={require("../../../assets/images/illustrations/hospitals/hospital.png")}
+          />
+        </View>
         <View style={styles.cardContent}>
           <CustomText label={name} customStyle={styles.nameText} />
         </View>
@@ -55,9 +69,9 @@ const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: COLORS.light,
     borderRadius: 4,
-    paddingVertical: 20,
+    paddingVertical: 10,
     paddingHorizontal: 6,
-    marginVertical: 0,
+    marginVertical: 5,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
     shadowRadius: 0.84,
@@ -67,12 +81,6 @@ const styles = StyleSheet.create({
     shadowColor: "#52006A",
   },
 
-  hospitalImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 40,
-  },
-
   cardContent: {
     display: "flex",
     justifyContent: "center",
@@ -80,7 +88,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   nameText: {
-    fontSize: 20,
+    fontSize: 22,
     color: COLORS.primary,
     fontFamily: "DMSansBold",
   },
@@ -102,8 +110,8 @@ const styles = StyleSheet.create({
     width: "45%",
   },
   image: {
-    height: 50,
-    width: 50,
+    height: 35,
+    width: 35,
   },
 });
 

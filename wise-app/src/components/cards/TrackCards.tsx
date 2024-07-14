@@ -8,14 +8,14 @@ import { router } from "expo-router";
 const TrackCards = () => {
   return (
     <View style={{ paddingHorizontal: 10, marginVertical: 10 }}>
-      <CustomText label="Set Reminders" customStyle={styles.title} />
+      <CustomText label="Take care of your health" customStyle={styles.title} />
       <View style={styles.cardContainer}>
         <Pressable
           style={styles.card}
           onPress={() => router.push("/water-reminder")}
         >
           <LinearGradient
-            colors={["#E0F7FA", COLORS.light]}
+            colors={[COLORS.lightPrimary, COLORS.light]}
             style={{
               paddingHorizontal: 13,
               flexDirection: "row",
@@ -23,7 +23,7 @@ const TrackCards = () => {
               paddingTop: 15,
             }}
           >
-            <View style={{ width: "38%" }}>
+            <View style={{ width: "39%" }}>
               <Image
                 style={styles.image}
                 source={require("../../../assets/images/illustrations/water-intake/card-image.png")}
@@ -48,7 +48,7 @@ const TrackCards = () => {
           onPress={() => router.push("/reminders/water-reminder")}
         >
           <LinearGradient
-            colors={["#E0F7FA", COLORS.light]}
+            colors={[COLORS.lightPrimary, COLORS.light]}
             style={{
               paddingHorizontal: 13,
               flexDirection: "row",
@@ -59,7 +59,7 @@ const TrackCards = () => {
             <View style={{ width: "38%" }}>
               <Image
                 style={styles.image}
-                source={require("../../../assets/images/illustrations/education/image.png")}
+                source={require("../../../assets/images/illustrations/water-intake/card-image.png")}
               />
             </View>
             <View style={{ width: "51%", flexDirection: "column" }}>
@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
     shadowRadius: 0.84,
     shadowOpacity: 0.15,
     shadowColor: "#52006A",
-
     width: "49%",
     backgroundColor: COLORS.light,
   },
@@ -107,8 +106,8 @@ const styles = StyleSheet.create({
     marginBottom: 7,
   },
   image: {
-    height: 75,
-    width: 63,
+    height: 80,
+    width: 62,
     marginLeft: -5,
   },
 });

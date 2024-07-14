@@ -71,7 +71,7 @@ const PeriodData: FC<PeriodDataProps> = ({ selectedDay }) => {
                     styles.period,
                     {
                       backgroundColor:
-                        selected === value.label ? "#FBE4E4" : "transparent",
+                        selected === value.label ? "#FFBFCD" : "transparent",
                       marginLeft: ind === 0 ? -10 : 10,
                       marginRight: ind == 4 ? 0 : 10,
                     },
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderWidth: 2,
-    borderColor: "#FBE4E4",
+    borderColor: "#FFBFCD",
     justifyContent: "center",
     alignItems: "center",
   },

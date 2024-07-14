@@ -27,7 +27,7 @@ const InfoScreen1 = () => {
       <View style={{ padding: "3%", alignItems: "center" }}>
         <Image
           style={styles.image}
-          source={require("../../../../../assets/images/illustrations/period-tracker/info-screen/step-1.png")}
+          source={require("../../../../../assets/images/illustrations/period-tracker/info-screen/step-2.png")}
         />
         <CustomText
           label="How long is your menstrual cycle?"
@@ -76,7 +76,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   image: {
-    height: 280,
-    width: 280,
+    height: 250,
+    margin: 10,
+    width: 250,
   },
 });

@@ -45,3 +45,15 @@ export const STATES: string[] = [
   "Uttarakhand",
   "West Bengal",
 ];
+
+export const DISTANCE = [
+  "2 KM",
+  "4 KM",
+  "6 KM",
+  "8 KM",
+  "10 KM",
+  "15 KM",
+  "20 KM",
+  "25 KM",
+  "50 KM",
+];

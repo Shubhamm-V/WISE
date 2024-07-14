@@ -82,7 +82,7 @@ const FeelingData: FC<FeelingsProps> = ({ selectedDay }) => {
                     styles.feelings,
                     {
                       backgroundColor: selected.includes(value.label)
-                        ? "#CDEEF6"
+                        ? COLORS.lightPrimary
                         : "transparent",
                       marginLeft: ind === 0 ? -11 : 10,
                       marginRight: ind == 4 ? 0 : 10,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderWidth: 2,
-    borderColor: "#CDEEF6",
+    borderColor: COLORS.lightPrimary,
     justifyContent: "center",
     alignItems: "center",
   },
