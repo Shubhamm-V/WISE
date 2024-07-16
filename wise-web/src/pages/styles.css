@@ -1,0 +1,24 @@
+.authContainer {
+  width: 25%;
+  border: 1px solid var(--subtheme-color);
+  padding-block: 30px;
+  border-radius: 10px !important;
+}
+
+@media (max-width: 1450px) {
+  .authContainer {
+    width: 40%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .authContainer {
+    width: 50%;
+  }
+}
+
+@media (max-width: 750px) {
+  .authContainer {
+    width: 95%;
+  }
+}
