@@ -1,17 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import type { FormProps } from "antd";
-import { Button, Checkbox, Col, Form, Input, Row } from "antd";
-import { Link } from "react-router-dom";
+import { Button, notification, Col, Form, Input, Row } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 import "./styles.css";
+import { useAuth } from "../context/authContext";
 type FieldType = {
-  username?: string;
-  password?: string;
-  remember?: string;
+  email: string;
+  password: string;
 };
 
-const App: React.FC = () => {
-  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    console.log("Success:", values);
+const Login: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const { login, isAuthenticated } = useAuth();
+  const [api, contextHolder] = notification.useNotification();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isAuthenticated) navigate("/");
+  }, [isAuthenticated]);
+
+  const openNotification = (message: string) => {
+    api.open({
+      message,
+      duration: 3,
+    });
+  };
+  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    setLoading(true);
+    const { email, password } = values;
+    const response: any = await login(email, password);
+    setLoading(false);
+    if (response.success) {
+      navigate("/");
+    } else {
+      openNotification("Invalid email or password");
+    }
   };
 
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
@@ -21,6 +43,7 @@ const App: React.FC = () => {
   };
   return (
     <Row style={{ height: "100vh", display: "grid", placeItems: "center" }}>
+      {contextHolder}
       <Col className="authContainer">
         <h1 style={{ textAlign: "center" }}> Login with WISE </h1>
         <Form
@@ -34,11 +57,11 @@ const App: React.FC = () => {
           autoComplete="off"
         >
           <Form.Item<FieldType>
-            label="Username"
-            name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
+            label="Email"
+            name="email"
+            rules={[{ required: true, message: "Please enter your email!" }]}
           >
-            <Input />
+            <Input type="email" placeholder="Enter you email" />
           </Form.Item>
 
           <Form.Item<FieldType>
@@ -46,11 +69,16 @@ const App: React.FC = () => {
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <Input.Password />
+            <Input.Password placeholder="Enter password" />
           </Form.Item>
 
           <Form.Item wrapperCol={{ span: 24 }}>
-            <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ width: "100%" }}
+              loading={loading}
+            >
               Submit
             </Button>
           </Form.Item>
@@ -72,4 +100,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Login;
