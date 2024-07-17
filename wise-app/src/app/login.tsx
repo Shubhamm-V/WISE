@@ -130,7 +130,7 @@ const Login = () => {
       let { msg } = response;
       console.log(response.message);
       if (msg && !msg.includes("(auth/invalid-credential)"))
-        Alert.alert("Invalid email or passwords");
+        Alert.alert("Invalid email or password");
     }
   };
 

@@ -20,6 +20,7 @@ interface AuthContextProps {
   login: (email: string, password: string) => Promise<{}>;
   logout: () => Promise<{}>;
   signup: (email: string, password: string, name: string) => Promise<{}>;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -61,6 +62,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   const login = async (email: string, password: string) => {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
+      setIsAuthenticated(true);
       console.log("RESPONSE : ", response);
       return { success: true };
     } catch (err) {
@@ -96,7 +98,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
         userId: response?.user?.uid,
         doctor: true,
       });
-
+      setIsAuthenticated(true);
       return {
         success: true,
         data: response?.user,
@@ -104,17 +106,24 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     } catch (err: any) {
       let msg = err.message;
       if (msg.includes("(auth/email-already-in-use)"))
-        msg = "This email is already in use";
+        msg = "Entered email is already in use";
       return {
         success: false,
-        msg: err.message,
+        msg,
       };
     }
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, signup, logout }}
+      value={{
+        user,
+        isAuthenticated,
+        login,
+        signup,
+        logout,
+        setIsAuthenticated,
+      }}
     >
       {children}
     </AuthContext.Provider>
