@@ -1,4 +1,4 @@
-@import "https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Roboto:wght@300&display=swap";
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap");
 
 :root {
   --theme-color: #9966cc;
@@ -11,7 +11,7 @@
 ::before,
 ::after {
   box-sizing: border-box;
-  font-family: "Josefin Sans", sans-serif;
+  font-family: "Jost", sans-serif;
 }
 
 body {

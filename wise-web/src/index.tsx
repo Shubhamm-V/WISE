@@ -8,7 +8,7 @@ import Login from "./pages/Login";
 import { ConfigProvider } from "antd";
 import Signup from "./pages/Signup";
 import AdminDashboard from "./pages/AdminDashboard";
-import HospitalDashboard from "./pages/HospitalDashboard";
+import HospitalDashboard from "./pages/hospitals/AddHospital";
 import { AuthContextProvider } from "./context/authContext";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
