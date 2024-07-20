@@ -105,7 +105,7 @@ const App: React.FC = () => {
               style={{ width: "100%" }}
               loading={loading}
             >
-              Submit
+              Sign Up
             </Button>
           </Form.Item>
         </Form>

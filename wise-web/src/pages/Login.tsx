@@ -79,7 +79,7 @@ const Login: React.FC = () => {
               style={{ width: "100%" }}
               loading={loading}
             >
-              Submit
+              Login
             </Button>
           </Form.Item>
         </Form>

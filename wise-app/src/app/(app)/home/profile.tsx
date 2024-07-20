@@ -1,10 +1,4 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import ProfileHeader from "@/src/components/layouts/ProfileHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,13 +8,12 @@ import { COLORS } from "@/src/constants/colors";
 import { object, string, number } from "yup";
 import { Input } from "@rneui/themed";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 import CustomButton from "@/src/components/custom-widgets/CustomButton";
 import { LANGUAGES, STATES } from "@/src/constants/dropdown";
 import { useAuth } from "@/src/context/authContext";
 import { db } from "@/firebaseConfig";
 import { getDoc, setDoc, doc } from "firebase/firestore";
-import { color } from "@rneui/base";
 import Loading from "@/src/components/custom-widgets/Loading";
 
 const detailsSchema = object({
@@ -91,10 +84,11 @@ const Profile: React.FC = () => {
     const { name, age, phone, city } = values;
     await setDoc(doc(db, "users", user.userId), {
       name,
-      age, // Convert age to number
+      age,
       phone,
       city,
       state,
+      email: user?.email,
       userId: user.userId,
     });
     console.log("Saved : ", values);
