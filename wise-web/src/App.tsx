@@ -8,6 +8,9 @@ import { useAuth } from "./context/authContext";
 import DashLayout from "./layouts/DashLayout";
 import Users from "./pages/Users";
 import ViewHospitals from "./pages/hospitals/ViewHospitals";
+import AllUserHospitals from "./pages/hospitals/AllUserHospitals";
+import AddVideo from "./pages/videos/AddVideo";
+import AllVideos from "./pages/videos/AllVideos";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -26,7 +29,10 @@ function App() {
         <Route path="admin" element={<AdminDashboard />} />
         <Route path="users" element={<Users />} />
         <Route path="add-hospital" element={<AddHospital />} />
+        <Route path="add-video" element={<AddVideo />} />
+        <Route path="view-videos" element={<AllVideos />} />
         <Route path="view-hospitals" element={<ViewHospitals />} />
+        <Route path="all-hospitals" element={<AllUserHospitals />} />
       </Route>
     </Routes>
   );

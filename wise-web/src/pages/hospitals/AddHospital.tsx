@@ -11,17 +11,22 @@ import {
   Select,
 } from "antd";
 import { useNavigate } from "react-router-dom";
-import { addDoc, collection } from "firebase/firestore";
-
-import { STATES } from "../../constants/states"; // Adjust the path according to your project structure
+import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
+import { STATES } from "../../constants/states";
 import { useAuth } from "../../context/authContext";
 import { db } from "../../firebaseConfig";
 import { HospitalData } from "../../constants/table_columns";
 
 const { Option } = Select;
 
-const AddHospital: React.FC = () => {
+interface HospitalProps {
+  hospitalData?: HospitalData;
+  onUpdate?: (updatedHospital: HospitalData) => void;
+}
+
+const AddHospital: React.FC<HospitalProps> = ({ hospitalData, onUpdate }) => {
   const [loading, setLoading] = useState<boolean>(false);
+
   const { user } = useAuth();
   const [initialFormValues, setInitialFormValues] = useState({
     hospitalName: "",
@@ -46,15 +51,25 @@ const AddHospital: React.FC = () => {
   };
 
   useEffect(() => {
-    if (initialFormValues.position) {
-      getMyLocation();
-    } else {
+    if (hospitalData) {
+      setInitialFormValues((prevValues) => ({
+        ...prevValues,
+        ...hospitalData,
+      }));
       form.setFieldsValue({
-        latitude: "",
-        longitude: "",
+        ...hospitalData,
       });
+    } else {
+      if (initialFormValues.position) {
+        getMyLocation();
+      } else {
+        form.setFieldsValue({
+          latitude: "",
+          longitude: "",
+        });
+      }
     }
-  }, [initialFormValues.position]);
+  }, [initialFormValues.position, hospitalData]);
 
   const getMyLocation = () => {
     const location = window.navigator && window.navigator.geolocation;
@@ -85,14 +100,18 @@ const AddHospital: React.FC = () => {
       if (!user) {
         throw new Error("User is not authenticated");
       }
-      const hospitalData = values;
-      delete hospitalData.position;
-      console.log("hospitalInfo : ", values);
-      const docRef = await addDoc(collection(db, "hospitals"), {
-        ...values,
-        userId: user.userId,
-      });
-      openNotification("Hospital added successfully");
+      if (hospitalData?.id) {
+        const hospitalDocRef = doc(db, "hospitals", hospitalData.id);
+        await updateDoc(hospitalDocRef, values);
+        if (onUpdate) onUpdate({ ...values, id: hospitalData.id });
+        openNotification("Hospital updated successfully");
+      } else {
+        await addDoc(collection(db, "hospitals"), {
+          ...values,
+          userId: user.userId,
+        });
+        openNotification("Hospital added successfully");
+      }
       setLoading(false);
       navigate("/view-hospitals");
     } catch (err: any) {
@@ -111,18 +130,18 @@ const AddHospital: React.FC = () => {
     <Row>
       {contextHolder}
       <Col span={24}>
-        <h1>Add Hospital</h1>
+        <h1>{hospitalData ? "Update Hospital" : "Add Hospital"}</h1>
         <Form
           form={form}
           name="basic"
           layout="vertical"
           labelCol={{ span: 18 }}
-          // initialValues={initialFormValues}
           wrapperCol={{ span: 24 }}
           style={{ paddingBlock: 5 }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
+          initialValues={initialFormValues}
         >
           <Row gutter={30}>
             <Col span={12} xs={24} sm={24} md={12}>
@@ -192,30 +211,35 @@ const AddHospital: React.FC = () => {
                 />
               </Form.Item>
             </Col>
-            <Col
-              span={12}
-              xs={24}
-              sm={24}
-              md={12}
-              style={{ display: "flex", alignItems: "center" }}
-            >
-              <Form.Item<HospitalData> name="position" valuePropName="checked">
-                <Checkbox
-                  checked={initialFormValues.position}
-                  onChange={() => {
-                    setInitialFormValues((prevValues) => ({
-                      ...prevValues,
-                      position: !prevValues.position,
-                    }));
-                  }}
+            {!hospitalData && (
+              <Col
+                span={12}
+                xs={24}
+                sm={24}
+                md={12}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <Form.Item<HospitalData>
+                  name="position"
+                  valuePropName="checked"
                 >
-                  <label style={{ fontSize: 16 }}>
-                    Set latitude and longitude of your current location
-                  </label>
-                </Checkbox>
-                <Button type="link">Why we need it?</Button>
-              </Form.Item>
-            </Col>
+                  <Checkbox
+                    checked={initialFormValues.position}
+                    onChange={() => {
+                      setInitialFormValues((prevValues) => ({
+                        ...prevValues,
+                        position: !prevValues.position,
+                      }));
+                    }}
+                  >
+                    <label style={{ fontSize: 16 }}>
+                      Set latitude and longitude of your current location
+                    </label>
+                  </Checkbox>
+                  <Button type="link">Why we need it?</Button>
+                </Form.Item>
+              </Col>
+            )}
           </Row>
           <Row gutter={30}>
             <Col span={12} xs={24} sm={12} md={12} lg={8}>
@@ -250,6 +274,10 @@ const AddHospital: React.FC = () => {
                 name="contact"
                 rules={[
                   { required: true, message: "Please enter contact number!" },
+                  {
+                    pattern: new RegExp(/^[0-9]{10}$/),
+                    message: "Please enter a valid 10-digit phone number!",
+                  },
                 ]}
               >
                 <Input placeholder="Enter contact number" />
@@ -270,7 +298,7 @@ const AddHospital: React.FC = () => {
                 style={{ width: "100%", paddingInline: 35, margin: 5 }}
                 loading={loading}
               >
-                Add Hospital
+                {hospitalData ? "Update Hospital" : "Add Hospital"}
               </Button>
             </Form.Item>
           </Row>

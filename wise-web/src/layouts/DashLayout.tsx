@@ -37,11 +37,12 @@ const items: MenuItem[] = [
   getItem("All Users", "users", <PieChartOutlined />),
   getItem("Hospitals", "hospitals", <UserOutlined />, [
     getItem("Add Hospital", "add-hospital"),
-    getItem("View Hospitals", "view-hospitals"),
+    getItem("Your Hospitals", "view-hospitals"),
+    getItem("All Hospitals", "all-hospitals"),
   ]),
   getItem("Video", "videos", <TeamOutlined />, [
-    getItem("Add Video", "4"),
-    getItem("View Videos", "5"),
+    getItem("Add Video", "add-video"),
+    getItem("View Videos", "view-videos"),
   ]),
 ];
 
