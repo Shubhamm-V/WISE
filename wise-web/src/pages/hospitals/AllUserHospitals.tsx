@@ -1,4 +1,4 @@
-import { Col, Row, Table, Button, Modal, notification } from "antd";
+import { Col, Row, Table, Button, Modal, notification, Input } from "antd";
 import { useEffect, useState } from "react";
 import {
   getDocs,
@@ -15,6 +15,8 @@ import {
 } from "@ant-design/icons";
 import { db } from "../../firebaseConfig";
 import { HOSPITAL_COLUMNS, HospitalData } from "../../constants/table_columns";
+import { SearchOutlined } from "@ant-design/icons";
+
 import { useAuth } from "../../context/authContext";
 import AddHospital from "./AddHospital";
 
@@ -22,11 +24,12 @@ const { confirm } = Modal;
 
 type Props = {};
 
-const Users = (props: Props) => {
+const AllUserHospitals = (props: Props) => {
   const [dataSource, setDataSource] = useState<HospitalData[]>([]);
   const [api, contextHolder] = notification.useNotification();
   const [editHospitalData, setEditHospitalData] = useState<HospitalData>();
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [searchText, setSearchText] = useState("");
   const { user } = useAuth();
 
   const openNotification = (message: string) => {
@@ -38,23 +41,30 @@ const Users = (props: Props) => {
 
   useEffect(() => {
     const getInfo = async () => {
-      try {
-        const hospitalsRef = collection(db, "hospitals");
-        const q = query(hospitalsRef, where("userId", "==", user.userId));
-        const querySnapshot = await getDocs(q);
+      const querySnapshot = await getDocs(collection(db, "hospitals"));
+      const allHospitalData: HospitalData[] = [];
 
-        const hospitalsData = querySnapshot.docs.map((doc) => ({
+      querySnapshot.forEach((doc) => {
+        let data = doc.data();
+        allHospitalData.push({
           id: doc.id,
-          ...doc.data(),
-        })) as HospitalData[];
-        setDataSource(hospitalsData);
-      } catch (error) {
-        console.error("Error fetching hospital data: ", error);
-      }
+          hospitalName: data?.hospitalName,
+          doctorName: data?.doctorName,
+          address: data?.address,
+          latitude: data?.latitude,
+          longitude: data?.longitude,
+          position: data?.position,
+          city: data?.city,
+          state: data?.state,
+          contact: data?.contact,
+        });
+      });
+
+      setDataSource(allHospitalData);
     };
 
     getInfo();
-  }, [user]);
+  }, []);
 
   const handleEdit = (record: HospitalData) => {
     setEditHospitalData(record);
@@ -104,6 +114,16 @@ const Users = (props: Props) => {
     setShowEditModal(false);
   };
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  };
+
+  const filteredDataSource = dataSource.filter((hospital) =>
+    [hospital.hospitalName, hospital.doctorName].some((field) =>
+      field.toString().toLowerCase().includes(searchText.toLowerCase())
+    )
+  );
+
   const columns = [
     ...HOSPITAL_COLUMNS,
     {
@@ -131,12 +151,21 @@ const Users = (props: Props) => {
       <Col span={24}>
         <Row style={{ display: "flex", alignItems: "center" }}>
           <Col span={17} sm={14} xs={24} md={17}>
-            <h1 style={{ marginTop: 0 }}>Your Hospitals</h1>
+            <h1 style={{ marginTop: 0 }}>Registered Hospitals</h1>
+          </Col>
+          <Col span={7} sm={10} xs={24} md={7}>
+            <Input
+              size="large"
+              placeholder="Search by name, email, etc"
+              value={searchText}
+              onChange={handleSearch}
+              prefix={<SearchOutlined style={{ marginRight: 5 }} />}
+            />
           </Col>
         </Row>
         <Table
           scroll={{ x: true }}
-          dataSource={dataSource}
+          dataSource={filteredDataSource}
           columns={columns}
           rowKey="id"
         />
@@ -157,4 +186,4 @@ const Users = (props: Props) => {
   );
 };
 
-export default Users;
+export default AllUserHospitals;
