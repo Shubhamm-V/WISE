@@ -45,8 +45,21 @@ const AddVideo: React.FC<VideoProps> = ({ videoData, onUpdate }) => {
     }
   }, [videoData]);
 
+  const getVideoID = (url: string) => {
+    if (!url) return "";
+    const regex =
+      /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const matches = url.match(regex);
+    return matches ? matches[1] : "";
+  };
+
   const onFinish: FormProps<VideoData>["onFinish"] = async (values) => {
     setLoading(true);
+    const videoId = getVideoID(values?.url);
+    values = {
+      ...values,
+      thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+    };
     try {
       if (!user) {
         throw new Error("User is not authenticated");
