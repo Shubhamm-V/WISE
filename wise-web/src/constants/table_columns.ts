@@ -103,17 +103,13 @@ export const HOSPITAL_COLUMNS = [
 export type VideoData = {
   id: string;
   url: string;
+  thumbnail: string;
   title: string;
   description: string;
   category: string;
 };
 
 export const VIDEO_COLUMNS = [
-  {
-    title: "Sr. No.",
-    key: "index",
-    render: (_text: any, _record: VideoData, index: number) => index + 1,
-  },
   {
     title: "Youtube URL",
     dataIndex: "url",

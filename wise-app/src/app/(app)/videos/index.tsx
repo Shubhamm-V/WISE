@@ -115,7 +115,7 @@ const NearByHospitals = (props: Props) => {
             <View style={{ width: "80%" }}>
               <CustomText
                 customStyle={{ textAlign: "center" }}
-                label="Sorry..! No nearby hospitals are registered on our App"
+                label="Sorry..! No videos found"
               />
             </View>
           </View>

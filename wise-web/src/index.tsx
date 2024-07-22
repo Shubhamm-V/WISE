@@ -3,12 +3,9 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
+import { BrowserRouter } from "react-router-dom";
 import { ConfigProvider } from "antd";
-import Signup from "./pages/Signup";
-import AdminDashboard from "./pages/AdminDashboard";
-import HospitalDashboard from "./pages/hospitals/AddHospital";
+
 import { AuthContextProvider } from "./context/authContext";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
