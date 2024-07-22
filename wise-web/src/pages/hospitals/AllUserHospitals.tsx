@@ -149,7 +149,7 @@ const AllUserHospitals = (props: Props) => {
     <Row>
       {contextHolder}
       <Col span={24}>
-        <Row style={{ display: "flex", alignItems: "center" }}>
+        <Row style={{ display: "flex", alignItems: "center", marginBlock: 20 }}>
           <Col span={17} sm={14} xs={24} md={17}>
             <h1 style={{ marginTop: 0 }}>Registered Hospitals</h1>
           </Col>

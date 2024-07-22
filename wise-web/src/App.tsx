@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes, Navigate, Outlet } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/Dashboard";
 import AddHospital from "./pages/hospitals/AddHospital";
 import { useAuth } from "./context/authContext";
 import DashLayout from "./layouts/DashLayout";
@@ -10,7 +10,7 @@ import Users from "./pages/Users";
 import ViewHospitals from "./pages/hospitals/ViewHospitals";
 import AllUserHospitals from "./pages/hospitals/AllUserHospitals";
 import AddVideo from "./pages/videos/AddVideo";
-import AllVideos from "./pages/videos/AllVideos";
+import AllVideos from "./pages/videos/PostedVideos";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -25,8 +25,8 @@ function App() {
           isAuthenticated ? <DashLayoutWithAuth /> : <Navigate to="/login" />
         }
       >
-        <Route index element={<Users />} />
-        <Route path="admin" element={<AdminDashboard />} />
+        <Route index element={<Navigate to={"add-hospital"} replace />} />
+        <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="users" element={<Users />} />
         <Route path="add-hospital" element={<AddHospital />} />
         <Route path="add-video" element={<AddVideo />} />
