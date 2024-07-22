@@ -5,6 +5,23 @@
   border-radius: 10px !important;
 }
 
+.cardContent {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardLabel {
+  font-weight: 500;
+  font-size: 25px;
+}
+
+.cardLabel:nth-child(even) {
+  color: var(--theme-color);
+  font-size: 35px;
+}
+
 @media (max-width: 1450px) {
   .authContainer {
     width: 40%;

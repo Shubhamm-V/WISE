@@ -1,15 +1,18 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
+  PlusSquareOutlined,
+  VideoCameraOutlined,
+  MenuFoldOutlined,
+  ExclamationCircleOutlined,
+  AppstoreOutlined,
+  LogoutOutlined,
   TeamOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Breadcrumb, Card, Layout, Menu, theme } from "antd";
+import { Card, Layout, Menu, theme, Modal } from "antd";
 import { useAuth } from "../context/authContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+const { confirm } = Modal;
 const { Header, Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -33,47 +36,83 @@ function getItem(
   } as MenuItem;
 }
 
-const items: MenuItem[] = [
-  getItem("All Users", "users", <PieChartOutlined />),
-  getItem("Hospitals", "hospitals", <UserOutlined />, [
-    getItem("Add Hospital", "add-hospital"),
-    getItem("Your Hospitals", "view-hospitals"),
-    getItem("All Hospitals", "all-hospitals"),
-  ]),
-  getItem("Video", "videos", <TeamOutlined />, [
-    getItem("Add Video", "add-video"),
-    getItem("View Videos", "view-videos"),
-  ]),
-];
-
 const DashLayout: React.FC<LayoutProps> = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const [showSideBar, setShowSideBar] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const [loading, setLoading] = useState(false);
   const { logout, user } = useAuth();
+
+  useEffect(() => {
+    if (window.innerWidth <= 575) {
+      setShowSideBar(true);
+    }
+  }, []);
+
   const handleLogout = async () => {
-    setLoading(true);
     await logout();
-    setLoading(false);
   };
+
+  const showDeleteConfirm = () => {
+    confirm({
+      title: "Are you sure you want to Logout?",
+      icon: <ExclamationCircleOutlined />,
+      okText: "Yes",
+      centered: true,
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        handleLogout();
+      },
+    });
+  };
+
+  const isAdmin = process.env.REACT_APP_ADMIN_ID === user.userId;
+
+  const items: MenuItem[] = isAdmin
+    ? [
+        getItem("Dashboard", "dashboard", <AppstoreOutlined />),
+        getItem("All Users", "users", <TeamOutlined />),
+        getItem("Hospitals", "hospitals", <PlusSquareOutlined />, [
+          getItem("Add Hospital", "add-hospital"),
+          getItem("Your Hospitals", "view-hospitals"),
+          getItem("All Hospitals", "all-hospitals"),
+        ]),
+        getItem("Video", "videos", <VideoCameraOutlined />, [
+          getItem("Add Video", "add-video"),
+          getItem("View Videos", "view-videos"),
+        ]),
+      ]
+    : [
+        getItem("Hospitals", "hospitals", <PlusSquareOutlined />, [
+          getItem("Add Hospital", "add-hospital"),
+          getItem("Your Hospitals", "view-hospitals"),
+        ]),
+      ];
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
-        collapsible
+        collapsible={!showSideBar && window.innerWidth > 575}
+        style={{ display: showSideBar ? "none" : "unset" }}
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
       >
-        <div className="demo-logo-vertical" />
-        <h2 style={{ color: "#fff", padding: 10 }}>WISE</h2>
+        <h1 style={{ color: "#fff", padding: 10, textAlign: "center" }}>
+          WISE - {isAdmin ? "Admin" : "Hospital"}
+        </h1>
         <Menu
           theme="dark"
-          defaultSelectedKeys={["1"]}
-          onSelect={(menuItem) => navigate(menuItem.key)}
+          defaultSelectedKeys={[location.pathname.substring(1)]}
+          selectedKeys={[location.pathname.substring(1)]}
+          onSelect={(menuItem) => {
+            navigate(`/${menuItem.key}`);
+            if (window.innerWidth <= 575) setShowSideBar(true);
+          }}
           mode="inline"
           items={items}
         />
@@ -81,21 +120,32 @@ const DashLayout: React.FC<LayoutProps> = ({ children }) => {
       <Layout>
         <Header
           style={{
-            padding: 0,
             background: colorBgContainer,
             display: "flex",
-            justifyContent: "flex-end",
-            gap: 10,
+            alignItems: "center",
+            justifyContent:
+              window.innerWidth <= 540 ? "space-between" : "flex-end",
             paddingInline: "2%",
           }}
         >
-          <label>{user.name}</label>
+          {window.innerWidth <= 540 && (
+            <div onClick={() => setShowSideBar((prev) => !prev)}>
+              <MenuFoldOutlined style={{ fontSize: 20, cursor: "pointer" }} />
+            </div>
+          )}
+          <div>
+            <label>{user.name}</label>
+            <LogoutOutlined
+              onClick={showDeleteConfirm}
+              style={{
+                marginLeft: 10,
+                color: "#9966CC",
+                cursor: "pointer",
+              }}
+            />
+          </div>
         </Header>
         <Content style={{ margin: "0 7px" }}>
-          {/* <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb> */}
           <Card style={{ marginTop: 16 }}>{children}</Card>
         </Content>
         <Footer style={{ padding: "7px" }}>
