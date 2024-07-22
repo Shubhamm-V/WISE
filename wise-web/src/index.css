@@ -27,3 +27,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.hideSideBar {
+  position: fixed;
+  z-index: 999;
+  height: 100vh;
+}
