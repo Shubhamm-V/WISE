@@ -9,6 +9,7 @@ import {
   Input,
   Row,
   Select,
+  Modal,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
@@ -26,7 +27,7 @@ interface HospitalProps {
 
 const AddHospital: React.FC<HospitalProps> = ({ hospitalData, onUpdate }) => {
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [showWhyLocation, setShowWhyLocation] = useState<boolean>(false);
   const { user } = useAuth();
   const [initialFormValues, setInitialFormValues] = useState({
     hospitalName: "",
@@ -96,6 +97,7 @@ const AddHospital: React.FC<HospitalProps> = ({ hospitalData, onUpdate }) => {
 
   const onFinish: FormProps<HospitalData>["onFinish"] = async (values) => {
     setLoading(true);
+    delete values.position;
     try {
       if (!user) {
         throw new Error("User is not authenticated");
@@ -141,7 +143,7 @@ const AddHospital: React.FC<HospitalProps> = ({ hospitalData, onUpdate }) => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
-          initialValues={initialFormValues}
+          initialValues={hospitalData && initialFormValues}
         >
           <Row gutter={30}>
             <Col span={12} xs={24} sm={24} md={12}>
@@ -236,7 +238,9 @@ const AddHospital: React.FC<HospitalProps> = ({ hospitalData, onUpdate }) => {
                       Set latitude and longitude of your current location
                     </label>
                   </Checkbox>
-                  <Button type="link">Why we need it?</Button>
+                  <Button type="link" onClick={() => setShowWhyLocation(true)}>
+                    Why we need it?
+                  </Button>
                 </Form.Item>
               </Col>
             )}
@@ -304,6 +308,21 @@ const AddHospital: React.FC<HospitalProps> = ({ hospitalData, onUpdate }) => {
           </Row>
         </Form>
       </Col>
+      <Modal
+        centered
+        onCancel={() => setShowWhyLocation(false)}
+        footer={false}
+        open={showWhyLocation}
+      >
+        <div style={{ paddingBlock: 30 }}>
+          <label style={{ fontSize: 16 }}>
+            We need your latitude and longitude, which are geospatial
+            coordinates that show the address of your hospital. This helps us
+            display nearby hospitals to users by calculating the distance
+            between them and the hospitals using these geospatial coordinates.
+          </label>
+        </div>
+      </Modal>
     </Row>
   );
 };
