@@ -5,13 +5,13 @@ import {
   EditOutlined,
   DeleteOutlined,
   ExclamationCircleOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import { db } from "../../firebaseConfig";
 import { VIDEO_COLUMNS, VideoData } from "../../constants/table_columns";
-import { SearchOutlined } from "@ant-design/icons";
-
 import { useAuth } from "../../context/authContext";
 import AddVideo from "./AddVideo";
+
 const { confirm } = Modal;
 
 type Props = {};
@@ -42,6 +42,7 @@ const AllVideos = (props: Props) => {
           id: doc.id,
           url: data?.url,
           title: data?.title,
+          thumbnail: data?.thumbnail,
           description: data?.description,
           category: data?.category,
         });
@@ -112,7 +113,48 @@ const AllVideos = (props: Props) => {
   );
 
   const columns = [
-    ...VIDEO_COLUMNS,
+    {
+      title: "Sr No",
+      key: "srno",
+      render: (text: any, record: VideoData, index: number) => index + 1,
+    },
+    {
+      title: "Thumbnail",
+      dataIndex: "thumbnail",
+      key: "thumbnail",
+      render: (url: string) => (
+        <img
+          src={url}
+          alt="video"
+          style={{ width: 65, height: "auto", borderRadius: 8 }}
+        />
+      ),
+    },
+    {
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
+      render: (title: string) => (
+        <span>
+          {title.length > 60 ? `${title.substring(0, 60)}...` : title}
+        </span>
+      ),
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
+      render: (description: string) => (
+        <span>
+          {description.length > 120
+            ? `${description.substring(0, 100)}...`
+            : description}
+        </span>
+      ),
+    },
+    ...VIDEO_COLUMNS.filter(
+      (column) => column.key !== "title" && column.key !== "description"
+    ),
     {
       title: "Edit",
       key: "edit",
