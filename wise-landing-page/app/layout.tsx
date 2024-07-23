@@ -1,7 +1,6 @@
 import "./globals.css";
 import Navbar from "./components/Navbar/index";
 import Footer from "./components/Footer/index";
-import { headers } from "next/headers";
 
 export const metadata = {
   title: "WISE",
@@ -10,33 +9,17 @@ export const metadata = {
 
 export default function RootLayout({
   children,
-  pathName,
 }: {
   children: React.ReactNode;
   pathName: string;
 }) {
   return (
     <html lang="en">
-      {pathName === "/hospitals" ? (
-        <body>{children}</body>
-      ) : (
-        <body>
-          <Navbar />
-          {children}
-          <Footer />
-        </body>
-      )}
+      <body>
+        <Navbar />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
-}
-
-export function getStaticProps() {
-  // Fetch data from external API
-
-  const headersList = headers();
-  const fullUrl = headersList.get("referer") || "";
-  const pathName = new URL(fullUrl).pathname;
-
-  // Pass data to the page via props
-  return { props: { pathName } };
 }
