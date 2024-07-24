@@ -1,18 +1,18 @@
 import Banner from "./components/Banner/index";
-import Aboutus from "./components/Aboutus/index";
+import Features from "./components/Features/index";
 
-import Beliefs from "./components/Beliefs/index";
+import Register from "./components/Register/index";
 
-import Featured from "./components/Featured/index";
+import Overview from "./components/Overview/index";
 import FAQ from "./components/FAQ/index";
 
 export default function Home() {
   return (
     <main>
       <Banner />
-      <Aboutus />
-      <Beliefs />
-      <Featured />
+      <Features />
+      <Register />
+      <Overview />
       <FAQ />
     </main>
   );
