@@ -5,7 +5,7 @@ import { ChevronUpIcon } from "@heroicons/react/20/solid";
 const FAQ = () => {
   return (
     <div
-      id="faq-section"
+      id="faq"
       className="mx-auto max-w-7xl py-24 lg:px-8 bg-darkprimary rounded-2xl my-16 faq-bg"
     >
       <h3 className="text-xl font-normal text-white text-center mb-6">FAQ</h3>
