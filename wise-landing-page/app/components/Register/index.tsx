@@ -1,6 +1,9 @@
 const Beliefs = () => {
   return (
-    <div className="mx-auto max-w-2xl lg:max-w-7xl sm:py-4 lg:px-8 rounded-3xl">
+    <div
+      id="register"
+      className="mx-auto max-w-2xl lg:max-w-7xl sm:py-4 lg:px-8 rounded-3xl"
+    >
       <div className="grid grid-cols-1 lg:grid-cols-2 my-16 mx-5 gap-5">
         {/* COLUMN-1 */}
 
