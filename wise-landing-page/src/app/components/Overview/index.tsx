@@ -77,7 +77,7 @@ export default class MultipleItems extends Component {
       slidesToShow: 2,
       // centerMode: true,
       slidesToScroll: 1,
-      arrows: true,
+      arrows: window.innerWidth > 575 ? true : false,
       autoplay: false,
       speed: 500,
       nextArrow: (
