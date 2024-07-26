@@ -21,7 +21,7 @@ const FAQ = () => {
                   <span>Question 1</span>
                   <ChevronUpIcon
                     className={`${
-                      open ? "rotate-180 transform" : ""
+                      !open ? "rotate-180 transform" : ""
                     } h-5 w-5 text-purple-500`}
                   />
                 </Disclosure.Button>
