@@ -13,7 +13,7 @@ const Aboutdata: datatype[] = [
     heading: "Education",
     imgSrc: "/images/aboutus/imgOne.svg",
     paragraph:
-      "Learn about women's health from professional doctors with the help of educational videos and booklets",
+      "Learn about women's health from professional doctors with the help of educational videos.",
   },
   {
     heading: "Track Periods",
