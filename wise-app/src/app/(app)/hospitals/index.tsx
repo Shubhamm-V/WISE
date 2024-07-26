@@ -7,6 +7,7 @@ import {
   Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
+import GetLocation from "react-native-get-location";
 import HospitalCard from "@/src/components/cards/HospitalCard";
 import { getDocs, collection } from "firebase/firestore";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -55,7 +56,17 @@ const NearByHospitals = (props: Props) => {
           contact: data?.contact,
         });
       });
-
+      GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 60000,
+      })
+        .then((location) => {
+          console.log(location);
+        })
+        .catch((error) => {
+          const { code, message } = error;
+          console.warn(code, message);
+        });
       setallHospitals(allHospitalData);
       settempAllHospitals(allHospitalData);
     };
@@ -142,10 +153,10 @@ const NearByHospitals = (props: Props) => {
               justifyContent: "center",
             }}
           >
-            <Image
+            {/* <Image
               style={{ height: 200, width: 200 }}
               source={require("../../../../assets/images/illustrations/hospitals/finding-hospital.png")}
-            />
+            /> */}
             <View style={{ width: "80%" }}>
               <CustomText
                 customStyle={{ textAlign: "center" }}

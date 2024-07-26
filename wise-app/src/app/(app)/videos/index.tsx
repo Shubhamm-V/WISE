@@ -128,10 +128,10 @@ const EducationalVideos = (props: Props) => {
               justifyContent: "center",
             }}
           >
-            <Image
+            {/* <Image
               style={{ height: 200, width: 200 }}
               source={require("../../../../assets/images/illustrations/hospitals/finding-hospital.png")}
-            />
+            /> */}
             <View style={{ width: "80%" }}>
               <CustomText
                 customStyle={{ textAlign: "center" }}
