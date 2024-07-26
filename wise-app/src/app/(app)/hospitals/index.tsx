@@ -8,22 +8,27 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import HospitalCard from "@/src/components/cards/HospitalCard";
-import { DUMMY_HOSPITALS } from "@/src/constants/dummy";
+import { getDocs, collection } from "firebase/firestore";
 import Icon from "react-native-vector-icons/Ionicons";
+import { db } from "@/firebaseConfig";
 import { COLORS } from "@/src/constants/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomText from "@/src/components/custom-widgets/CustomText";
 import { DISTANCE } from "@/src/constants/dropdown";
 import Dropdown from "@/src/components/custom-widgets/Dropdown";
-export interface Hospital {
-  name: string;
-  doctor: string;
+
+type Hospital = {
+  id: string;
+  hospitalName: string;
+  doctorName: string;
   address: string;
-  distance: string;
-  coordinates: { lat: number; lang: number };
+  latitude: string;
+  longitude: string;
+  position?: boolean;
+  city: string;
+  state: string;
   contact: string;
-  uid: string;
-}
+};
 
 type Props = {};
 const NearByHospitals = (props: Props) => {
@@ -31,16 +36,39 @@ const NearByHospitals = (props: Props) => {
   const [tempAllHospitals, settempAllHospitals] = useState<Hospital[]>([]);
 
   useEffect(() => {
-    setallHospitals(DUMMY_HOSPITALS);
-    settempAllHospitals(DUMMY_HOSPITALS);
+    const getInfo = async () => {
+      const querySnapshot = await getDocs(collection(db, "hospitals"));
+      const allHospitalData: Hospital[] = [];
+
+      querySnapshot.forEach((doc) => {
+        let data = doc.data();
+        allHospitalData.push({
+          id: doc.id,
+          hospitalName: data?.hospitalName,
+          doctorName: data?.doctorName,
+          address: data?.address,
+          latitude: data?.latitude,
+          longitude: data?.longitude,
+          position: data?.position,
+          city: data?.city,
+          state: data?.state,
+          contact: data?.contact,
+        });
+      });
+
+      setallHospitals(allHospitalData);
+      settempAllHospitals(allHospitalData);
+    };
+
+    getInfo();
   }, []);
 
   const filterResults = (value: string) => {
     value = value.toLowerCase();
     const data = tempAllHospitals.filter((hospital: any) => {
       return (
-        hospital.name.toLowerCase().includes(value) ||
-        hospital.doctor.toLowerCase().includes(value) ||
+        hospital.hospitalName.toLowerCase().includes(value) ||
+        hospital.doctorName.toLowerCase().includes(value) ||
         hospital.address.toLowerCase().includes(value)
       );
     });
@@ -96,7 +124,7 @@ const NearByHospitals = (props: Props) => {
                 <FlatList
                   data={allHospitals}
                   contentContainerStyle={{ paddingBottom: 5 }}
-                  keyExtractor={(item) => item?.uid} // You can use a unique key here
+                  keyExtractor={(item) => item?.id} // You can use a unique key here
                   renderItem={({ item }) => {
                     return <HospitalCard hospitalData={item} />;
                   }}

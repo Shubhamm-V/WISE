@@ -9,7 +9,7 @@ export const DUMMY_HOSPITALS = [
     uid: "UID001",
   },
   {
-    name: "Alpha Hospital",
+    name: "JMK Hospital",
     address: "456 Brigade Road, Bangalore",
     doctor: "Dr. Asha Gupta",
     contact: "+91 9043434344",
@@ -18,9 +18,9 @@ export const DUMMY_HOSPITALS = [
     uid: "UID002",
   },
   {
-    name: "Beta Hospital",
+    name: "Gandhi Hospital",
     address: "789 Commercial Street, Bangalore",
-    doctor: "Dr. John Doe",
+    doctor: "Dr. Sanjay Gandhi",
     contact: "+91 9043434345",
     distance: "9 KM",
     coordinates: { lat: 12.9827, lang: 77.61 },
