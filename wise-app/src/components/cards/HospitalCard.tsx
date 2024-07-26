@@ -11,8 +11,7 @@ interface ChildProps {
 }
 
 const HospitalCard: React.FC<ChildProps> = ({ hospitalData }) => {
-  const { name, address, contact, distance, coordinates, doctor } =
-    hospitalData;
+  const { hospitalName, address, contact, doctorName } = hospitalData;
   return (
     <View style={styles.cardContainer}>
       <View
@@ -35,7 +34,7 @@ const HospitalCard: React.FC<ChildProps> = ({ hospitalData }) => {
           />
         </View>
         <View style={styles.cardContent}>
-          <CustomText label={name} customStyle={styles.nameText} />
+          <CustomText label={hospitalName} customStyle={styles.nameText} />
         </View>
       </View>
 
@@ -48,7 +47,7 @@ const HospitalCard: React.FC<ChildProps> = ({ hospitalData }) => {
       <Divider />
       <View style={styles.hospitalLabel}>
         <CustomText label="Doctor Name" customStyle={styles.infoLabel} />
-        <CustomText label={doctor} customStyle={styles.infoText} />
+        <CustomText label={doctorName} customStyle={styles.infoText} />
       </View>
       <Divider />
 
@@ -59,7 +58,7 @@ const HospitalCard: React.FC<ChildProps> = ({ hospitalData }) => {
       <Divider />
       <View style={styles.hospitalLabel}>
         <CustomText label="Distance" customStyle={styles.infoLabel} />
-        <CustomText label={distance} customStyle={styles.infoText} />
+        <CustomText label={"2 KM"} customStyle={styles.infoText} />
       </View>
     </View>
   );

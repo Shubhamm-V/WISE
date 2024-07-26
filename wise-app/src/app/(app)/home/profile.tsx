@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     borderWidth: 1,
-    borderColor: "#2EB5FA",
+    borderColor: COLORS.primary,
     backgroundColor: COLORS.light,
   },
 });

@@ -7,21 +7,22 @@ import {
   Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import HospitalCard from "@/src/components/cards/HospitalCard";
+import VideoCard from "@/src/components/cards/VideoCard";
+import { db } from "@/firebaseConfig";
 import Icon from "react-native-vector-icons/Ionicons";
 import { COLORS } from "@/src/constants/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomText from "@/src/components/custom-widgets/CustomText";
-import { DUMMY_VIDEOS } from "@/src/constants/dummy";
-import VideoCard from "@/src/components/cards/VideoCard";
+import { getDocs, collection } from "firebase/firestore";
 
-export interface YoutubeVideo {
+type YoutubeVideo = {
+  id: string;
   url: string;
   title: string;
+  thumbnail: string;
+  category: string;
   description: string;
-  videoId: string;
-  uid: string;
-}
+};
 
 // Function to extract YouTube video ID
 const getVideoID = (url: string | null): string => {
@@ -34,28 +35,47 @@ const getVideoID = (url: string | null): string => {
 
 type Props = {};
 
-const NearByHospitals = (props: Props) => {
+const EducationalVideos = (props: Props) => {
   const [allVideos, setAllVideos] = useState<YoutubeVideo[]>([]);
   const [tempAllVideos, setTempAllVideos] = useState<YoutubeVideo[]>([]);
 
   useEffect(() => {
-    const filterVideos: YoutubeVideo[] = DUMMY_VIDEOS.map((video) => {
-      return {
-        ...video,
-        videoId: getVideoID(video?.url) || "",
-      };
-    });
+    const getInfo = async () => {
+      const querySnapshot = await getDocs(collection(db, "videos"));
+      const allVideoData: YoutubeVideo[] = [];
 
-    setAllVideos(filterVideos);
-    setTempAllVideos(filterVideos);
+      querySnapshot.forEach((doc) => {
+        let data = doc.data();
+        allVideoData.push({
+          id: doc.id,
+          url: data?.url,
+          title: data?.title,
+          thumbnail: data?.thumbnail,
+          description: data?.description,
+          category: data?.category,
+        });
+      });
+
+      const filterVideos: YoutubeVideo[] = allVideoData.map((video) => {
+        return {
+          ...video,
+          videoId: getVideoID(video?.url) || "",
+        };
+      });
+
+      setAllVideos(filterVideos);
+      setTempAllVideos(filterVideos);
+    };
+
+    getInfo();
   }, []);
 
   const filterResults = (value: string) => {
     value = value.toLowerCase();
-    const data = tempAllVideos.filter((hospital: any) => {
+    const data = tempAllVideos.filter((video) => {
       return (
-        hospital.title.toLowerCase().includes(value) ||
-        hospital.description.toLowerCase().includes(value)
+        video.title.toLowerCase().includes(value) ||
+        video.description.toLowerCase().includes(value)
       );
     });
     setAllVideos(data);
@@ -96,7 +116,7 @@ const NearByHospitals = (props: Props) => {
             <FlatList
               data={allVideos}
               contentContainerStyle={{ paddingBottom: 5 }}
-              keyExtractor={(item) => item.uid}
+              keyExtractor={(item) => item.id}
               renderItem={({ item }) => <VideoCard youtubeData={item} />}
             />
           </View>
@@ -125,7 +145,7 @@ const NearByHospitals = (props: Props) => {
   );
 };
 
-export default NearByHospitals;
+export default EducationalVideos;
 
 const styles = StyleSheet.create({
   searchInput: {
