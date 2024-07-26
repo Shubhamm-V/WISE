@@ -61,13 +61,13 @@ const Aboutus = () => {
               <h4 className="text-4xl font-semibold  text-darkprimary mb-5 group-hover:text-white">
                 {item.heading}
               </h4>
-              <Image
+              {/* <Image
                 src={item.imgSrc}
                 alt={item.imgSrc}
                 width={100}
                 height={100}
                 className="mb-5"
-              />
+              /> */}
               <h4 className="text-lg font-normal text-darkprimary group-hover:text-offwhite mb-5">
                 {item.paragraph}
               </h4>

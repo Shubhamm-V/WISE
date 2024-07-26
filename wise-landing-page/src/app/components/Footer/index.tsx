@@ -33,66 +33,68 @@ const products: ProductType[] = [
 
 const footer = () => {
   return (
-    <div className="bg-black mt-40" id="first-section">
-      <div className="mx-auto max-w-2xl pt-4 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+    <div className="bg-black mt-20 lg:mt-40" id="first-section">
+      <div className="mx-auto max-w-2xl pt-1 pb-10 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="mt-24 grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 lg:grid-cols-12 xl:gap-x-8">
           {/* COLUMN-1 */}
 
-          <div className="col-span-4">
-            <h3 className="text-white text-4xl font-semibold leading-9 mb-4 lg:mb-20">
+          <div className="sm:col-span-5 lg:col-span-12 lg:flex justify-between">
+            <label className="text-white text-4xl lg:mt-3 line-clamp-6 font-semibold leading-9 mb-4 lg:mb-5">
               {" "}
               WISE
-            </h3>
-            <div className="flex gap-4">
-              <div className="footer-icons">
-                <Link href="https://facebook.com">
-                  <Image
-                    src={"/images/footer/vec.svg"}
-                    alt="facebook"
-                    width={15}
-                    height={20}
-                  />
-                </Link>
-              </div>
-              <div className="footer-icons">
-                <Link href="https://twitter.com">
-                  <Image
-                    src={"/images/footer/twitter.svg"}
-                    alt="twitter"
-                    width={20}
-                    height={20}
-                  />
-                </Link>
-              </div>
-              <div className="footer-icons">
-                <Link href="https://instagram.com">
-                  <Image
-                    src={"/images/footer/instagram.svg"}
-                    alt="instagram"
-                    width={20}
-                    height={20}
-                  />
-                </Link>
+            </label>
+            <div className="pt-4 lg:pt-0">
+              <div className="flex gap-4 ">
+                <div className="footer-icons">
+                  <Link href="#">
+                    <Image
+                      src={"/images/footer/vec.svg"}
+                      alt="facebook"
+                      width={15}
+                      height={20}
+                    />
+                  </Link>
+                </div>
+                <div className="footer-icons">
+                  <Link href="#">
+                    <Image
+                      src={"/images/footer/twitter.svg"}
+                      alt="twitter"
+                      width={20}
+                      height={20}
+                    />
+                  </Link>
+                </div>
+                <div className="footer-icons">
+                  <Link href="#">
+                    <Image
+                      src={"/images/footer/instagram.svg"}
+                      alt="instagram"
+                      width={20}
+                      height={20}
+                    />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
 
           {/* CLOUMN-2/3 */}
 
-          {products.map((product) => (
+          {/* {products.map((product) => (
             <div key={product.id} className="group relative col-span-2">
               <p className="text-white text-xl font-extrabold mb-9">
                 {product.section}
               </p>
-              {/* <ul>
+              <ul>
                                 {product.link.map((link: string, index: number) => (
                                     <li key={index} className='mb-5'>
                                         <Link href="/" className="text-white text-lg font-normal mb-6 space-links">{link}</Link>
                                     </li>
                                 ))}
-                            </ul> */}
+                            </ul>
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
 

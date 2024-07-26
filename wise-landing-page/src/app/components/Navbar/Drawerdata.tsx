@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Contactusform from "./Contactus";
+import Image from "next/image";
 
 interface NavigationItem {
   name: string;
@@ -9,10 +10,11 @@ interface NavigationItem {
 }
 
 const navigation: NavigationItem[] = [
-  { name: "Features", href: "#aboutus-section", current: true },
-  { name: "Join Us", href: "#services-section", current: false },
-  { name: "How it Works?", href: "#faq-section", current: false },
-  { name: "FAQ", href: "#faq-section", current: false },
+  { name: "Home", href: "/", current: true },
+  { name: "Features", href: "#features", current: false },
+  { name: "Join Us", href: "#joinus", current: false },
+  { name: "App Overview", href: "#overview", current: false },
+  { name: "FAQ", href: "#faq", current: false },
 ];
 
 function classNames(...classes: string[]) {
@@ -41,9 +43,20 @@ const Data = () => {
               </Link>
             ))}
             <div className="mt-4"></div>
-            <button className="bg-navyblue w-full hover:text-white text-white border border-purple font-medium py-2 px-4 rounded">
-              Contact
-            </button>
+            <Link href="/">
+              <button
+                type="button"
+                className="flex flex-row gap-2 align-middle text-sm font-semibold bg-transparent py-2 px-8 lg:px-8 navbutton rounded-lg hover:bg-darkprimary hover:text-white"
+              >
+                <Image
+                  src={"/images/socials/google-play.png"}
+                  alt="twitter"
+                  width={24}
+                  height={24}
+                />
+                <div>Install WISE</div>
+              </button>
+            </Link>
             {/* <Contactusform /> */}
           </div>
         </div>

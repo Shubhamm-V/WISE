@@ -66,6 +66,7 @@ const config: Config = {
       "8xl": ["6rem", { lineHeight: "1" }],
       "9xl": ["8rem", { lineHeight: "1" }],
       "65xl": ["65px", { lineHeight: "1" }],
+      "70xl": ["70px", { lineHeight: "1" }],
       "80xl": ["80px", { lineHeight: "6rem" }],
     },
   },

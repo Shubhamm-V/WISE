@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const Banner = () => {
   return (
@@ -9,12 +10,12 @@ const Banner = () => {
         <div className="mx-auto sm:mx-0">
           <div className="py-3 text-center lg:text-start">
             <button className="purple bg-lightprimary hover:shadow-xl text-sm md:text-lg font-bold px-6 py-1 rounded-3xl tracking-wider hover:text-white hover:bg-darkprimary">
-              Women Health Empowerment
+              Empowering Women Health
             </button>
           </div>
           <div className="py-3 text-center lg:text-start">
-            <h1 className="text-6xl lg:text-80xl font-bold text-darkpurple">
-              Your Wellness Journey, Our Empowering Mission
+            <h1 className="text-5xl pr-3 lg:text-70xl font-bold text-darkpurple">
+              WISE - Women Health Information and Supportive Education
             </h1>
           </div>
           <div className="flex gap-3 justify-center sm:justify-start">
@@ -25,16 +26,18 @@ const Banner = () => {
               </button>
             </div>
             <div className="my-7 text-center lg:text-start">
-              <button className="text-sm border-2 md:text-xl font-semibold hover:shadow-xl bg-white text-primary py-3 px-6 md:py-3 md:px-4  rounded-lg hover:bg-lightprimary">
-                Register Hospital
-              </button>
+              <Link href={"https://wisefordoctors.netlify.app"}>
+                <button className="text-sm border-2 md:text-xl font-semibold hover:shadow-xl bg-white text-primary py-3 px-6 md:py-3 md:px-4  rounded-lg hover:bg-lightprimary">
+                  Register Hospital
+                </button>
+              </Link>
             </div>
           </div>
         </div>
 
         {/* COLUMN-2 */}
 
-        <div className="lg:-m-24 lg:pt-20 hidden lg:block">
+        <div className="lg:-m-4 hidden lg:block">
           <Image
             src="/images/banner/banner.svg"
             alt="hero-image"

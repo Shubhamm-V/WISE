@@ -50,8 +50,8 @@ const Contactusform = () => {
                         Contact Us
                     </button>
                 </div> */}
-        <Link href="/hospitals">
-          <div className="hidden lg:block">
+        <div className="hidden lg:block">
+          <Link href="/">
             <button
               type="button"
               className="flex flex-row gap-2 align-middle text-xl font-semibold bg-transparent py-4 lg:px-8 navbutton rounded-full hover:bg-darkprimary hover:text-white"
@@ -64,8 +64,8 @@ const Contactusform = () => {
               />
               <div>Install WISE</div>
             </button>
-          </div>
-        </Link>
+          </Link>
+        </div>
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>

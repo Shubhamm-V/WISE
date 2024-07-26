@@ -1,7 +1,9 @@
+import Link from "next/link";
+
 const Beliefs = () => {
   return (
     <div
-      id="register"
+      id="joinus"
       className="mx-auto max-w-2xl lg:max-w-7xl sm:py-4 lg:px-8 rounded-3xl"
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 my-16 mx-5 gap-5">
@@ -31,14 +33,16 @@ const Beliefs = () => {
             JOIN US AS HOSPITAL
           </h2>
           <h3 className="text-4xl sm:text-65xl font-bold text-black leading-snug mb-5 text-center sm:text-start">
-            <span className="text-primary">Register</span> as hospital and help
-            women to empower.
+            <span className="text-primary">Register</span> as hospital and
+            connect with patients.
           </h3>
 
           <div className="text-center sm:text-start">
-            <button className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary border border-primary hover:bg-darkprimary">
-              Register Hospital
-            </button>
+            <Link href={"https://wisefordoctors.netlify.app"}>
+              <button className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary border border-primary hover:bg-darkprimary">
+                Register Hospital
+              </button>
+            </Link>
           </div>
         </div>
       </div>
