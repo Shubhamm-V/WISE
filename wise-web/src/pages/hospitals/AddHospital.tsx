@@ -35,7 +35,7 @@ const AddHospital: React.FC<HospitalProps> = ({ hospitalData, onUpdate }) => {
     address: "",
     latitude: "",
     longitude: "",
-    position: true,
+    position: false,
     city: "",
     state: "",
     contact: "",
@@ -56,6 +56,7 @@ const AddHospital: React.FC<HospitalProps> = ({ hospitalData, onUpdate }) => {
       setInitialFormValues((prevValues) => ({
         ...prevValues,
         ...hospitalData,
+        position: true,
       }));
       form.setFieldsValue({
         ...hospitalData,
