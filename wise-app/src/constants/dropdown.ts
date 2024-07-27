@@ -8,11 +8,6 @@ export const LANGUAGES: string[] = [
   "తెలుగు",
   "தமிழ்",
   "ಕನ್ನಡ",
-  "ଓଡ଼ିଆ",
-  "മലയാളം",
-  "অসমীয়া",
-  "मैथिली",
-  "भीली/भीलोडी",
 ];
 
 export const STATES: string[] = [
@@ -57,3 +52,17 @@ export const DISTANCE = [
   "25 KM",
   "50 KM",
 ];
+
+// languageMap.ts
+
+export const languageMap: { [key: string]: string } = {
+  हिन्दी: "hi",
+  English: "en",
+  मराठी: "mr",
+  ગુજરાતી: "gu",
+  ਪੰਜਾਬੀ: "pa",
+  বাংলা: "bn",
+  తెలుగు: "te",
+  தமிழ்: "ta",
+  ಕನ್ನಡ: "kn",
+};
