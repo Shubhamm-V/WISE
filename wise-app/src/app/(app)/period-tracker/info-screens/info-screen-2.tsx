@@ -16,7 +16,7 @@ import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const InfoScreen2 = () => {
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState(4);
 
   const handleInfoTwo = async () => {
     await AsyncStorage.setItem("periodLength", value.toString());

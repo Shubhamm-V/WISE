@@ -10,11 +10,12 @@ import { Input } from "@rneui/themed";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Formik } from "formik";
 import CustomButton from "@/src/components/custom-widgets/CustomButton";
-import { LANGUAGES, STATES } from "@/src/constants/dropdown";
+import { languageMap, LANGUAGES, STATES } from "@/src/constants/dropdown";
 import { useAuth } from "@/src/context/authContext";
 import { db } from "@/firebaseConfig";
 import { getDoc, setDoc, doc } from "firebase/firestore";
 import Loading from "@/src/components/custom-widgets/Loading";
+import { useTranslation } from "react-i18next";
 
 const detailsSchema = object({
   name: string()
@@ -32,10 +33,12 @@ interface PersonalInfo {
   name: string;
   phone: string;
   age: string;
+  email: string;
   city: string;
 }
 
 const Profile: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [selectedState, setSelectedState] = useState<string>("Select a State");
   const [selectedLanguage, setSelectedLanguage] =
     useState<string>("Select a Language");
@@ -45,12 +48,14 @@ const Profile: React.FC = () => {
     name: "",
     phone: "",
     age: "",
+    email: "",
     city: "",
   });
   const { user, setUser } = useAuth();
 
   const handleSelectLanguage = (item: string, index: number) => {
     setSelectedLanguage(item);
+    i18n.changeLanguage(languageMap[item]);
   };
 
   const handleSelectState = (item: string, index: number) => {
@@ -66,6 +71,7 @@ const Profile: React.FC = () => {
         setInitialValues({
           ...initialValues,
           name: data?.name,
+          email: data?.email,
           age: data.age ? data?.age?.toString() : "",
           city: data?.city ? data.city : "",
           phone: data.phone ? data?.phone.toString() : "",
@@ -81,17 +87,16 @@ const Profile: React.FC = () => {
   const handleSave = async (values: PersonalInfo) => {
     setLoading(true);
     let state: string = selectedState !== "Select a State" ? selectedState : "";
-    const { name, age, phone, city } = values;
+    const { name, age, phone, city, email } = values;
     await setDoc(doc(db, "users", user.userId), {
       name,
       age,
       phone,
       city,
       state,
-      email: user?.email,
+      email,
       userId: user.userId,
     });
-    console.log("Saved : ", values);
     setUser({ ...user, name });
     setLoading(false);
     setEditing(false);
