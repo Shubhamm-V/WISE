@@ -6,17 +6,20 @@ import CustomText from "@/src/components/custom-widgets/CustomText";
 import { COLORS } from "@/src/constants/colors";
 import { Image } from "react-native";
 import { router } from "expo-router";
-
+import { useTranslation } from "react-i18next";
 type Props = {};
 
 const Header = (props: Props) => {
-  const { logout, user } = useAuth();
-
+  const { user } = useAuth();
+  const { t } = useTranslation();
   return (
     <SafeAreaView>
       <View style={styles.header}>
         <View>
-          <CustomText label="Hello," customStyle={styles.textStyle} />
+          <CustomText
+            label={t("screens.home.hello")}
+            customStyle={styles.textStyle}
+          />
           <CustomText label={user?.name} customStyle={styles.headerTextStyle} />
         </View>
         <TouchableOpacity onPress={() => router.navigate("/home/profile")}>

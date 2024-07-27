@@ -72,6 +72,8 @@ const TrackMenustralCycle = () => {
       const cycleLength = await AsyncStorage.getItem("cycleLength");
       const periodLength = await AsyncStorage.getItem("periodLength");
       const lastPeriod = await AsyncStorage.getItem("lastPeriod");
+      if (!cycleLength || !periodLength || !lastPeriod)
+        router.navigate("/period-tracker/info-screens/info-screen-1");
       setCycleDetails({
         cycleLength: cycleLength ?? "",
         periodLength: periodLength ?? "",

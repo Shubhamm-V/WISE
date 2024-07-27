@@ -7,7 +7,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { FONTS } from "../constants/fonts";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { I18nextProvider } from "react-i18next";
+import i18n from "@/i18n";
 import { getAuth } from "firebase/auth";
 import { COLORS } from "../constants/colors";
 import { RootSiblingParent } from "react-native-root-siblings";
@@ -79,12 +80,14 @@ const MainLayout = () => {
 
   return (
     <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
-      <Provider store={store}>
-        <RootSiblingParent>
-          <Slot />
-          <StatusBar barStyle="dark-content" backgroundColor={COLORS.light} />
-        </RootSiblingParent>
-      </Provider>
+      <I18nextProvider i18n={i18n}>
+        <Provider store={store}>
+          <RootSiblingParent>
+            <Slot />
+            <StatusBar barStyle="dark-content" backgroundColor={COLORS.light} />
+          </RootSiblingParent>
+        </Provider>
+      </I18nextProvider>
     </View>
   );
 };
