@@ -1,12 +1,21 @@
-import { Col, Row, Table, Button, Modal, notification, Input } from "antd";
+import {
+  Col,
+  Row,
+  Table,
+  Button,
+  Modal,
+  notification,
+  Input,
+  Radio,
+  Tag,
+} from "antd";
 import { useEffect, useState } from "react";
 import {
   getDocs,
-  query,
-  where,
   collection,
   deleteDoc,
   doc,
+  setDoc,
 } from "firebase/firestore";
 import {
   EditOutlined,
@@ -30,7 +39,8 @@ const AllUserHospitals = (props: Props) => {
   const [editHospitalData, setEditHospitalData] = useState<HospitalData>();
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [searchText, setSearchText] = useState("");
-  const { user } = useAuth();
+  const [isApproved, setIsApproved] = useState<boolean>(false);
+  const [filterCriteria, setFilterCriteria] = useState<string>("clear"); // New state for filter criteria
 
   const openNotification = (message: string) => {
     api.open({
@@ -48,6 +58,8 @@ const AllUserHospitals = (props: Props) => {
         let data = doc.data();
         allHospitalData.push({
           id: doc.id,
+          approved: data?.approved || false,
+          userId: data?.userId,
           hospitalName: data?.hospitalName,
           doctorName: data?.doctorName,
           address: data?.address,
@@ -64,7 +76,7 @@ const AllUserHospitals = (props: Props) => {
     };
 
     getInfo();
-  }, []);
+  }, [isApproved]);
 
   const handleEdit = (record: HospitalData) => {
     setEditHospitalData(record);
@@ -84,17 +96,48 @@ const AllUserHospitals = (props: Props) => {
     }
   };
 
+  const handleApprove = async (hospital: HospitalData, isApproved: boolean) => {
+    delete hospital.position;
+    await setDoc(doc(db, "hospitals", hospital.id), {
+      ...hospital,
+      approved: isApproved ? false : true,
+    });
+    setIsApproved((prev) => !prev);
+  };
+
   const showDeleteConfirm = (record: HospitalData) => {
     confirm({
       title: "Are you sure delete this hospital?",
       icon: <ExclamationCircleOutlined />,
-      content: "This action cannot be undone.",
+      content: "You can disapprove any time.",
       okText: "Yes",
       centered: true,
       okType: "danger",
       cancelText: "No",
       onOk() {
         handleDelete(record);
+      },
+    });
+  };
+
+  const showApproveConfirm = (record: HospitalData) => {
+    const isApproved = record.approved;
+    confirm({
+      title: isApproved
+        ? "Are you sure want to cancel approval of this hospital"
+        : "Are you sure want to approve this hospital?",
+      icon: <ExclamationCircleOutlined />,
+      okText: isApproved ? "Cancel Approval" : "Aprrove",
+      centered: true,
+      okType: "primary",
+      okButtonProps: {
+        style: {
+          backgroundColor: "#9966CC",
+        },
+      },
+      cancelText: "No",
+      onOk() {
+        handleApprove(record, isApproved);
       },
     });
   };
@@ -118,14 +161,35 @@ const AllUserHospitals = (props: Props) => {
     setSearchText(e.target.value);
   };
 
-  const filteredDataSource = dataSource.filter((hospital) =>
-    [hospital.hospitalName, hospital.doctorName].some((field) =>
-      field.toString().toLowerCase().includes(searchText.toLowerCase())
-    )
-  );
+  const filteredDataSource = dataSource.filter((hospital) => {
+    const matchesSearchText = [hospital.hospitalName, hospital.doctorName].some(
+      (field) =>
+        field.toString().toLowerCase().includes(searchText.toLowerCase())
+    );
+
+    const matchesFilterCriteria =
+      filterCriteria === "clear" ||
+      (filterCriteria === "approved" && hospital.approved) ||
+      (filterCriteria === "notApproved" && !hospital.approved);
+
+    return matchesSearchText && matchesFilterCriteria;
+  });
 
   const columns = [
     ...HOSPITAL_COLUMNS,
+    {
+      title: "Status",
+      key: "status",
+      render: (text: any, record: HospitalData) => (
+        <Tag
+          color={record.approved ? "purple" : "volcano"}
+          style={{ cursor: "pointer" }}
+          onClick={() => showApproveConfirm(record)}
+        >
+          {record.approved ? "Approved" : "Not Approved"}
+        </Tag>
+      ),
+    },
     {
       title: "Edit",
       key: "edit",
@@ -161,6 +225,15 @@ const AllUserHospitals = (props: Props) => {
               onChange={handleSearch}
               prefix={<SearchOutlined style={{ marginRight: 5 }} />}
             />
+            <Radio.Group
+              buttonStyle="solid"
+              style={{ marginTop: 10 }}
+              onChange={(e) => setFilterCriteria(e.target.value)}
+            >
+              <Radio.Button value="approved">Approved</Radio.Button>
+              <Radio.Button value="notApproved">Not Approverd</Radio.Button>
+              <Radio.Button value="clear">No Filter</Radio.Button>
+            </Radio.Group>
           </Col>
         </Row>
         <Table
