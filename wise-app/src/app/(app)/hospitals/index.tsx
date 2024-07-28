@@ -17,6 +17,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CustomText from "@/src/components/custom-widgets/CustomText";
 import { DISTANCE } from "@/src/constants/dropdown";
 import Dropdown from "@/src/components/custom-widgets/Dropdown";
+import Loading from "@/src/components/custom-widgets/Loading";
 
 type Hospital = {
   id: string;
@@ -35,12 +36,12 @@ type Props = {};
 const NearByHospitals = (props: Props) => {
   const [allHospitals, setallHospitals] = useState<Hospital[]>([]);
   const [tempAllHospitals, settempAllHospitals] = useState<Hospital[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getInfo = async () => {
       const querySnapshot = await getDocs(collection(db, "hospitals"));
       const allHospitalData: Hospital[] = [];
-
       querySnapshot.forEach((doc) => {
         let data = doc.data();
         allHospitalData.push({
@@ -56,6 +57,7 @@ const NearByHospitals = (props: Props) => {
           contact: data?.contact,
         });
       });
+
       GetLocation.getCurrentPosition({
         enableHighAccuracy: true,
         timeout: 60000,
@@ -71,7 +73,13 @@ const NearByHospitals = (props: Props) => {
       settempAllHospitals(allHospitalData);
     };
 
-    getInfo();
+    try {
+      getInfo();
+      setLoading(false);
+    } catch {
+      console.log("Something went wrong");
+      setLoading(false);
+    }
   }, []);
 
   const filterResults = (value: string) => {
@@ -85,6 +93,8 @@ const NearByHospitals = (props: Props) => {
     });
     setallHospitals(data);
   };
+
+  if (loading) return <Loading />;
 
   const handleDistanceSelect = () => {};
   return (

@@ -14,6 +14,7 @@ import { COLORS } from "@/src/constants/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomText from "@/src/components/custom-widgets/CustomText";
 import { getDocs, collection } from "firebase/firestore";
+import Loading from "@/src/components/custom-widgets/Loading";
 
 type YoutubeVideo = {
   id: string;
@@ -38,6 +39,7 @@ type Props = {};
 const EducationalVideos = (props: Props) => {
   const [allVideos, setAllVideos] = useState<YoutubeVideo[]>([]);
   const [tempAllVideos, setTempAllVideos] = useState<YoutubeVideo[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getInfo = async () => {
@@ -66,9 +68,15 @@ const EducationalVideos = (props: Props) => {
       setAllVideos(filterVideos);
       setTempAllVideos(filterVideos);
     };
-
-    getInfo();
+    try {
+      getInfo();
+      setLoading(false);
+    } catch {
+      setLoading(false);
+    }
   }, []);
+
+  if (loading) return <Loading />;
 
   const filterResults = (value: string) => {
     value = value.toLowerCase();

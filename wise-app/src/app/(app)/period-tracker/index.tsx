@@ -43,7 +43,7 @@ interface MarkedDates {
 const TrackMenustralCycle = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [isOverlayVisible, setIsOverlayVisible] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [daysBetween, setDaysBetween] = useState<string>("");
   const [periodDayMonth, setPeriodDayMonth] = useState<string[]>([]);
   const [selectedDay, setSelectedDay] = useState("");
@@ -72,13 +72,16 @@ const TrackMenustralCycle = () => {
       const cycleLength = await AsyncStorage.getItem("cycleLength");
       const periodLength = await AsyncStorage.getItem("periodLength");
       const lastPeriod = await AsyncStorage.getItem("lastPeriod");
-      if (!cycleLength || !periodLength || !lastPeriod)
+      if (!cycleLength || !periodLength || !lastPeriod) {
+        setLoading(false);
         router.navigate("/period-tracker/info-screens/info-screen-1");
+      }
       setCycleDetails({
         cycleLength: cycleLength ?? "",
         periodLength: periodLength ?? "",
         lastPeriod: lastPeriod ?? "",
       });
+      setLoading(false);
     };
 
     fetchCycleDetails();
@@ -180,6 +183,7 @@ const TrackMenustralCycle = () => {
             <TouchableOpacity
               onPress={() => {
                 removePeriodDays();
+                setIsOverlayVisible(false);
                 router.navigate("/period-tracker/info-screens/info-screen-1");
               }}
             >
