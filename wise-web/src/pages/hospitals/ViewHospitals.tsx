@@ -1,4 +1,4 @@
-import { Col, Row, Table, Button, Modal, notification } from "antd";
+import { Col, Row, Table, Button, Modal, notification, Tag } from "antd";
 import { useEffect, useState } from "react";
 import {
   getDocs,
@@ -40,13 +40,15 @@ const Users = (props: Props) => {
     const getInfo = async () => {
       try {
         const hospitalsRef = collection(db, "hospitals");
-        const q = query(hospitalsRef, where("userId", "==", user.userId));
+        const q = query(hospitalsRef, where("userId", "==", user?.userId));
         const querySnapshot = await getDocs(q);
 
         const hospitalsData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
+          userId: user?.userId,
           ...doc.data(),
         })) as HospitalData[];
+        console.log("HOSPITALDATA : ", hospitalsData);
         setDataSource(hospitalsData);
       } catch (error) {
         console.error("Error fetching hospital data: ", error);
@@ -106,6 +108,15 @@ const Users = (props: Props) => {
 
   const columns = [
     ...HOSPITAL_COLUMNS,
+    {
+      title: "Status",
+      key: "status",
+      render: (text: any, record: HospitalData) => (
+        <Tag color={record.approved ? "purple" : "volcano"}>
+          {record.approved ? "Approved" : "Not Approved"}
+        </Tag>
+      ),
+    },
     {
       title: "Edit",
       key: "edit",

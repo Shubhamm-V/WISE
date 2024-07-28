@@ -50,6 +50,7 @@ export const USERS_COLUMNS = [
 export type HospitalData = {
   id: string;
   hospitalName: string;
+  approved: boolean;
   doctorName: string;
   address: string;
   latitude: string;
@@ -58,6 +59,7 @@ export type HospitalData = {
   city: string;
   state: string;
   contact: string;
+  userId?: string;
 };
 
 // Hospital Table
