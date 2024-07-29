@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import GetLocation from "react-native-get-location";
 import HospitalCard from "@/src/components/cards/HospitalCard";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, where, query } from "firebase/firestore";
 import Icon from "react-native-vector-icons/Ionicons";
 import { db } from "@/firebaseConfig";
 import { COLORS } from "@/src/constants/colors";
@@ -18,8 +18,9 @@ import CustomText from "@/src/components/custom-widgets/CustomText";
 import { DISTANCE } from "@/src/constants/dropdown";
 import Dropdown from "@/src/components/custom-widgets/Dropdown";
 import Loading from "@/src/components/custom-widgets/Loading";
+import { haversine } from "@/src/utils/haversineAlgo";
 
-type Hospital = {
+export type Hospital = {
   id: string;
   hospitalName: string;
   doctorName: string;
@@ -27,60 +28,82 @@ type Hospital = {
   latitude: string;
   longitude: string;
   position?: boolean;
+  distance?: string;
   city: string;
   state: string;
   contact: string;
 };
 
 type Props = {};
+
 const NearByHospitals = (props: Props) => {
   const [allHospitals, setallHospitals] = useState<Hospital[]>([]);
   const [tempAllHospitals, settempAllHospitals] = useState<Hospital[]>([]);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedDistance, setSelectedDistance] = useState<number>(25);
 
   useEffect(() => {
     const getInfo = async () => {
-      const querySnapshot = await getDocs(collection(db, "hospitals"));
-      const allHospitalData: Hospital[] = [];
-      querySnapshot.forEach((doc) => {
-        let data = doc.data();
-        allHospitalData.push({
-          id: doc.id,
-          hospitalName: data?.hospitalName,
-          doctorName: data?.doctorName,
-          address: data?.address,
-          latitude: data?.latitude,
-          longitude: data?.longitude,
-          position: data?.position,
-          city: data?.city,
-          state: data?.state,
-          contact: data?.contact,
+      try {
+        const q = query(
+          collection(db, "hospitals"),
+          where("approved", "==", true)
+        );
+        const querySnapshot = await getDocs(q);
+        const allHospitalData: Hospital[] = [];
+        querySnapshot.forEach((doc) => {
+          let data = doc.data();
+          allHospitalData.push({
+            id: doc.id,
+            hospitalName: data?.hospitalName,
+            doctorName: data?.doctorName,
+            address: data?.address,
+            latitude: data?.latitude,
+            longitude: data?.longitude,
+            position: data?.position,
+            city: data?.city,
+            state: data?.state,
+            contact: data?.contact,
+            distance: "0 KM", // Initialize with a default value
+          });
         });
-      });
 
-      GetLocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 60000,
-      })
-        .then((location) => {
-          console.log(location);
-        })
-        .catch((error) => {
-          const { code, message } = error;
-          console.warn(code, message);
+        const location = await GetLocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 60000,
         });
-      setallHospitals(allHospitalData);
-      settempAllHospitals(allHospitalData);
+
+        const filteredHospitals = allHospitalData
+          .map((hospital) => {
+            const distance = haversine(
+              location.latitude,
+              location.longitude,
+              Number(hospital.latitude),
+              Number(hospital.longitude)
+            );
+
+            return {
+              ...hospital,
+              distance: `${distance.toFixed(2)} KM`, // Add distance property
+            };
+          })
+          .filter(
+            (hospital) => parseFloat(hospital.distance) < selectedDistance
+          ); // Filter by distance
+
+        setallHospitals(filteredHospitals);
+        settempAllHospitals(filteredHospitals);
+        if (filteredHospitals.length > 0) setIsLoaded(true);
+      } catch (error) {
+        console.log("Something went wrong", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    try {
-      getInfo();
-      setLoading(false);
-    } catch {
-      console.log("Something went wrong");
-      setLoading(false);
-    }
-  }, []);
+    getInfo();
+  }, [selectedDistance]);
 
   const filterResults = (value: string) => {
     value = value.toLowerCase();
@@ -94,16 +117,15 @@ const NearByHospitals = (props: Props) => {
     setallHospitals(data);
   };
 
-  if (loading) return <Loading />;
+  if (loading || !isLoaded) return <Loading />;
 
-  const handleDistanceSelect = () => {};
+  const handleDistanceSelect = (value: string) => {
+    const distance = parseFloat(value.split(" ")[0]);
+    setSelectedDistance(distance);
+  };
+
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: COLORS.light,
-      }}
-    >
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.light }}>
       <View style={{ paddingHorizontal: "2%", flex: 1 }}>
         <View
           style={{
@@ -113,7 +135,7 @@ const NearByHospitals = (props: Props) => {
             alignItems: "center",
           }}
         >
-          <CustomText label="Neareby Hospitals" customStyle={styles.header} />
+          <CustomText label="Nearby Hospitals" customStyle={styles.header} />
           <View style={styles.dropdown}>
             <Dropdown
               options={DISTANCE}
@@ -141,16 +163,14 @@ const NearByHospitals = (props: Props) => {
         {allHospitals && allHospitals.length > 0 && (
           <View style={{ flex: 1 }}>
             <View>
-              {allHospitals.length > 0 && (
-                <FlatList
-                  data={allHospitals}
-                  contentContainerStyle={{ paddingBottom: 5 }}
-                  keyExtractor={(item) => item?.id} // You can use a unique key here
-                  renderItem={({ item }) => {
-                    return <HospitalCard hospitalData={item} />;
-                  }}
-                />
-              )}
+              <FlatList
+                data={allHospitals}
+                contentContainerStyle={{ paddingBottom: 5 }}
+                keyExtractor={(item) => item?.id} // You can use a unique key here
+                renderItem={({ item }) => {
+                  return <HospitalCard hospitalData={item} />;
+                }}
+              />
             </View>
           </View>
         )}

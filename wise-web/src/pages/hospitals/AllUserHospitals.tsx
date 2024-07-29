@@ -26,7 +26,6 @@ import { db } from "../../firebaseConfig";
 import { HOSPITAL_COLUMNS, HospitalData } from "../../constants/table_columns";
 import { SearchOutlined } from "@ant-design/icons";
 
-import { useAuth } from "../../context/authContext";
 import AddHospital from "./AddHospital";
 
 const { confirm } = Modal;
@@ -98,6 +97,7 @@ const AllUserHospitals = (props: Props) => {
 
   const handleApprove = async (hospital: HospitalData, isApproved: boolean) => {
     delete hospital.position;
+    console.log("Hospital : ", hospital);
     await setDoc(doc(db, "hospitals", hospital.id), {
       ...hospital,
       approved: isApproved ? false : true,

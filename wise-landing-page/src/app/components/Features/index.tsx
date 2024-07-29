@@ -50,7 +50,7 @@ const Aboutus = () => {
           FEATURES
         </h3>
         <h4 className="text-center text-4xl lg:text-65xl font-bold">
-          What we offers?
+          What we offer?
         </h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 my-16 gap-x-16 lg:gap-x-2">
           {Aboutdata.map((item, i) => (

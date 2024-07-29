@@ -122,10 +122,10 @@ const MultipleItems: React.FC = () => {
             id="overview"
             className="text-4xl sm:text-6xl  font-bold text-white my-2"
           >
-            App Oveview
+            App Overview
           </h3>
           <h3 className="text-4xl sm:text-6xl font-bold text-white text-opacity-50 lg:mr-48 my-2">
-            App Oveview
+            App Overview
           </h3>
           <h3 className="text-4xl sm:text-6xl font-bold text-white text-opacity-25 lg:-mr-32 my-2">
             App Overview
