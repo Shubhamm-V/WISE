@@ -3,6 +3,7 @@ import {
   PlusSquareOutlined,
   VideoCameraOutlined,
   MenuFoldOutlined,
+  BookOutlined,
   ExclamationCircleOutlined,
   AppstoreOutlined,
   LogoutOutlined,
@@ -48,9 +49,18 @@ const DashLayout: React.FC<LayoutProps> = ({ children }) => {
   const { logout, user } = useAuth();
 
   useEffect(() => {
-    if (window.innerWidth <= 575) {
-      setShowSideBar(true);
-    }
+    const handleResize = () => {
+      setShowSideBar(window.innerWidth <= 575);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -86,6 +96,10 @@ const DashLayout: React.FC<LayoutProps> = ({ children }) => {
           getItem("Add Video", "add-video"),
           getItem("View Videos", "view-videos"),
         ]),
+        getItem("Booklets", "booklets", <BookOutlined />, [
+          getItem("Add Booklets", "add-booklet"),
+          getItem("View Booklets", "view-booklets"),
+        ]),
       ]
     : [
         getItem("Hospitals", "hospitals", <PlusSquareOutlined />, [
@@ -97,10 +111,10 @@ const DashLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
-        collapsible={!showSideBar && window.innerWidth > 575}
-        style={{ display: showSideBar ? "none" : "unset" }}
+        collapsible={!showSideBar}
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
+        style={{ display: showSideBar ? "none" : "block" }}
       >
         <h1 style={{ color: "#fff", padding: 10, textAlign: "center" }}>
           WISE - {isAdmin ? "Admin" : "Hospital"}
