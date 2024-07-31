@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Routes, Navigate, Outlet } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -11,6 +10,8 @@ import ViewHospitals from "./pages/hospitals/ViewHospitals";
 import AllUserHospitals from "./pages/hospitals/AllUserHospitals";
 import AddVideo from "./pages/videos/AddVideo";
 import AllVideos from "./pages/videos/PostedVideos";
+import AddBooklet from "./pages/booklets/AddBooklet";
+import PostedBooklets from "./pages/booklets/PostedBooklets";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -33,6 +34,8 @@ function App() {
         <Route path="view-videos" element={<AllVideos />} />
         <Route path="view-hospitals" element={<ViewHospitals />} />
         <Route path="all-hospitals" element={<AllUserHospitals />} />
+        <Route path="add-booklet" element={<AddBooklet />} />
+        <Route path="view-booklets" element={<PostedBooklets />} />
       </Route>
     </Routes>
   );

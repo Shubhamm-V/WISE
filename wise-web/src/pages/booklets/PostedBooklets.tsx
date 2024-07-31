@@ -8,21 +8,19 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import { db } from "../../firebaseConfig";
-import { VIDEO_COLUMNS, VideoData } from "../../constants/table_columns";
-import { useAuth } from "../../context/authContext";
-import AddVideo from "./AddVideo";
+import { BOOKLET_COLUMNS, BookletData } from "../../constants/table_columns";
+import AddBooklet from "./AddBooklet";
 
 const { confirm } = Modal;
 
 type Props = {};
 
-const AllVideos = (props: Props) => {
-  const [dataSource, setDataSource] = useState<VideoData[]>([]);
+const PostedBooklets = (props: Props) => {
+  const [dataSource, setDataSource] = useState<BookletData[]>([]);
   const [api, contextHolder] = notification.useNotification();
-  const [editVideoData, setEditVideoData] = useState<VideoData>();
+  const [editBookletData, setEditBookletData] = useState<BookletData>();
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [searchText, setSearchText] = useState("");
-  const { user } = useAuth();
 
   const openNotification = (message: string) => {
     api.open({
@@ -33,48 +31,45 @@ const AllVideos = (props: Props) => {
 
   useEffect(() => {
     const getInfo = async () => {
-      const querySnapshot = await getDocs(collection(db, "videos"));
-      const allVideoData: VideoData[] = [];
+      const querySnapshot = await getDocs(collection(db, "booklets"));
+      const allBookletData: BookletData[] = [];
 
       querySnapshot.forEach((doc) => {
         let data = doc.data();
-        allVideoData.push({
+        allBookletData.push({
           id: doc.id,
           url: data?.url,
           title: data?.title,
-          thumbnail: data?.thumbnail,
-          description: data?.description,
-          category: data?.category,
         });
       });
-
-      setDataSource(allVideoData);
+      console.log("BOOKLET DATA : ", allBookletData);
+      setDataSource(allBookletData);
     };
 
     getInfo();
   }, []);
 
-  const handleEdit = (record: VideoData) => {
-    setEditVideoData(record);
+  const handleEdit = (record: BookletData) => {
+    setEditBookletData(record);
     setShowEditModal(true);
   };
 
-  const handleDelete = async (record: VideoData) => {
+  const handleDelete = async (record: BookletData) => {
     try {
-      const videoDoc = doc(db, "videos", record.id);
-      await deleteDoc(videoDoc);
+      const bookletDoc = doc(db, "booklets", record.id);
+      await deleteDoc(bookletDoc);
       setDataSource((prevDataSource) =>
         prevDataSource.filter((item) => item.id !== record.id)
       );
-      openNotification("Video successfully deleted");
+      openNotification("booklet successfully deleted");
     } catch (error) {
-      console.error("Error removing video: ", error);
+      console.error("Error removing booklet: ", error);
     }
   };
 
-  const showDeleteConfirm = (record: VideoData) => {
+  const showDeleteConfirm = (record: BookletData) => {
     confirm({
-      title: "Are you sure delete this video?",
+      title: "Are you sure delete this booklet?",
       icon: <ExclamationCircleOutlined />,
       content: "This action cannot be undone.",
       okText: "Yes",
@@ -87,17 +82,17 @@ const AllVideos = (props: Props) => {
     });
   };
 
-  const updateVideoData = (updatedVideo: VideoData) => {
+  const updateBookletData = (updatedbooklet: BookletData) => {
     setDataSource((prevDataSource) => {
       const index = prevDataSource.findIndex(
-        (item) => item.id === updatedVideo.id
+        (item) => item.id === updatedbooklet.id
       );
       if (index !== -1) {
         const newDataSource = [...prevDataSource];
-        newDataSource[index] = updatedVideo;
+        newDataSource[index] = updatedbooklet;
         return newDataSource;
       }
-      return [...prevDataSource, updatedVideo];
+      return [...prevDataSource, updatedbooklet];
     });
     setShowEditModal(false);
   };
@@ -106,8 +101,8 @@ const AllVideos = (props: Props) => {
     setSearchText(e.target.value);
   };
 
-  const filteredDataSource = dataSource.filter((video) =>
-    [video.title, video.description].some((field) =>
+  const filteredDataSource = dataSource.filter((booklet) =>
+    [booklet.title].some((field) =>
       field.toString().toLowerCase().includes(searchText.toLowerCase())
     )
   );
@@ -116,56 +111,20 @@ const AllVideos = (props: Props) => {
     {
       title: "Sr No",
       key: "srno",
-      render: (text: any, record: VideoData, index: number) => index + 1,
+      render: (text: any, record: BookletData, index: number) => index + 1,
     },
-    {
-      title: "Thumbnail",
-      dataIndex: "thumbnail",
-      key: "thumbnail",
-      render: (url: string) => (
-        <img
-          src={url}
-          alt="video"
-          style={{ width: 65, height: "auto", borderRadius: 8 }}
-        />
-      ),
-    },
-    {
-      title: "Title",
-      dataIndex: "title",
-      key: "title",
-      render: (title: string) => (
-        <span>
-          {title.length > 60 ? `${title.substring(0, 60)}...` : title}
-        </span>
-      ),
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-      render: (description: string) => (
-        <span>
-          {description.length > 120
-            ? `${description.substring(0, 100)}...`
-            : description}
-        </span>
-      ),
-    },
-    ...VIDEO_COLUMNS.filter(
-      (column) => column.key !== "title" && column.key !== "description"
-    ),
+    ...BOOKLET_COLUMNS,
     {
       title: "Edit",
       key: "edit",
-      render: (text: any, record: VideoData) => (
+      render: (text: any, record: BookletData) => (
         <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
       ),
     },
     {
       title: "Delete",
       key: "delete",
-      render: (text: any, record: VideoData) => (
+      render: (text: any, record: BookletData) => (
         <Button
           icon={<DeleteOutlined />}
           onClick={() => showDeleteConfirm(record)}
@@ -180,12 +139,12 @@ const AllVideos = (props: Props) => {
       <Col span={24}>
         <Row style={{ display: "flex", alignItems: "center" }}>
           <Col span={17} sm={14} xs={24} md={17}>
-            <h1 style={{ marginTop: 0 }}>Posted Videos</h1>
+            <h1 style={{ marginTop: 0 }}>Posted booklets</h1>
           </Col>
           <Col span={7} sm={10} xs={24} md={7}>
             <Input
               size="large"
-              placeholder="Search by title or description"
+              placeholder="Search by booklet title"
               value={searchText}
               onChange={handleSearch}
               prefix={<SearchOutlined style={{ marginRight: 5 }} />}
@@ -206,10 +165,13 @@ const AllVideos = (props: Props) => {
         footer={false}
         onCancel={() => setShowEditModal(false)}
       >
-        <AddVideo videoData={editVideoData} onUpdate={updateVideoData} />
+        <AddBooklet
+          bookletData={editBookletData}
+          onUpdate={updateBookletData}
+        />
       </Modal>
     </Row>
   );
 };
 
-export default AllVideos;
+export default PostedBooklets;

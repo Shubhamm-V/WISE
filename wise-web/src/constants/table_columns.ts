@@ -133,3 +133,23 @@ export const VIDEO_COLUMNS = [
     key: "category",
   },
 ];
+
+// Videos Table
+export type BookletData = {
+  id: string;
+  url: string;
+  title: string;
+};
+
+export const BOOKLET_COLUMNS = [
+  {
+    title: "Booklet URL",
+    dataIndex: "url",
+    key: "url",
+  },
+  {
+    title: "Booklet Title",
+    dataIndex: "title",
+    key: "title",
+  },
+];

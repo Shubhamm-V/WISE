@@ -5,22 +5,20 @@ import { useNavigate } from "react-router-dom";
 import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
 import { useAuth } from "../../context/authContext";
 import { db } from "../../firebaseConfig";
-import { VideoData } from "../../constants/table_columns";
+import { BookletData } from "../../constants/table_columns";
 
-interface VideoProps {
-  videoData?: VideoData;
-  onUpdate?: (updateVideo: VideoData) => void;
+interface BookletProps {
+  bookletData?: BookletData;
+  onUpdate?: (updateBooklet: BookletData) => void;
 }
 
-const AddVideo: React.FC<VideoProps> = ({ videoData, onUpdate }) => {
+const AddBooklet: React.FC<BookletProps> = ({ bookletData, onUpdate }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const { user } = useAuth();
   const [initialFormValues, setInitialFormValues] = useState({
     url: "",
     title: "",
-    description: "",
-    category: "",
   });
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
@@ -34,59 +32,49 @@ const AddVideo: React.FC<VideoProps> = ({ videoData, onUpdate }) => {
   };
 
   useEffect(() => {
-    if (videoData) {
+    if (bookletData) {
       setInitialFormValues((prevValues) => ({
         ...prevValues,
-        ...videoData,
+        ...bookletData,
       }));
       form.setFieldsValue({
-        ...videoData,
+        ...bookletData,
       });
     }
-  }, [videoData]);
+  }, [bookletData]);
 
-  const getVideoID = (url: string) => {
-    if (!url) return "";
-    const regex =
-      /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const matches = url.match(regex);
-    return matches ? matches[1] : "";
-  };
-
-  const onFinish: FormProps<VideoData>["onFinish"] = async (values) => {
+  const onFinish: FormProps<BookletData>["onFinish"] = async (values) => {
     setLoading(true);
-    const videoId = getVideoID(values?.url);
     values = {
       ...values,
-      thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
     };
     try {
       if (!user) {
         throw new Error("User is not authenticated");
       }
-      if (videoData?.id) {
-        const videoRef = doc(db, "videos", videoData.id);
-        await updateDoc(videoRef, values);
-        if (onUpdate) onUpdate({ ...values, id: videoData.id });
-        openNotification("Video updated successfully");
+      if (bookletData?.id) {
+        const bookletRef = doc(db, "booklets", bookletData.id);
+        await updateDoc(bookletRef, values);
+        if (onUpdate) onUpdate({ ...values, id: bookletData.id });
+        openNotification("Booklet updated successfully");
       } else {
-        await addDoc(collection(db, "videos"), {
+        await addDoc(collection(db, "booklets"), {
           ...values,
           userId: user.userId,
         });
-        setTimeout(() => {
-          openNotification("Video added successfully");
-        }, 1000);
+        openNotification("Booklets added successfully");
       }
       setLoading(false);
-      navigate("/view-videos");
+      setTimeout(() => {
+        navigate("/view-booklets");
+      }, 1000);
     } catch (err: any) {
       openNotification("Something went wrong: " + err.message);
       setLoading(false);
     }
   };
 
-  const onFinishFailed: FormProps<VideoData>["onFinishFailed"] = (
+  const onFinishFailed: FormProps<BookletData>["onFinishFailed"] = (
     errorInfo
   ) => {
     console.log("Failed:", errorInfo);
@@ -96,7 +84,7 @@ const AddVideo: React.FC<VideoProps> = ({ videoData, onUpdate }) => {
     <Row>
       {contextHolder}
       <Col span={24}>
-        <h1>{videoData ? "Update Video" : "Add Video"}</h1>
+        <h1>{bookletData ? "Update Booklet" : "Add Booklet"}</h1>
         <Form
           form={form}
           name="basic"
@@ -111,46 +99,25 @@ const AddVideo: React.FC<VideoProps> = ({ videoData, onUpdate }) => {
         >
           <Row gutter={30}>
             <Col span={12} xs={24} sm={24} md={12}>
-              <Form.Item<VideoData>
-                label="Video URL (Youtube)"
+              <Form.Item<BookletData>
+                label="Booklet URL"
                 name="url"
                 rules={[
-                  { required: true, message: "Please enter youtube video URL" },
+                  { required: true, message: "Please enter booklet URL" },
                 ]}
               >
-                <Input placeholder="Enter youtube video URL" />
+                <Input placeholder="Enter booklet URL" />
               </Form.Item>
             </Col>
             <Col span={12} xs={24} sm={24} md={12}>
-              <Form.Item<VideoData>
-                label="Video Title"
+              <Form.Item<BookletData>
+                label="Booklet Title"
                 name="title"
                 rules={[
-                  { required: true, message: "Please enter video title!" },
+                  { required: true, message: "Please enter booklet title!" },
                 ]}
               >
-                <Input placeholder="Enter video title" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Form.Item<VideoData>
-            label="Video Description"
-            name="description"
-            rules={[
-              { required: true, message: "Please enter video description!" },
-            ]}
-          >
-            <Input.TextArea placeholder="Enter video description" rows={4} />
-          </Form.Item>
-          =
-          <Row gutter={30}>
-            <Col span={12} xs={24} sm={12} md={12} lg={8}>
-              <Form.Item<VideoData>
-                label="Category"
-                name="category"
-                // rules={[{ required: true, message: "Please enter city!" }]}
-              >
-                <Input placeholder="Enter city name" />
+                <Input placeholder="Enter booklet title" />
               </Form.Item>
             </Col>
           </Row>
@@ -168,7 +135,7 @@ const AddVideo: React.FC<VideoProps> = ({ videoData, onUpdate }) => {
                 style={{ width: "100%", paddingInline: 35, margin: 5 }}
                 loading={loading}
               >
-                {videoData ? "Update Video" : "Add Video"}
+                {bookletData ? "Update Booklet" : "Add Booklet"}
               </Button>
             </Form.Item>
           </Row>
@@ -178,4 +145,4 @@ const AddVideo: React.FC<VideoProps> = ({ videoData, onUpdate }) => {
   );
 };
 
-export default AddVideo;
+export default AddBooklet;
