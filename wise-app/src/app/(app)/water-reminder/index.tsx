@@ -19,7 +19,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { CheckBox, Dialog } from "@rneui/themed";
 import Toast from "react-native-root-toast";
 import { Input } from "@rneui/themed";
-const amounts = [250, 500, 1000, 1500];
+const amounts = [250, 500, 750, 1000, 1500];
 
 // Async Storage
 const storeData = async (value: any, key = "@amount") => {
@@ -45,7 +45,7 @@ const getData = async (key: any, setValue: any) => {
 
 // Notifications
 
-async function setWaterReminder(hours: number, doRepeat: boolean) {
+async function setWaterReminder(hours: number) {
   const permission = await Notifications.requestPermissionsAsync();
   const seconds = hours * 3600;
   if (permission.status === "granted") {
@@ -56,7 +56,7 @@ async function setWaterReminder(hours: number, doRepeat: boolean) {
         subtitle: "Your body needs water!",
       },
       trigger: {
-        repeats: doRepeat,
+        repeats: false,
         seconds, // Convert hours to seconds
       },
     });
@@ -93,7 +93,6 @@ export default function App() {
   const [waterGoal, setWaterGoal] = useState(3000);
   const [waterDrank, setWaterDrank] = useState(0);
   const [isGoalAchieved, setIsGoalAchieved] = useState(false);
-  const [checkedRepeated, setCheckedRepeated] = useState(false);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
   const [hours, setHours] = useState("");
   const [isNotificationScheduled, setIsNotificationScheduled] = useState(false);
@@ -172,18 +171,22 @@ export default function App() {
         {/* Water Goal */}
         <View
           style={{
-            paddingHorizontal: 10,
-            paddingVertical: 30,
-            display: "flex",
             flexDirection: "row",
-            width: "100%",
             justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
+          <CustomText label="Track Water Intake" customStyle={styles.title} />
+          <TouchableOpacity onPress={() => setWaterDrank(0)}>
+            <CustomText label="Reset All" customStyle={styles.reset} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.goalHeader}>
           <CustomText
-            label="Your Goal"
+            label="Set toady's goal"
             customStyle={{
-              fontSize: 22,
+              fontSize: 18,
               color: COLORS.primary,
               fontFamily: "DMSansBold",
             }}
@@ -192,7 +195,7 @@ export default function App() {
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <CustomText
               label={`${waterGoal} mL`}
-              customStyle={{ fontSize: 20 }}
+              customStyle={{ fontSize: 17 }}
             />
 
             {/* Add Goal */}
@@ -215,78 +218,79 @@ export default function App() {
           </View>
         </View>
         {/* ProgressView */}
-        <View
-          style={{
-            flexDirection: "row",
-            paddingHorizontal: 10,
-            paddingVertical: 20,
-            justifyContent: "space-between",
-          }}
-        >
+        <View style={styles.waterContainer}>
           {/* Water You've Drank Label */}
           <View style={{ justifyContent: "center" }}>
             <CustomText
               label="You've drank"
-              customStyle={{ color: COLORS.dark, fontSize: 30 }}
+              customStyle={{ color: COLORS.dark, fontSize: 18 }}
             />
             <CustomText
               label={`${waterDrank} mL`}
               customStyle={{
                 color: COLORS.primary,
-                fontSize: 45,
+                fontSize: 35,
                 fontFamily: "DMSansBold",
               }}
             />
             <CustomText
-              label={`Water Today`}
+              label={`water today`}
               customStyle={{
                 color: COLORS.dark,
-                fontSize: 25,
+                fontSize: 20,
               }}
             />
           </View>
 
           {/* Progress Bar */}
-          <View style={styles.progressBarContainer}>
-            <Animated.View
-              style={{
-                height: progressPercent,
-                borderRadius: 25,
-                backgroundColor: COLORS.primary,
-              }}
-            />
+          <View>
+            <View style={styles.progressBarContainer}>
+              <Animated.View
+                style={{
+                  height: progressPercent,
+                  borderRadius: 25,
+                  backgroundColor: COLORS.primary,
+                }}
+              />
+            </View>
           </View>
         </View>
         {/* Add Water */}
-        <TouchableOpacity onPress={() => setWaterDrank(0)}>
-          <CustomText label="Reset All" customStyle={styles.reset} />
-        </TouchableOpacity>
-        <View style={styles.waterButtonsContainer}>
-          {amounts.map((amount) => {
-            return (
-              <AddRemoveButton
-                key={"add" + amount}
-                amount={amount}
-                value={waterDrank}
-                setValue={setWaterDrank}
-                operation="add"
-              />
-            );
-          })}
-        </View>
-        {/* Remove Water */}
-        <View style={styles.waterButtonsContainer}>
-          {amounts.map((amount) => {
-            return (
-              <AddRemoveButton
-                key={"remove" + amount}
-                amount={amount}
-                value={waterDrank}
-                setValue={setWaterDrank}
-                operation="remove"
-              />
-            );
-          })}
+
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: COLORS.lightPrimary,
+            borderRadius: 8,
+          }}
+        >
+          <View style={styles.waterButtonsContainer}>
+            {amounts.map((amount) => {
+              return (
+                <AddRemoveButton
+                  key={"add" + amount}
+                  amount={amount}
+                  value={waterDrank}
+                  setValue={setWaterDrank}
+                  operation="add"
+                />
+              );
+            })}
+          </View>
+          {/* Remove Water */}
+          <View style={styles.waterButtonsContainer}>
+            {amounts.map((amount) => {
+              return (
+                <AddRemoveButton
+                  key={"remove" + amount}
+                  amount={amount}
+                  value={waterDrank}
+                  setValue={setWaterDrank}
+                  operation="remove"
+                />
+              );
+            })}
+          </View>
         </View>
         <View
           style={{
@@ -319,8 +323,8 @@ export default function App() {
           ) : (
             <CustomButton
               onPress={() => setIsDialogVisible(true)}
-              customStyle={{ width: "97.5%" }}
-              label="Set Reminder"
+              customStyle={{ width: "100%" }}
+              label="Set water reminder"
             />
           )}
         </View>
@@ -354,23 +358,7 @@ export default function App() {
                 // errorMessage="Please select range from 1-24 hours"
               />
             </View>
-            {hours.length > 0 && (
-              <View style={styles.checkBoxContainer}>
-                <CheckBox
-                  checked={checkedRepeated}
-                  onPress={() => setCheckedRepeated(!checkedRepeated)}
-                  iconType="material-community"
-                  checkedIcon="checkbox-marked"
-                  uncheckedIcon="checkbox-blank-outline"
-                  checkedColor={COLORS.primary}
-                />
-                <View style={{ display: "flex", flexShrink: 1 }}>
-                  <CustomText
-                    label={`Repeat Reminder after every ${hours} hours`}
-                  />
-                </View>
-              </View>
-            )}
+
             <View
               style={{
                 display: "flex",
@@ -383,7 +371,7 @@ export default function App() {
               <CustomButton
                 isDisabled={hours.length == 0}
                 onPress={() => {
-                  setWaterReminder(parseInt(hours), checkedRepeated);
+                  setWaterReminder(parseInt(hours));
                   setIsNotificationScheduled(true);
                   setIsDialogVisible(false);
                 }}
@@ -433,6 +421,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     width: "100%",
     justifyContent: "space-between",
+    paddingHorizontal: 5,
   },
   waterGoalContainer: {
     padding: 50,
@@ -460,8 +449,35 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     fontFamily: "DMSansBold",
     fontSize: 19,
-    textAlign: "right",
-    padding: 4,
+    padding: 10,
     textDecorationLine: "underline",
+  },
+  title: {
+    fontSize: 20,
+    color: COLORS.dark,
+    fontFamily: "DMSansBold",
+    marginVertical: 15,
+  },
+  goalHeader: {
+    paddingHorizontal: 7,
+    borderWidth: 1,
+    borderColor: COLORS.lightPrimary,
+    borderRadius: 10,
+    paddingVertical: 10,
+
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  waterContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: COLORS.lightPrimary,
+    marginVertical: 10,
+    borderRadius: 8,
+    paddingVertical: 20,
+    justifyContent: "space-between",
   },
 });

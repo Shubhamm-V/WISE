@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { View, TouchableOpacity, Text, Animated } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { COLORS } from "@/src/constants/colors";
+import CustomText from "./CustomText";
 
 interface Water {
   amount: number;
@@ -32,8 +33,8 @@ export const AddRemoveButton = ({
         style={{
           borderWidth: 1,
           borderColor: operation == "add" ? COLORS.primary : "#FE5B7D",
-          width: 60,
-          height: 60,
+          width: 48,
+          height: 45,
           borderRadius: 5,
           alignItems: "center",
           justifyContent: "center",
@@ -41,11 +42,19 @@ export const AddRemoveButton = ({
       >
         <Icon
           name="glass-water"
-          size={24}
+          size={18}
           color={operation == "add" ? COLORS.primary : "#FE5B7D"}
         />
       </View>
-      <Text style={{ color: "#5a595b", fontWeight: "600" }}>{amount} mL</Text>
+      <CustomText
+        label={`${amount} mL`}
+        customStyle={{
+          fontSize: 11,
+          textAlign: "center",
+          color: operation == "add" ? COLORS.primary : "#FE5B7D",
+          paddingVertical: 2,
+        }}
+      />
     </TouchableOpacity>
   );
 };
