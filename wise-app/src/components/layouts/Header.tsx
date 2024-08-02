@@ -17,7 +17,7 @@ const Header = (props: Props) => {
       <View style={styles.header}>
         <View>
           <CustomText
-            label={t("screens.home.hello")}
+            label={"👋 " + t("screens.home.hello") + ","}
             customStyle={styles.textStyle}
           />
           <CustomText label={user?.name} customStyle={styles.headerTextStyle} />
@@ -42,20 +42,20 @@ const styles = StyleSheet.create({
   },
   header: {
     width: "100%",
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   headerTextStyle: {
-    fontSize: 20,
+    fontSize: 16,
     lineHeight: 24,
     flexWrap: "wrap",
     fontFamily: "DMSansBlack",
-    color: COLORS.title,
+    color: COLORS.primary,
   },
   textStyle: {
-    fontSize: 16,
+    fontSize: 14,
     color: COLORS.title,
     fontFamily: "DMSans",
   },
