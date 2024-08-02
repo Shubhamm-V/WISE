@@ -16,8 +16,9 @@ import CustomText from "@/src/components/custom-widgets/CustomText";
 import { getDocs, collection } from "firebase/firestore";
 import Loading from "@/src/components/custom-widgets/Loading";
 
-type YoutubeVideo = {
+export type YoutubeVideo = {
   id: string;
+  videoId?: string;
   url: string;
   title: string;
   thumbnail: string;
@@ -96,12 +97,13 @@ const EducationalVideos = (props: Props) => {
         backgroundColor: COLORS.light,
       }}
     >
-      <View style={{ flex: 1, paddingHorizontal: "2.3%" }}>
+      <View style={{ flex: 1, paddingHorizontal: "2%" }}>
         <CustomText
-          label="Educational Health Videos"
+          label="👩‍⚕️ Health Education Videos "
           customStyle={{
-            fontSize: 23,
+            fontSize: 20,
             fontFamily: "DMSansBold",
+            textAlign: "center",
             marginTop: 15,
           }}
         />
@@ -157,13 +159,13 @@ export default EducationalVideos;
 
 const styles = StyleSheet.create({
   searchInput: {
-    borderRadius: 10,
+    borderRadius: 5,
     paddingVertical: 10,
     marginTop: 10,
-    marginBottom: 1,
+    marginBottom: 5,
     borderBottomWidth: 1,
     flexDirection: "row",
     borderBottomColor: "#ccc",
-    backgroundColor: "#fbfbfb",
+    backgroundColor: "#f5f5f5",
   },
 });

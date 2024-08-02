@@ -1,6 +1,6 @@
 export const COLORS = {
   primary: "#9966CC",
-  lightPrimary: "#F1ECF6",
+  lightPrimary: "#dfc8f6",
   // primary: "#2EB5FA",
   pink: "#D81E5B",
   light: "#FDFFFC",

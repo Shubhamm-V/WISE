@@ -284,7 +284,8 @@ export default TrackMenustralCycle;
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 25,
+    fontSize: 20,
+    color: COLORS.dark,
     fontFamily: "DMSansBold",
     marginVertical: 10,
   },
