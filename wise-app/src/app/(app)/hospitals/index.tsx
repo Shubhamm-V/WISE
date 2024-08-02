@@ -39,6 +39,7 @@ type Props = {};
 const NearByHospitals = (props: Props) => {
   const [allHospitals, setallHospitals] = useState<Hospital[]>([]);
   const [tempAllHospitals, settempAllHospitals] = useState<Hospital[]>([]);
+  const [openMapId, setOpenMapId] = useState<string>();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedDistance, setSelectedDistance] = useState<number>(25);
@@ -126,7 +127,7 @@ const NearByHospitals = (props: Props) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.light }}>
-      <View style={{ paddingHorizontal: "2%", flex: 1 }}>
+      <View style={{ paddingHorizontal: "2.5%", flex: 1 }}>
         <View
           style={{
             display: "flex",
@@ -168,7 +169,13 @@ const NearByHospitals = (props: Props) => {
                 contentContainerStyle={{ paddingBottom: 5 }}
                 keyExtractor={(item) => item?.id} // You can use a unique key here
                 renderItem={({ item }) => {
-                  return <HospitalCard hospitalData={item} />;
+                  return (
+                    <HospitalCard
+                      hospitalData={item}
+                      setOpenMapId={setOpenMapId}
+                      openMapId={openMapId}
+                    />
+                  );
                 }}
               />
             </View>
@@ -206,11 +213,12 @@ const styles = StyleSheet.create({
   searchInput: {
     borderRadius: 10,
     paddingVertical: 10,
+    marginTop: 8,
     marginBottom: 5,
     borderBottomWidth: 1,
     flexDirection: "row",
     borderBottomColor: "#ccc",
-    backgroundColor: "#fbfbfb",
+    backgroundColor: "#f5f5f5",
   },
   dropdown: {
     width: "32%",
@@ -220,8 +228,9 @@ const styles = StyleSheet.create({
     borderColor: COLORS.dark700,
   },
   header: {
-    fontSize: 23,
+    fontSize: 20,
     fontFamily: "DMSansBold",
+    color: COLORS.dark,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
