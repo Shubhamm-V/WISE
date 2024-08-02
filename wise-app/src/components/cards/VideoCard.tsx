@@ -19,7 +19,7 @@ const VideoCard: FC<ChildProps> = ({ youtubeData }) => {
         })
       }
     >
-      <View style={{ width: "42%" }}>
+      <View style={{ width: "32%" }}>
         <Image
           style={styles.thumbnail}
           source={{
@@ -27,10 +27,10 @@ const VideoCard: FC<ChildProps> = ({ youtubeData }) => {
           }}
         />
       </View>
-      <View style={{ width: "56%" }}>
+      <View style={{ width: "65%" }}>
         <CustomText
           label={youtubeData?.title}
-          customStyle={{ paddingHorizontal: 5, fontSize: 16 }}
+          customStyle={{ paddingHorizontal: 5, fontSize: 14 }}
         />
       </View>
     </TouchableOpacity>
@@ -41,22 +41,21 @@ export default VideoCard;
 
 const styles = StyleSheet.create({
   cardContainer: {
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
+    elevation: 1,
     marginTop: 1,
     borderRadius: 3,
-    shadowRadius: 0.84,
-    shadowOpacity: 0.15,
     paddingVertical: 12,
     paddingHorizontal: 10,
     display: "flex",
+    borderColor: "lightgray",
+    borderWidth: 1,
     backgroundColor: COLORS.light,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   thumbnail: {
-    height: 75,
+    height: 55,
     borderRadius: 10,
     width: "auto",
   },

@@ -26,7 +26,7 @@ const PeriodCard: FC<PeriodProps> = ({
               ? "Next Period"
               : "Period is ongoing"
           }
-          customStyle={{ fontSize: 18, fontFamily: "DMSansBold" }}
+          customStyle={{ fontSize: 17, fontFamily: "DMSansBold" }}
         />
       </View>
       {isPeriodEnded ? (
