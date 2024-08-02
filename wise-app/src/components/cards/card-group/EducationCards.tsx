@@ -1,14 +1,13 @@
 import { StyleSheet, View, Image, Pressable } from "react-native";
 import React from "react";
-import { COLORS } from "@/src/constants/colors";
-import CustomText from "../custom-widgets/CustomText";
+import { COLORS } from "../../../constants/colors";
+import CustomText from "../../custom-widgets/CustomText";
 import Icon from "react-native-vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-const TrackCards = () => {
+const EducationCards = () => {
   return (
-    <View style={{ paddingHorizontal: 10, marginVertical: 10 }}>
-      <CustomText label="Take care of your health" customStyle={styles.title} />
+    <View style={{ paddingHorizontal: 12, marginVertical: 6 }}>
       <View style={styles.cardContainer}>
         <Pressable
           style={styles.card}
@@ -26,13 +25,18 @@ const TrackCards = () => {
             <View style={{ width: "39%" }}>
               <Image
                 style={styles.image}
-                source={require("../../../assets/images/illustrations/water-intake/card-image.png")}
+                source={require("../../../../assets/images/illustrations/education/image.png")}
               />
             </View>
             <View style={{ width: "51%", flexDirection: "column" }}>
               <CustomText
-                label="Water Reminder"
-                customStyle={{ flex: 1, flexShrink: 1, color: COLORS.dark }}
+                label="Health Education"
+                customStyle={{
+                  flex: 1,
+                  flexShrink: 1,
+                  color: COLORS.primary,
+                  fontFamily: "DMSansBold",
+                }}
               />
               <Icon
                 name="arrow-forward-outline"
@@ -59,7 +63,7 @@ const TrackCards = () => {
             <View style={{ width: "38%" }}>
               <Image
                 style={styles.image}
-                source={require("../../../assets/images/illustrations/water-intake/card-image.png")}
+                source={require("../../../../assets/images/illustrations/water-intake/card-image.png")}
               />
             </View>
             <View style={{ width: "51%", flexDirection: "column" }}>
@@ -81,17 +85,12 @@ const TrackCards = () => {
   );
 };
 
-export default TrackCards;
+export default EducationCards;
 
 const styles = StyleSheet.create({
   card: {
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 5,
-    borderRadius: 5,
-    shadowRadius: 0.84,
-    shadowOpacity: 0.15,
-    shadowColor: "#52006A",
-    width: "49%",
+    elevation: 1,
+    width: "48.5%",
     backgroundColor: COLORS.light,
   },
   cardContainer: {
@@ -106,8 +105,9 @@ const styles = StyleSheet.create({
     marginBottom: 7,
   },
   image: {
-    height: 80,
-    width: 62,
+    height: 90,
+    width: 75,
     marginLeft: -5,
+    marginTop: 15,
   },
 });
