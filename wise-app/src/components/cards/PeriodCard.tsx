@@ -3,17 +3,26 @@ import CustomText from "../custom-widgets/CustomText";
 import React, { FC } from "react";
 import { COLORS } from "@/src/constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
+import { PrevCycleDetails } from "@/src/app/(app)/period-tracker";
+
 interface PeriodProps {
   periodDayMonth: string[];
   daysBetween: string;
   isPeriodEnded: boolean;
+  periodDayMonths: string[];
+  prevPeriodData: PrevCycleDetails;
 }
+
 const PeriodCard: FC<PeriodProps> = ({
   periodDayMonth,
   daysBetween,
   isPeriodEnded,
+  prevPeriodData,
+  periodDayMonths,
 }) => {
+  const router = useRouter();
+
   return (
     <View style={styles.periodCard}>
       <View style={{ flexDirection: "row", gap: 5, justifyContent: "center" }}>
@@ -32,11 +41,20 @@ const PeriodCard: FC<PeriodProps> = ({
       {isPeriodEnded ? (
         <View>
           <TouchableOpacity
-            onPress={() =>
-              router.navigate("/period-tracker/info-screens/info-screen-1")
-            }
+            onPress={() => {
+              router.push({
+                pathname: "/period-tracker/info-screens/info-screen-1",
+                params: {
+                  periodDayMonths: JSON.stringify(periodDayMonths),
+                  prevPeriodData: JSON.stringify(prevPeriodData),
+                },
+              });
+            }}
           >
-            <CustomText label="RESET" customStyle={styles.resetButton} />
+            <CustomText
+              label="Track next period"
+              customStyle={styles.resetButton}
+            />
           </TouchableOpacity>
         </View>
       ) : (
@@ -77,18 +95,18 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 7,
     marginHorizontal: "1%",
-    marginVertical: 7,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
-    shadowRadius: 0.84,
-    shadowOpacity: 0.15,
+    marginTop: 1.5,
+    marginBottom: 6,
+    elevation: 1,
+    borderColor: "lightgray",
+    borderWidth: 1,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   resetButton: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "DMSansBold",
     color: COLORS.primary,
     textDecorationLine: "underline",

@@ -64,7 +64,7 @@ const FeelingData: FC<FeelingsProps> = ({ selectedDay }) => {
     <View style={{ padding: "2%" }}>
       <CustomText
         label="Feelings"
-        customStyle={{ fontSize: 19, fontFamily: "DMSansBold" }}
+        customStyle={{ fontSize: 16, fontFamily: "DMSansBold" }}
       />
       <View style={styles.feelingContainer}>
         <ScrollView
