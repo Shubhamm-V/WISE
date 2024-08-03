@@ -13,3 +13,20 @@ export const COLORS = {
   error: "#ff0d10",
   orange: "#ffe7cc",
 };
+
+export const CALANDER_THEME = {
+  selectedDayBackgroundColor: COLORS.primary,
+  arrowColor: COLORS.primary,
+  textSectionTitleColor: COLORS.dark,
+  todayTextColor: COLORS.dark,
+  monthTextColor: COLORS.primary,
+  indicatorColor: COLORS.primary,
+  textDayFontFamily: "DMSansMedium",
+  textMonthFontFamily: "DMSansSemiBold",
+  textDayHeaderFontFamily: "DMSansMedium",
+  textMonthFontWeight: "bold",
+  textDayHeaderFontWeight: "300",
+  textDayFontSize: 14,
+  textMonthFontSize: 16,
+  textDayHeaderFontSize: 14,
+};

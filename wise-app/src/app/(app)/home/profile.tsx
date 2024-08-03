@@ -108,7 +108,7 @@ const Profile: React.FC = () => {
     <SafeAreaView>
       <ScrollView>
         <ProfileHeader />
-        <View>
+        {/* <View>
           <CustomText label="Change Language" customStyle={[styles.title]} />
           <View style={{ paddingHorizontal: "2.5%" }}>
             <Dropdown
@@ -118,7 +118,7 @@ const Profile: React.FC = () => {
               placeholder={selectedLanguage}
             />
           </View>
-        </View>
+        </View> */}
         <View>
           <View style={styles.editHeader}>
             <CustomText
@@ -282,7 +282,7 @@ export default Profile;
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 20,
+    fontSize: 18,
     paddingHorizontal: "2.5%",
     fontFamily: "DMSansBold",
     paddingVertical: 15,
