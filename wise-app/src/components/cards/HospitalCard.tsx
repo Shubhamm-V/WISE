@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Divider } from "@rneui/base";
@@ -8,16 +8,11 @@ import { Hospital } from "@/src/app/(app)/hospitals";
 import WebView from "react-native-webview";
 interface ChildProps {
   hospitalData: Hospital;
-  setOpenMapId: Dispatch<SetStateAction<string | undefined>>;
-  openMapId: string | undefined;
 }
 
-const HospitalCard: React.FC<ChildProps> = ({
-  hospitalData,
-  setOpenMapId,
-  openMapId,
-}) => {
+const HospitalCard: React.FC<ChildProps> = ({ hospitalData }) => {
   const { hospitalName, address, contact, doctorName, distance } = hospitalData;
+  const [isMapOpen, setIsMapOpen] = useState(false);
   return (
     <View style={styles.cardContainer}>
       <View
@@ -71,28 +66,23 @@ const HospitalCard: React.FC<ChildProps> = ({
       <Pressable
         style={{ paddingHorizontal: 10, alignItems: "flex-end" }}
         onPress={() => {
-          if (hospitalData?.id === openMapId) setOpenMapId(undefined);
-          else setOpenMapId(hospitalData?.id);
+          setIsMapOpen((prev) => !prev);
         }}
       >
         <View style={styles.mapHeader}>
           <CustomText
-            label={hospitalData?.id === openMapId ? "Close Map" : "Open Map"}
+            label={isMapOpen ? "Close Map" : "Open Map"}
             customStyle={styles.mapLabel}
           />
           <Icon
-            name={
-              hospitalData?.id === openMapId
-                ? "chevron-up-outline"
-                : "chevron-down-outline"
-            }
+            name={isMapOpen ? "chevron-up-outline" : "chevron-down-outline"}
             color={COLORS.primary}
             size={19}
             style={{ marginTop: 5 }}
           />
         </View>
       </Pressable>
-      {hospitalData.id == openMapId && (
+      {isMapOpen && (
         <WebView
           containerStyle={{
             borderColor: "#ccc",

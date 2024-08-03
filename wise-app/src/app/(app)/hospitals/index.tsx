@@ -39,7 +39,6 @@ type Props = {};
 const NearByHospitals = (props: Props) => {
   const [allHospitals, setallHospitals] = useState<Hospital[]>([]);
   const [tempAllHospitals, settempAllHospitals] = useState<Hospital[]>([]);
-  const [openMapId, setOpenMapId] = useState<string>();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedDistance, setSelectedDistance] = useState<number>(25);
@@ -169,13 +168,7 @@ const NearByHospitals = (props: Props) => {
                 contentContainerStyle={{ paddingBottom: 5 }}
                 keyExtractor={(item) => item?.id} // You can use a unique key here
                 renderItem={({ item }) => {
-                  return (
-                    <HospitalCard
-                      hospitalData={item}
-                      setOpenMapId={setOpenMapId}
-                      openMapId={openMapId}
-                    />
-                  );
+                  return <HospitalCard hospitalData={item} />;
                 }}
               />
             </View>
