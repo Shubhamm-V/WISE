@@ -5,14 +5,21 @@ import Slider from "@react-native-community/slider";
 import CustomText from "@/src/components/custom-widgets/CustomText";
 import { COLORS } from "@/src/constants/colors";
 import CustomButton from "@/src/components/custom-widgets/CustomButton";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const InfoScreen1 = () => {
   const [value, setValue] = useState(28);
+  const params = useLocalSearchParams();
   const handleInfoOne = async () => {
     await AsyncStorage.setItem("cycleLength", value.toString());
-    router.push("/period-tracker/info-screens/info-screen-2");
+    router.push({
+      pathname: "/period-tracker/info-screens/info-screen-2",
+      params: {
+        previousPeriodDayMonths: params.periodDayMonths,
+        prevPeriodData: params?.prevPeriodData,
+      },
+    });
   };
   return (
     <SafeAreaView

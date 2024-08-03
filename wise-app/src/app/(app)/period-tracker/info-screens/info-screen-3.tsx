@@ -3,9 +3,10 @@ import CustomText from "@/src/components/custom-widgets/CustomText";
 import { COLORS } from "@/src/constants/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CheckBox } from "@rneui/themed";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Switch } from "@rneui/themed";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -14,6 +15,19 @@ const App = () => {
   const [selected, setSelected] = useState<string>("");
   const [checkedReminder, setCheckedReminder] = useState<boolean>(false);
   const [periodBeforeDay, setPeriodBeforeDay] = useState<string>("");
+  const params = useLocalSearchParams();
+  // Removing passed dates from localstorage
+  const removePeriodLogs = async (previousPeriodDayMonths: string) => {
+    const periodMonthsArray: string[] = previousPeriodDayMonths.split(",");
+    const keysToRemove = periodMonthsArray.map((periodDay: any) => {
+      return periodDay.replace(/\s+/g, "");
+    });
+    for (const key of keysToRemove) {
+      await AsyncStorage.removeItem(`${key}-flow`);
+      await AsyncStorage.removeItem(`${key}-feelings`);
+      await AsyncStorage.removeItem(`${key}-symptoms`);
+    }
+  };
 
   const schedulePeriodsReminder = async () => {
     // const startDate = new Date(selected);
@@ -45,6 +59,29 @@ const App = () => {
       return;
     }
     await AsyncStorage.setItem("lastPeriod", selected);
+
+    if (params?.prevPeriodData) {
+      // @ts-ignore
+      const prevPeriodData = JSON.parse(params?.prevPeriodData);
+      const allPeriodDataString = await AsyncStorage.getItem("allPeriodsData");
+      // @ts-ignore
+      const tempArray = [];
+      tempArray.push(prevPeriodData);
+
+      if (allPeriodDataString && allPeriodDataString.length > 0) {
+        let allPeriodDataArr = JSON.parse(allPeriodDataString);
+        allPeriodDataArr = [...allPeriodDataArr, prevPeriodData];
+        await AsyncStorage.setItem(
+          "allPeriodsData",
+          JSON.stringify(allPeriodDataArr)
+        );
+      } else {
+        await AsyncStorage.setItem("allPeriodsData", JSON.stringify(tempArray));
+      }
+    }
+
+    if (params.previousPeriodDayMonths)
+      await removePeriodLogs(params.previousPeriodDayMonths as string);
     router.push("/period-tracker");
   };
 
@@ -70,7 +107,11 @@ const App = () => {
       <View>
         <CustomText
           label="When did your last period start?"
-          customStyle={{ fontSize: 20, textAlign: "center", marginBottom: 15 }}
+          customStyle={{
+            fontSize: 20,
+            textAlign: "center",
+            marginVertical: 15,
+          }}
         />
         <View
           style={{
@@ -100,23 +141,28 @@ const App = () => {
           />
         </View>
         <View style={styles.reminderContainer}>
-          <CheckBox
-            checked={checkedReminder}
-            onPress={() => setCheckedReminder(!checkedReminder)}
-            iconType="material-community"
-            checkedIcon="checkbox-marked"
-            uncheckedIcon="checkbox-blank-outline"
-            checkedColor={COLORS.primary}
+          <Switch
+            style={{ marginLeft: -15 }}
+            value={checkedReminder}
+            color={COLORS.primary}
+            onValueChange={(value) => setCheckedReminder(value)}
           />
           <CustomText
             label="Send me reminder 1 day before period"
-            customStyle={{ marginLeft: -10, fontSize: 15 }}
+            customStyle={{ fontSize: 15 }}
           />
         </View>
-        <View style={{ display: "flex", alignItems: "center", marginTop: 25 }}>
+        <View
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginTop: 15,
+            marginHorizontal: "2%",
+          }}
+        >
           <CustomButton
             label="Finish"
-            style={{ width: "100%" }}
+            customStyle={{ width: "100%" }}
             onPress={handleInfoThree}
           />
         </View>
@@ -131,6 +177,9 @@ const styles = StyleSheet.create({
   reminderContainer: {
     display: "flex",
     flexDirection: "row",
+    gap: 10,
+    marginVertical: 10,
+    justifyContent: "center",
     alignItems: "center",
   },
 });

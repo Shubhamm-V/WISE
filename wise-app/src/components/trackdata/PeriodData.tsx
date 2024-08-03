@@ -52,7 +52,7 @@ const PeriodData: FC<PeriodDataProps> = ({ selectedDay }) => {
     <View style={{ padding: "2%" }}>
       <CustomText
         label="Menstruation Flow"
-        customStyle={{ fontSize: 19, fontFamily: "DMSansBold" }}
+        customStyle={{ fontSize: 16, fontFamily: "DMSansBold" }}
       />
 
       <View style={styles.periodContainer}>
