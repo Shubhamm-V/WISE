@@ -41,6 +41,7 @@ const EducationalVideos = (props: Props) => {
   const [allVideos, setAllVideos] = useState<YoutubeVideo[]>([]);
   const [tempAllVideos, setTempAllVideos] = useState<YoutubeVideo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     const getInfo = async () => {
@@ -68,6 +69,7 @@ const EducationalVideos = (props: Props) => {
 
       setAllVideos(filterVideos);
       setTempAllVideos(filterVideos);
+      setIsLoaded(true);
     };
     try {
       getInfo();
@@ -77,7 +79,7 @@ const EducationalVideos = (props: Props) => {
     }
   }, []);
 
-  if (loading) return <Loading />;
+  if (loading || !isLoaded) return <Loading />;
 
   const filterResults = (value: string) => {
     value = value.toLowerCase();
@@ -99,7 +101,7 @@ const EducationalVideos = (props: Props) => {
     >
       <View style={{ flex: 1, paddingHorizontal: "2%" }}>
         <CustomText
-          label="👩‍⚕️ Health Education Videos "
+          label="Health Education Videos "
           customStyle={{
             fontSize: 20,
             fontFamily: "DMSansBold",

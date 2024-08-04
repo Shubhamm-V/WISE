@@ -16,10 +16,7 @@ const Header = (props: Props) => {
     <SafeAreaView>
       <View style={styles.header}>
         <View>
-          <CustomText
-            label={"👋 " + t("screens.home.hello") + ","}
-            customStyle={styles.textStyle}
-          />
+          <CustomText label="👋  Hello " customStyle={styles.textStyle} />
           <CustomText label={user?.name} customStyle={styles.headerTextStyle} />
         </View>
         <TouchableOpacity onPress={() => router.navigate("/home/profile")}>

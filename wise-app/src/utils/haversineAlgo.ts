@@ -7,12 +7,12 @@ export const haversine = (
   // Radius of the Earth in meters
   const R = 6371000.0;
 
-  // Convert latitude and longitude from degrees to radians
+  // Converting latitude and longitude from degrees to radians
   const [radLat1, radLon1, radLat2, radLon2] = [lat1, lon1, lat2, lon2].map(
     (coord) => (coord * Math.PI) / 180
   );
 
-  // Calculate differences in coordinates
+  // Calculating differences in coordinates
   const dlat = radLat2 - radLat1;
   const dlon = radLon2 - radLon1;
 
@@ -25,7 +25,7 @@ export const haversine = (
   // Distance in meters
   const distanceInMeters = R * c;
 
-  // Convert distance to kilometers
+  // Converting distance to kilometers
   const distanceInKilometers = distanceInMeters / 1000;
 
   return distanceInKilometers;
