@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  FlatList,
-  Image,
-} from "react-native";
+import { StyleSheet, View, TextInput, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import GetLocation from "react-native-get-location";
 import HospitalCard from "@/src/components/cards/HospitalCard";
@@ -94,7 +87,7 @@ const NearByHospitals = (props: Props) => {
 
         setallHospitals(filteredHospitals);
         settempAllHospitals(filteredHospitals);
-        if (filteredHospitals.length > 0) setIsLoaded(true);
+        setIsLoaded(true);
       } catch (error) {
         console.log("Something went wrong", error);
       } finally {
