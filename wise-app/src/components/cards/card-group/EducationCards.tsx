@@ -5,81 +5,57 @@ import CustomText from "../../custom-widgets/CustomText";
 import Icon from "react-native-vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
+
+const cardsData = [
+  {
+    label: "Watch Videos",
+    imageSource: require("../../../../assets/images/illustrations/education/video-card.png"),
+    link: "/videos",
+  },
+  {
+    label: "Read Booklets",
+    imageSource: require("../../../../assets/images/illustrations/education/booklet-card.png"),
+    link: "/home/booklets",
+  },
+];
+
 const EducationCards = () => {
   return (
-    <View style={{ paddingHorizontal: 12, marginVertical: 6 }}>
+    <View style={{ paddingHorizontal: 12 }}>
       <View style={styles.cardContainer}>
-        <Pressable
-          style={styles.card}
-          onPress={() => router.push("/water-reminder")}
-        >
-          <LinearGradient
-            colors={[COLORS.lightPrimary, COLORS.light]}
-            style={{
-              paddingHorizontal: 13,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              paddingTop: 15,
-            }}
-          >
-            <View style={{ width: "39%" }}>
-              <Image
-                style={styles.image}
-                source={require("../../../../assets/images/illustrations/education/image.png")}
-              />
+        {cardsData.map((card, index) => (
+          <View key={index} style={styles.card}>
+            <View style={styles.gradientWrapper}>
+              <LinearGradient
+                colors={[COLORS.lightPrimary, "#F1ECF6"]}
+                style={styles.gradient}
+              >
+                <View style={{ width: "54%" }}>
+                  <Image style={styles.image} source={card.imageSource} />
+                </View>
+                <View style={{ width: "46%", flexDirection: "column" }}>
+                  <CustomText
+                    label={card.label}
+                    customStyle={{
+                      flex: 1,
+                      flexShrink: 1,
+                      color: COLORS.primary,
+                      fontFamily: "DMSansBold",
+                    }}
+                  />
+                  <Pressable onPress={() => router.push(card.link)}>
+                    <Icon
+                      name="arrow-forward-outline"
+                      size={25}
+                      color={COLORS.primary}
+                      style={{ textAlign: "right", paddingBottom: 5 }}
+                    />
+                  </Pressable>
+                </View>
+              </LinearGradient>
             </View>
-            <View style={{ width: "51%", flexDirection: "column" }}>
-              <CustomText
-                label="Health Education"
-                customStyle={{
-                  flex: 1,
-                  flexShrink: 1,
-                  color: COLORS.primary,
-                  fontFamily: "DMSansBold",
-                }}
-              />
-              <Icon
-                name="arrow-forward-outline"
-                size={25}
-                color={COLORS.primary}
-                style={{ textAlign: "right", paddingBottom: 5 }}
-              />
-            </View>
-          </LinearGradient>
-        </Pressable>
-        <Pressable
-          style={styles.card}
-          onPress={() => router.push("/reminders/water-reminder")}
-        >
-          <LinearGradient
-            colors={[COLORS.lightPrimary, COLORS.light]}
-            style={{
-              paddingHorizontal: 13,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              paddingTop: 15,
-            }}
-          >
-            <View style={{ width: "38%" }}>
-              <Image
-                style={styles.image}
-                source={require("../../../../assets/images/illustrations/water-intake/card-image.png")}
-              />
-            </View>
-            <View style={{ width: "51%", flexDirection: "column" }}>
-              <CustomText
-                label="Health Education"
-                customStyle={{ flex: 1, flexShrink: 1, color: COLORS.dark }}
-              />
-              <Icon
-                name="arrow-forward-outline"
-                size={25}
-                color={COLORS.primary}
-                style={{ textAlign: "right", paddingBottom: 5 }}
-              />
-            </View>
-          </LinearGradient>
-        </Pressable>
+          </View>
+        ))}
       </View>
     </View>
   );
@@ -89,25 +65,32 @@ export default EducationCards;
 
 const styles = StyleSheet.create({
   card: {
-    elevation: 1,
     width: "48.5%",
+    elevation: 1,
     backgroundColor: COLORS.light,
+    borderRadius: 8,
+    overflow: "hidden",
   },
   cardContainer: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  title: {
-    color: COLORS.dark,
-    fontFamily: "DMSansSemiBold",
-    fontSize: 17,
-    marginBottom: 7,
+  gradientWrapper: {
+    borderRadius: 5,
+    overflow: "hidden",
+  },
+  gradient: {
+    paddingHorizontal: 13,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 15,
+    borderRadius: 5,
   },
   image: {
-    height: 90,
-    width: 75,
+    height: 77,
+    width: 68,
     marginLeft: -5,
-    marginTop: 15,
+    marginTop: 10,
   },
 });

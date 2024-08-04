@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   profileImage: {
     borderRadius: 100,
     height: 70,
+    backgroundColor: COLORS.light,
     width: 70,
     borderColor: COLORS.primary,
     borderWidth: 1,
