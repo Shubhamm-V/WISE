@@ -9,6 +9,7 @@ import { useAuth } from "@/src/context/authContext";
 import Loading from "@/src/components/custom-widgets/Loading";
 import { COLORS } from "@/src/constants/colors";
 import TrackCards from "@/src/components/cards/card-group/TrackCards";
+import DoctorCard from "@/src/components/cards/DoctorCard";
 type Props = {};
 
 const Home = (props: Props) => {
@@ -23,6 +24,7 @@ const Home = (props: Props) => {
         {/* <CircularChart /> */}
         <TrackCards />
         <EducationCards />
+        <DoctorCard />
       </ScrollView>
     </SafeAreaView>
   );
