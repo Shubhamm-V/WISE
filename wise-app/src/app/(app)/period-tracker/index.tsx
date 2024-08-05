@@ -18,6 +18,7 @@ import FeelingData from "@/src/components/trackdata/Feelings";
 import SymptomsData from "@/src/components/trackdata/SymptomsData";
 import { router } from "expo-router";
 import Loading from "@/src/components/custom-widgets/Loading";
+import { useAuth } from "@/src/context/authContext";
 
 interface CycleDetails {
   cycleLength: string;
@@ -43,6 +44,7 @@ interface MarkedDates {
 
 const TrackMenstrualCycle = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
+  const { user } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const [allPeriodDataString, setAllPeriodString] = useState<string | null>("");
   const [prevPeriodData, setPrevPeriodData] = useState<PrevCycleDetails>({
@@ -65,10 +67,10 @@ const TrackMenstrualCycle = () => {
     const fetchCycleDetails = async () => {
       const [cycleLength, periodLength, lastPeriod, allPeriods] =
         await Promise.all([
-          AsyncStorage.getItem("cycleLength"),
-          AsyncStorage.getItem("periodLength"),
-          AsyncStorage.getItem("lastPeriod"),
-          AsyncStorage.getItem("allPeriodsData"),
+          AsyncStorage.getItem(`${user.userId}-cycleLength`),
+          AsyncStorage.getItem(`${user.userId}-periodLength`),
+          AsyncStorage.getItem(`${user.userId}-lastPeriod`),
+          AsyncStorage.getItem(`${user.userId}-allPeriodsData`),
         ]);
       setAllPeriodString(allPeriods);
       if (!cycleLength || !periodLength || !lastPeriod) {
@@ -266,7 +268,7 @@ const TrackMenstrualCycle = () => {
               onDayPress={(day: any) => {
                 setSelectedDate(day.dateString);
               }}
-              theme={CALANDER_THEME}
+              theme={{ ...CALANDER_THEME, textDayFontSize: 14 }}
               markingType={"period"}
               markedDates={markedDates}
             />

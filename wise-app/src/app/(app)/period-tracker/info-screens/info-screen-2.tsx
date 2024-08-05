@@ -19,12 +19,13 @@ const InfoScreen2 = () => {
   const [value, setValue] = useState(4);
   const params = useLocalSearchParams();
   const handleInfoTwo = async () => {
-    await AsyncStorage.setItem("periodLength", value.toString());
     router.push({
       pathname: "/period-tracker/info-screens/info-screen-3",
       params: {
         previousPeriodDayMonths: params.previousPeriodDayMonths,
         prevPeriodData: params?.prevPeriodData,
+        cycleLength: params?.cycleLength,
+        periodLength: value.toString(),
       },
     });
   };

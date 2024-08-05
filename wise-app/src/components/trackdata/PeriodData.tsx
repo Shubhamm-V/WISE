@@ -10,6 +10,7 @@ import React, { FC, useEffect, useState } from "react";
 import CustomText from "../custom-widgets/CustomText";
 import { COLORS } from "@/src/constants/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "@/src/context/authContext";
 const data = [
   { label: "Low", index: "1" },
   { label: "Medium", index: "2" },
@@ -32,12 +33,13 @@ interface PeriodDataProps {
 }
 
 const PeriodData: FC<PeriodDataProps> = ({ selectedDay }) => {
+  const { user } = useAuth();
   const [selected, setSelected] = useState("");
 
   useEffect(() => {
     const getPeriodsData = async () => {
       const day = selectedDay.replace(/\s+/g, "");
-      const value = await AsyncStorage.getItem(`${day}-flow`);
+      const value = await AsyncStorage.getItem(`${user?.userId}-${day}-flow`);
       setSelected(value || "");
     };
     getPeriodsData();
@@ -45,7 +47,7 @@ const PeriodData: FC<PeriodDataProps> = ({ selectedDay }) => {
 
   const handleSelected = async (value: string) => {
     const day = selectedDay.replace(/\s+/g, "");
-    await AsyncStorage.setItem(`${day}-flow`, value);
+    await AsyncStorage.setItem(`${user?.userId}-${day}-flow`, value);
     setSelected(value);
   };
   return (

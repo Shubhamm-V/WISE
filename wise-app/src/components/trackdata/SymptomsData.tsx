@@ -10,6 +10,7 @@ import React, { FC, useState, useEffect } from "react";
 import CustomText from "../custom-widgets/CustomText";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { COLORS } from "@/src/constants/colors";
+import { useAuth } from "@/src/context/authContext";
 
 const data = [
   { label: "All Good", index: "1" },
@@ -38,11 +39,14 @@ interface SymptomProps {
 
 const SymptomsData: FC<SymptomProps> = ({ selectedDay }) => {
   const [selected, setSelected] = useState<string[]>([]);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       const day = selectedDay.replace(/\s+/g, "");
-      const storedFeelings = await AsyncStorage.getItem(`${day}-symptoms`);
+      const storedFeelings = await AsyncStorage.getItem(
+        `${user?.userId}-${day}-symptoms`
+      );
       if (storedFeelings) {
         setSelected(storedFeelings.split(","));
       } else {
@@ -67,7 +71,10 @@ const SymptomsData: FC<SymptomProps> = ({ selectedDay }) => {
     const storeData = async () => {
       const day = selectedDay.replace(/\s+/g, "");
       const stringSelected = selected.join(",");
-      await AsyncStorage.setItem(`${day}-symptoms`, stringSelected);
+      await AsyncStorage.setItem(
+        `${user?.userId}-${day}-symptoms`,
+        stringSelected
+      );
     };
 
     storeData();

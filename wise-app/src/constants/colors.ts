@@ -26,7 +26,7 @@ export const CALANDER_THEME = {
   textDayHeaderFontFamily: "DMSansMedium",
   textMonthFontWeight: "bold",
   textDayHeaderFontWeight: "300",
-  textDayFontSize: 14,
   textMonthFontSize: 16,
   textDayHeaderFontSize: 14,
+  textDisabledColor: "#b3b3b3",
 };
