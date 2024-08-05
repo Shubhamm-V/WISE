@@ -11,6 +11,7 @@ import CustomText from "../custom-widgets/CustomText";
 import { COLORS } from "@/src/constants/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useAuth } from "@/src/context/authContext";
 const data = [
   { label: "Normal", index: "1", icon: "emoticon-neutral" },
   { label: "Happy", index: "2", icon: "emoticon-happy" },
@@ -24,12 +25,15 @@ interface FeelingsProps {
 }
 
 const FeelingData: FC<FeelingsProps> = ({ selectedDay }) => {
+  const { user } = useAuth();
   const [selected, setSelected] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const day = selectedDay.replace(/\s+/g, "");
-      const storedFeelings = await AsyncStorage.getItem(`${day}-feelings`);
+      const storedFeelings = await AsyncStorage.getItem(
+        `${user?.userId}-${day}-feelings`
+      );
       if (storedFeelings) {
         setSelected(storedFeelings.split(","));
       } else {
@@ -54,7 +58,10 @@ const FeelingData: FC<FeelingsProps> = ({ selectedDay }) => {
     const storeData = async () => {
       const day = selectedDay.replace(/\s+/g, "");
       const stringSelected = selected.join(",");
-      await AsyncStorage.setItem(`${day}-feelings`, stringSelected);
+      await AsyncStorage.setItem(
+        `${user?.userId}-${day}-feelings`,
+        stringSelected
+      );
     };
 
     storeData();
