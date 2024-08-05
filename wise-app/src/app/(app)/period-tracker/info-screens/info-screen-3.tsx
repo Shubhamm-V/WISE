@@ -39,10 +39,16 @@ const App = () => {
         Toast.show("Permission to send notifications was denied");
         return;
       }
+      const startDate = new Date(selected);
+      const nextPeriodDate = new Date(startDate);
+      nextPeriodDate.setDate(
+        startDate.getDate() + parseInt(params?.cycleLength as string)
+      );
+      const day = nextPeriodDate.getUTCDate();
+      const month = nextPeriodDate.getUTCMonth();
+      const year = nextPeriodDate.getUTCFullYear();
 
-      // Update target date to a future date (replace with your logic)
-      const targetDate = new Date(2024, 7, 5, 18, 21, 0); // Assuming period starts tomorrow (August 5th)
-      console.log("er : ", targetDate.toISOString());
+      const targetDate = new Date(year, month, day, 9, 30, 0); // Assuming period starts tomorrow (August 5th)
       console.log(targetDate.getMonth());
 
       const notificationId = await Notifications.scheduleNotificationAsync({

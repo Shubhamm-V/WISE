@@ -91,6 +91,9 @@ const AddHospital: React.FC<HospitalProps> = ({ hospitalData, onUpdate }) => {
           } else {
             openNotification("Please give permission to access location");
           }
+        },
+        {
+          enableHighAccuracy: true,
         }
       );
     }
