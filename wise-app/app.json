@@ -39,6 +39,14 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow WISE to use your location."
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#ffffff",
+          "defaultChannel": "default"
+        }
       ]
     ],
     "experiments": {

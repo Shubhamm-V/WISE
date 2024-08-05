@@ -32,12 +32,12 @@ type Props = {};
 const NearByHospitals = (props: Props) => {
   const [allHospitals, setallHospitals] = useState<Hospital[]>([]);
   const [tempAllHospitals, settempAllHospitals] = useState<Hospital[]>([]);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [selectedDistance, setSelectedDistance] = useState<number>(25);
 
   useEffect(() => {
     const getInfo = async () => {
+      setLoading(true);
       try {
         const q = query(
           collection(db, "hospitals"),
@@ -84,13 +84,12 @@ const NearByHospitals = (props: Props) => {
           .filter(
             (hospital) => parseFloat(hospital.distance) < selectedDistance
           ); // Filter by distance
-
+        console.log("Filtered : ", filteredHospitals);
         setallHospitals(filteredHospitals);
         settempAllHospitals(filteredHospitals);
-        setIsLoaded(true);
+        setLoading(false);
       } catch (error) {
         console.log("Something went wrong", error);
-      } finally {
         setLoading(false);
       }
     };
@@ -110,7 +109,7 @@ const NearByHospitals = (props: Props) => {
     setallHospitals(data);
   };
 
-  if (loading || !isLoaded) return <Loading />;
+  if (loading) return <Loading />;
 
   const handleDistanceSelect = (value: string) => {
     const distance = parseFloat(value.split(" ")[0]);
