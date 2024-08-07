@@ -53,9 +53,9 @@ const App = () => {
 
       const notificationId = await Notifications.scheduleNotificationAsync({
         content: {
-          title: "Period Reminder",
+          title: "Your Period will arrive tomorrow!",
           sound: "default",
-          subtitle: "Your period will start tomorrow!",
+          subtitle: "Period Reminder",
         },
         trigger: {
           date: targetDate,

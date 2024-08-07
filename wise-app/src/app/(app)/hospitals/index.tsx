@@ -33,7 +33,7 @@ const NearByHospitals = (props: Props) => {
   const [allHospitals, setallHospitals] = useState<Hospital[]>([]);
   const [tempAllHospitals, settempAllHospitals] = useState<Hospital[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedDistance, setSelectedDistance] = useState<number>(25);
+  const [selectedDistance, setSelectedDistance] = useState<number>(10);
 
   useEffect(() => {
     const getInfo = async () => {
@@ -84,7 +84,6 @@ const NearByHospitals = (props: Props) => {
           .filter(
             (hospital) => parseFloat(hospital.distance) < selectedDistance
           ); // Filter by distance
-        console.log("Filtered : ", filteredHospitals);
         setallHospitals(filteredHospitals);
         settempAllHospitals(filteredHospitals);
         setLoading(false);
@@ -132,7 +131,7 @@ const NearByHospitals = (props: Props) => {
             <Dropdown
               options={DISTANCE}
               onSelect={handleDistanceSelect}
-              placeholder="25 KM"
+              placeholder="10 KM"
               isEditing={true}
               height={27}
             />

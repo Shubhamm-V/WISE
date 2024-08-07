@@ -89,8 +89,8 @@ const Booklets = (props: Props) => {
             <Icon
               name="arrow-back-outline"
               style={{
-                fontSize: 23,
-                marginTop: 5,
+                fontSize: 24,
+                marginTop: 10,
               }}
             />
           </TouchableOpacity>

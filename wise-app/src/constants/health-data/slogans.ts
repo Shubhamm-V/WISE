@@ -53,7 +53,6 @@ export const SLOGANS = [
   "Your wellness can kill the illness.",
   "Follow healthy habit and see the magic.",
   "Balance in diet balance in life.",
-  "Healthy meal wealthy feel.",
   "Health is an art not everyone can master.",
   "Want to fail the germs then top the hygiene.",
   "Stay fit and tell the bacteria to take a chill pill.",

@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
-  Text,
   Alert,
 } from "react-native";
 import { Input } from "@rneui/themed";
@@ -32,10 +31,8 @@ import {
 } from "@react-native-google-signin/google-signin";
 
 // import auth from "@react-native-firebase/auth";
-import { useDispatch } from "react-redux";
 import { router } from "expo-router";
 import { useAuth } from "../context/authContext";
-import { isLoading } from "expo-font";
 import Loading from "../components/custom-widgets/Loading";
 
 let loginSchema = object({

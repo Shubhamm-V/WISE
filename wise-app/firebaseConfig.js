@@ -1,6 +1,5 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 
 import { initializeAuth } from "firebase/auth";
 import { getReactNativePersistence } from "@firebase/auth/dist/rn/index.js";
@@ -18,6 +17,8 @@ const firebaseConfig = {
   measurementId: "G-ZQ2Y56SXK2",
 };
 
+export const CLIENT_ID =
+  "999945649944-8he22f9ddebl6n1qbet3uc8lr5hgatdu.apps.googleusercontent.com";
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 

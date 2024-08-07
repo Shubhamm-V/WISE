@@ -11,10 +11,17 @@ import CustomText from "@/src/components/custom-widgets/CustomText";
 import { router, useLocalSearchParams } from "expo-router";
 import Icon from "react-native-vector-icons/Ionicons";
 import WebView from "react-native-webview";
+import { COLORS } from "@/src/constants/colors";
 const VideoScreen = () => {
   const params: any = useLocalSearchParams();
   return (
-    <SafeAreaView style={{ paddingHorizontal: "2%" }}>
+    <SafeAreaView
+      style={{
+        paddingHorizontal: "2%",
+        flex: 1,
+        backgroundColor: COLORS.light,
+      }}
+    >
       <ScrollView>
         <TouchableOpacity onPress={() => router.back()}>
           <Icon

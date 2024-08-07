@@ -8,7 +8,6 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
 import { AddRemoveButton } from "@/src/components/custom-widgets/AddRemoveButton";
@@ -16,7 +15,7 @@ import CustomButton from "@/src/components/custom-widgets/CustomButton";
 import { COLORS } from "@/src/constants/colors";
 import CustomText from "@/src/components/custom-widgets/CustomText";
 import Icon from "react-native-vector-icons/Ionicons";
-import { CheckBox, Dialog } from "@rneui/themed";
+import { Dialog } from "@rneui/themed";
 import Toast from "react-native-root-toast";
 import { Input } from "@rneui/themed";
 const amounts = [250, 500, 750, 1000, 1500];
@@ -67,20 +66,20 @@ async function setWaterReminder(hours: number) {
   }
 }
 
-async function cancelWaterReminder() {
-  try {
-    const notificationId = await AsyncStorage.getItem("waterNotificationId");
-    if (notificationId) {
-      await Notifications.cancelScheduledNotificationAsync(notificationId);
+// async function cancelWaterReminder() {
+//   try {
+//     const notificationId = await AsyncStorage.getItem("waterNotificationId");
+//     if (notificationId) {
+//       await Notifications.cancelScheduledNotificationAsync(notificationId);
 
-      Toast.show(`Reminder has been cancelled`);
-    } else {
-      // console.log("No notification ID found.");
-    }
-  } catch (error) {
-    console.error("Error cancelling notification:", error);
-  }
-}
+//       Toast.show(`Reminder has been cancelled`);
+//     } else {
+//       // console.log("No notification ID found.");
+//     }
+//   } catch (error) {
+//     console.error("Error cancelling notification:", error);
+//   }
+// }
 
 async function checkScheduledNotifications() {
   const scheduledNotifications =
@@ -94,6 +93,7 @@ export default function App() {
   const [waterDrank, setWaterDrank] = useState(0);
   const [isGoalAchieved, setIsGoalAchieved] = useState(false);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
   const [hours, setHours] = useState("");
   const [isNotificationScheduled, setIsNotificationScheduled] = useState(false);
 
@@ -146,9 +146,11 @@ export default function App() {
   useEffect(() => {
     if (waterDrank >= waterGoal && isGoalAchieved === false) {
       setIsGoalAchieved(true);
-      setTimeout(() => {
-        Alert.alert("Your today's goal achieved 🎉");
-      }, 1000);
+      if (isAdded == true) {
+        setTimeout(() => {
+          Alert.alert("Your today's goal achieved 🎉");
+        }, 1000);
+      }
     }
     if (waterDrank < waterGoal && isGoalAchieved === true) {
       setIsGoalAchieved(false);
@@ -164,237 +166,220 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{ paddingTop: 20 }}
-      >
-        {/* Water Goal */}
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <CustomText label="Track Water Intake" customStyle={styles.title} />
-          <TouchableOpacity onPress={() => setWaterDrank(0)}>
-            <CustomText label="Reset All" customStyle={styles.reset} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.goalHeader}>
-          <CustomText
-            label="Set toady's goal"
-            customStyle={{
-              fontSize: 18,
-              color: COLORS.primary,
-              fontFamily: "DMSansBold",
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View style={styles.innerContainer}>
+          {/* Water Goal */}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
-          />
-
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <CustomText
-              label={`${waterGoal} mL`}
-              customStyle={{ fontSize: 17 }}
-            />
-
-            {/* Add Goal */}
-            <TouchableOpacity
-              style={{ paddingHorizontal: 3 }}
-              onPress={() => setWaterGoal(waterGoal + 250)}
-            >
-              <Ionicons
-                name="add-circle-outline"
-                size={30}
-                color={COLORS.primary}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ paddingHorizontal: 1 }}
-              onPress={() => setWaterGoal(waterGoal - 250)}
-            >
-              <Ionicons name="remove-circle" size={30} color={COLORS.primary} />
-            </TouchableOpacity>
+          >
+            <CustomText label="Track Water Intake" customStyle={styles.title} />
+            {waterDrank > 0 && (
+              <TouchableOpacity onPress={() => setWaterDrank(0)}>
+                <CustomText label="Reset All" customStyle={styles.reset} />
+              </TouchableOpacity>
+            )}
           </View>
-        </View>
-        {/* ProgressView */}
-        <View style={styles.waterContainer}>
-          {/* Water You've Drank Label */}
-          <View style={{ justifyContent: "center" }}>
+
+          <View style={styles.goalHeader}>
             <CustomText
-              label="You've drank"
-              customStyle={{ color: COLORS.dark, fontSize: 18 }}
-            />
-            <CustomText
-              label={`${waterDrank} mL`}
+              label="Set today's goal"
               customStyle={{
+                fontSize: 18,
                 color: COLORS.primary,
-                fontSize: 35,
                 fontFamily: "DMSansBold",
               }}
             />
-            <CustomText
-              label={`water today`}
-              customStyle={{
-                color: COLORS.dark,
-                fontSize: 20,
-              }}
-            />
-          </View>
 
-          {/* Progress Bar */}
-          <View>
-            <View style={styles.progressBarContainer}>
-              <Animated.View
-                style={{
-                  height: progressPercent,
-                  borderRadius: 25,
-                  backgroundColor: COLORS.primary,
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <CustomText
+                label={`${waterGoal} mL`}
+                customStyle={{ fontSize: 17 }}
+              />
+
+              {/* Add Goal */}
+              <TouchableOpacity
+                style={{ paddingHorizontal: 3 }}
+                onPress={() => setWaterGoal(waterGoal + 250)}
+              >
+                <Icon
+                  name="add-circle-outline"
+                  size={30}
+                  color={COLORS.primary}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ paddingHorizontal: 1 }}
+                onPress={() => setWaterGoal(waterGoal - 250)}
+              >
+                <Icon name="remove-circle" size={30} color={COLORS.primary} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.waterContainer}>
+            <View style={{ justifyContent: "center" }}>
+              <CustomText
+                label="You've drank"
+                customStyle={{ color: COLORS.dark, fontSize: 18 }}
+              />
+              <CustomText
+                label={`${waterDrank} mL`}
+                customStyle={{
+                  color: COLORS.primary,
+                  fontSize: 35,
+                  fontFamily: "DMSansBold",
+                }}
+              />
+              <CustomText
+                label={`water today`}
+                customStyle={{
+                  color: COLORS.dark,
+                  fontSize: 20,
                 }}
               />
             </View>
-          </View>
-        </View>
-        {/* Add Water */}
 
-        <View
-          style={{
-            borderWidth: 1,
-            borderColor: COLORS.lightPrimary,
-            borderRadius: 8,
-          }}
-        >
-          <View style={styles.waterButtonsContainer}>
-            {amounts.map((amount) => {
-              return (
-                <AddRemoveButton
-                  key={"add" + amount}
-                  amount={amount}
-                  value={waterDrank}
-                  setValue={setWaterDrank}
-                  operation="add"
+            <View>
+              <View style={styles.progressBarContainer}>
+                <Animated.View
+                  style={{
+                    height: progressPercent,
+                    borderRadius: 25,
+                    backgroundColor: COLORS.primary,
+                  }}
                 />
-              );
-            })}
+              </View>
+            </View>
           </View>
-          {/* Remove Water */}
-          <View style={styles.waterButtonsContainer}>
-            {amounts.map((amount) => {
-              return (
-                <AddRemoveButton
-                  key={"remove" + amount}
-                  amount={amount}
-                  value={waterDrank}
-                  setValue={setWaterDrank}
-                  operation="remove"
-                />
-              );
-            })}
+
+          <View
+            style={{
+              borderWidth: 1,
+              borderColor: COLORS.lightPrimary,
+              borderRadius: 8,
+            }}
+          >
+            <View style={styles.waterButtonsContainer}>
+              {amounts.map((amount) => {
+                return (
+                  <AddRemoveButton
+                    key={"add" + amount}
+                    amount={amount}
+                    value={waterDrank}
+                    setValue={(val) => {
+                      setWaterDrank(val), setIsAdded(true);
+                    }}
+                    operation="add"
+                  />
+                );
+              })}
+            </View>
+            {/* Remove Water */}
+            <View style={styles.waterButtonsContainer}>
+              {amounts.map((amount) => {
+                return (
+                  <AddRemoveButton
+                    key={"remove" + amount}
+                    amount={amount}
+                    value={waterDrank}
+                    setValue={(val) => {
+                      setWaterDrank(val), setIsAdded(true);
+                    }}
+                    operation="remove"
+                  />
+                );
+              })}
+            </View>
           </View>
-        </View>
-        <View
-          style={{
-            width: "100%",
-            paddingVertical: 20,
-            alignItems: "center",
-          }}
-        >
-          {isNotificationScheduled ? (
-            <CustomButton
-              onPress={() => {
-                cancelWaterReminder();
-                setIsNotificationScheduled(false);
-              }}
-              label="Cancel Reminder"
-              customStyle={[
-                styles.buttonStyle,
-                {
-                  borderWidth: 1,
-                  width: "97.5%",
-                  borderColor: COLORS.primary,
-                  backgroundColor: COLORS.light,
-                },
-              ]}
-              customTextStyle={{
-                color: COLORS.primary,
-                fontFamily: "DMSansSemiBold",
-              }}
-            />
-          ) : (
+          <View
+            style={{
+              width: "100%",
+              paddingVertical: 20,
+              alignItems: "center",
+            }}
+          >
             <CustomButton
               onPress={() => setIsDialogVisible(true)}
               customStyle={{ width: "100%" }}
               label="Set water reminder"
             />
-          )}
-        </View>
-        <Dialog
-          isVisible={isDialogVisible}
-          // onBackdropPress={toggleDialog1}
-          overlayStyle={{ width: "90%", borderRadius: 10 }}
-        >
-          <TouchableOpacity onPress={() => setIsDialogVisible(false)}>
-            <Icon
-              name="close-outline"
-              style={{ fontSize: 30, paddingHorizontal: 1, textAlign: "right" }}
-            />
-          </TouchableOpacity>
-          <Dialog.Title
-            title="Set Water Reminder"
-            titleStyle={{ padding: 5 }}
-          />
-          <View>
-            <View>
-              <CustomText
-                label="After how many hours do you want the reminder to drink water?"
-                customStyle={{ paddingLeft: 5 }}
-              />
-              <Input
-                keyboardType="numeric"
-                value={hours}
-                onChangeText={(value) => setHours(value)}
-                placeholder="Enter hours"
-                maxLength={2}
-                // errorMessage="Please select range from 1-24 hours"
-              />
-            </View>
-
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                paddingVertical: 20,
-                paddingHorizontal: 5,
-              }}
-            >
-              <CustomButton
-                isDisabled={hours.length == 0}
-                onPress={() => {
-                  setWaterReminder(parseInt(hours));
-                  setIsNotificationScheduled(true);
-                  setIsDialogVisible(false);
-                }}
-                label="Set Reminder"
-                customStyle={styles.reminderButton}
-                customTextStyle={{
-                  color: COLORS.primary,
-                  fontFamily: "DMSansSemiBold",
-                }}
-                icon={
-                  <Icon
-                    style={{
-                      fontSize: 20,
-                      color: hours.length == 0 ? "lightgray" : COLORS.primary,
-                    }}
-                    name="alarm-outline"
-                    size={40}
-                  />
-                }
-              />
-            </View>
           </View>
-        </Dialog>
+
+          <Dialog
+            isVisible={isDialogVisible}
+            // onBackdropPress={toggleDialog1}
+            overlayStyle={{ width: "90%", borderRadius: 10 }}
+          >
+            <TouchableOpacity onPress={() => setIsDialogVisible(false)}>
+              <Icon
+                name="close-outline"
+                style={{
+                  fontSize: 30,
+                  paddingHorizontal: 1,
+                  textAlign: "right",
+                }}
+              />
+            </TouchableOpacity>
+            <Dialog.Title
+              title="Set Water Reminder"
+              titleStyle={{ padding: 5 }}
+            />
+            <View>
+              <View>
+                <CustomText
+                  label="After how many hours do you want the reminder to drink water?"
+                  customStyle={{ paddingLeft: 5 }}
+                />
+                <Input
+                  keyboardType="numeric"
+                  value={hours}
+                  onChangeText={(value) => setHours(value)}
+                  placeholder="Enter hours"
+                  maxLength={2}
+                  // errorMessage="Please select range from 1-24 hours"
+                />
+              </View>
+
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  paddingVertical: 20,
+                  paddingHorizontal: 5,
+                }}
+              >
+                <CustomButton
+                  isDisabled={hours.length == 0}
+                  onPress={() => {
+                    setWaterReminder(parseInt(hours));
+                    setIsNotificationScheduled(true);
+                    setIsDialogVisible(false);
+                  }}
+                  label="Set Reminder"
+                  customStyle={styles.reminderButton}
+                  customTextStyle={{
+                    color: COLORS.primary,
+                    fontFamily: "DMSansSemiBold",
+                  }}
+                  icon={
+                    <Icon
+                      style={{
+                        fontSize: 20,
+                        color: hours.length == 0 ? "lightgray" : COLORS.primary,
+                      }}
+                      name="alarm-outline"
+                      size={40}
+                    />
+                  }
+                />
+              </View>
+            </View>
+          </Dialog>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -402,11 +387,18 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 20,
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
+    backgroundColor: COLORS.light,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
     justifyContent: "center",
     paddingHorizontal: 10,
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: "center",
   },
   progressBarContainer: {
     borderWidth: 1,
@@ -464,12 +456,10 @@ const styles = StyleSheet.create({
     borderColor: COLORS.lightPrimary,
     borderRadius: 10,
     paddingVertical: 10,
-
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-
   waterContainer: {
     flexDirection: "row",
     paddingHorizontal: 10,

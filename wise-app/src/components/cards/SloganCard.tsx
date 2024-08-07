@@ -3,6 +3,18 @@ import React from "react";
 import { COLORS } from "@/src/constants/colors";
 import CustomText from "../custom-widgets/CustomText";
 import { SLOGANS } from "@/src/constants/health-data/slogans";
+
+const getQuoteIndexForToday = () => {
+  const start = new Date("2024-01-01");
+  const now = new Date();
+  const diff = Math.floor(
+    (now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  return diff % SLOGANS.length;
+};
+
+const quoteIndex = getQuoteIndexForToday();
+const quote = SLOGANS[quoteIndex];
 const SloganCard = () => {
   return (
     <View style={styles.card}>
@@ -15,10 +27,7 @@ const SloganCard = () => {
             fontFamily: "DMSansBold",
           }}
         />
-        <CustomText
-          label={SLOGANS[Math.floor(Math.random() * SLOGANS.length)]}
-          customStyle={styles.slogan}
-        />
+        <CustomText label={quote} customStyle={styles.slogan} />
       </View>
       <View
         style={{

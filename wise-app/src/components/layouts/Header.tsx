@@ -6,12 +6,10 @@ import CustomText from "@/src/components/custom-widgets/CustomText";
 import { COLORS } from "@/src/constants/colors";
 import { Image } from "react-native";
 import { router } from "expo-router";
-import { useTranslation } from "react-i18next";
 type Props = {};
 
 const Header = (props: Props) => {
   const { user } = useAuth();
-  const { t } = useTranslation();
   return (
     <SafeAreaView>
       <View style={styles.header}>

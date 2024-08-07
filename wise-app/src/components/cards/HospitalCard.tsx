@@ -1,7 +1,7 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { View, Text, Image, StyleSheet, Pressable } from "react-native";
+import React, { useState } from "react";
+import { View, Image, StyleSheet, Pressable } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Divider } from "@rneui/base";
+import { Divider } from "@rneui/themed";
 import { COLORS } from "@/src/constants/colors";
 import CustomText from "../custom-widgets/CustomText";
 import { Hospital } from "@/src/app/(app)/hospitals";
