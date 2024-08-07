@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Input } from "@rneui/themed";
 import {
   Alert,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -13,19 +12,13 @@ import CustomText from "@/src/components/custom-widgets/CustomText";
 import { COLORS } from "@/src/constants/colors";
 import { Formik } from "formik";
 import Icon from "react-native-vector-icons/Ionicons";
-
 import { object, string, ref } from "yup";
-
 import { router } from "expo-router";
 import { useAuth } from "../context/authContext";
 import auth from "@react-native-firebase/auth";
-import { db } from "@/firebaseConfig";
+import { CLIENT_ID, db } from "@/firebaseConfig";
 import { doc, setDoc, getDoc } from "firebase/firestore";
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Loading from "../components/custom-widgets/Loading";
 
 let signupSchema = object({
@@ -61,8 +54,7 @@ const SignUp = () => {
     useAuth();
 
   GoogleSignin.configure({
-    webClientId:
-      "999945649944-8he22f9ddebl6n1qbet3uc8lr5hgatdu.apps.googleusercontent.com",
+    webClientId: CLIENT_ID,
   });
 
   function onAuthStateChanged(user: any) {
@@ -126,7 +118,10 @@ const SignUp = () => {
   if (loading) return <Loading />;
 
   return (
-    <ScrollView keyboardShouldPersistTaps="handled">
+    <ScrollView
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+    >
       <Formik
         initialValues={{
           name: "",
@@ -282,7 +277,6 @@ const SignUp = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },

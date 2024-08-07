@@ -42,8 +42,8 @@ export default VideoCard;
 const styles = StyleSheet.create({
   cardContainer: {
     elevation: 1,
-    marginTop: 1,
-    borderRadius: 3,
+    marginBottom: 3.5,
+    borderRadius: 5,
     paddingVertical: 12,
     paddingHorizontal: 10,
     display: "flex",

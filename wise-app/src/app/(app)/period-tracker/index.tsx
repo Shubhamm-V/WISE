@@ -65,6 +65,7 @@ const TrackMenstrualCycle = () => {
 
   useEffect(() => {
     const fetchCycleDetails = async () => {
+      setLoading(true);
       const [cycleLength, periodLength, lastPeriod, allPeriods] =
         await Promise.all([
           AsyncStorage.getItem(`${user.userId}-cycleLength`),
@@ -74,7 +75,6 @@ const TrackMenstrualCycle = () => {
         ]);
       setAllPeriodString(allPeriods);
       if (!cycleLength || !periodLength || !lastPeriod) {
-        setLoading(false);
         router.push("/period-tracker/info-screens/info-screen-1");
       } else {
         setCycleDetails({
@@ -82,10 +82,9 @@ const TrackMenstrualCycle = () => {
           periodLength: periodLength ?? "",
           lastPeriod: lastPeriod ?? "",
         });
-        setLoading(false);
       }
+      setLoading(false);
     };
-
     fetchCycleDetails();
   }, []);
 
@@ -220,7 +219,15 @@ const TrackMenstrualCycle = () => {
     const date1 = new Date();
     const date2 = new Date(endPeriodString);
 
-    if (date1 > date2) {
+    const isAfter =
+      date1.getFullYear() > date2.getFullYear() ||
+      (date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() > date2.getMonth()) ||
+      (date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() > date2.getDate());
+
+    if (isAfter) {
       if (!isPeriodEnded) setIsPeriodEnded(true);
     }
     if (selectedDay.length === 0) setSelectedDay(formattedPeriods[0]);
@@ -237,108 +244,120 @@ const TrackMenstrualCycle = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.light }}>
       <ScrollView>
-        <View style={styles.header}>
-          <CustomText label="Track Periods" customStyle={styles.title} />
-          <CustomButton
-            label="Edit"
-            onPress={() => {
-              router.push({
-                pathname: "/period-tracker/info-screens/info-screen-1",
-                params: { periodDayMonths: periodDayMonths },
-              });
-            }}
-            customStyle={styles.editButton}
-            customTextStyle={{
-              color: COLORS.primary,
-              fontFamily: "DMSansSemiBold",
-            }}
-            icon={
-              <Icon
-                style={{ fontSize: 16, color: COLORS.primary }}
-                name="create-outline"
-                size={40}
-              />
-            }
-          />
-        </View>
-        <View>
-          <View style={styles.calendarContainer}>
-            <Calendar
-              style={{ borderRadius: 5 }}
-              onDayPress={(day: any) => {
-                setSelectedDate(day.dateString);
+        <View style={{ padding: "1%" }}>
+          <View style={styles.header}>
+            <CustomText label="Track Periods" customStyle={styles.title} />
+            <CustomButton
+              label="Edit"
+              onPress={() => {
+                router.push({
+                  pathname: "/period-tracker/info-screens/info-screen-1",
+                  params: { periodDayMonths: periodDayMonths },
+                });
               }}
-              theme={{ ...CALANDER_THEME, textDayFontSize: 14 }}
-              markingType={"period"}
-              markedDates={markedDates}
+              customStyle={styles.editButton}
+              customTextStyle={{
+                color: COLORS.primary,
+                fontFamily: "DMSansSemiBold",
+              }}
+              icon={
+                <Icon
+                  style={{ fontSize: 16, color: COLORS.primary }}
+                  name="create-outline"
+                  size={40}
+                />
+              }
             />
           </View>
-          <View style={styles.markInfo}>
-            <View style={styles.boxContainer}>
-              <View style={[styles.box, { backgroundColor: "#fb8da4" }]}></View>
-              <CustomText label="Next period" customStyle={{ fontSize: 12 }} />
-            </View>
-            <View style={styles.boxContainer}>
-              <View
-                style={[styles.box, { backgroundColor: COLORS.lightPrimary }]}
-              ></View>
-              <CustomText label="Today's date" customStyle={{ fontSize: 12 }} />
-            </View>
-            <View style={styles.boxContainer}>
-              <View style={[styles.box, { backgroundColor: "#fdd6df" }]}></View>
-              <CustomText
-                label="Previous periods"
-                customStyle={{ fontSize: 12 }}
+          <View>
+            <View style={styles.calendarContainer}>
+              <Calendar
+                style={{ borderRadius: 5 }}
+                onDayPress={(day: any) => {
+                  setSelectedDate(day.dateString);
+                }}
+                theme={{ ...CALANDER_THEME, textDayFontSize: 14 }}
+                markingType={"period"}
+                markedDates={markedDates}
               />
             </View>
-          </View>
-        </View>
-        <PeriodCard
-          periodDayMonth={periodDayMonths}
-          daysBetween={daysBetween}
-          isPeriodEnded={isPeriodEnded}
-          periodDayMonths={periodDayMonths}
-          prevPeriodData={prevPeriodData}
-        />
-
-        <View style={styles.tagContainer}>
-          <ScrollView
-            horizontal={true}
-            contentContainerStyle={{
-              alignItems: "center",
-              paddingHorizontal: 10,
-            }}
-          >
-            {periodDayMonths.map((periodDay, ind) => (
-              <TouchableOpacity
-                onPress={() => handleDateSelect(periodDay)}
-                style={[
-                  styles.tag,
-                  {
-                    backgroundColor:
-                      selectedDay === periodDay
-                        ? COLORS.lightPrimary
-                        : "transparent",
-                    marginLeft: ind === 0 ? -10 : 5,
-                    marginRight: ind === periodDayMonths.length - 1 ? 0 : 5,
-                  },
-                ]}
-                key={ind}
-              >
+            <View style={styles.markInfo}>
+              <View style={styles.boxContainer}>
+                <View
+                  style={[styles.box, { backgroundColor: "#fb8da4" }]}
+                ></View>
                 <CustomText
-                  label={periodDay}
-                  customStyle={{
-                    color: COLORS.primary,
-                    fontFamily: "DMSansBold",
-                  }}
+                  label="Next period"
+                  customStyle={{ fontSize: 12 }}
                 />
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+              </View>
+              <View style={styles.boxContainer}>
+                <View
+                  style={[styles.box, { backgroundColor: COLORS.lightPrimary }]}
+                ></View>
+                <CustomText
+                  label="Today's date"
+                  customStyle={{ fontSize: 12 }}
+                />
+              </View>
+              <View style={styles.boxContainer}>
+                <View
+                  style={[styles.box, { backgroundColor: "#fdd6df" }]}
+                ></View>
+                <CustomText
+                  label="Previous periods"
+                  customStyle={{ fontSize: 12 }}
+                />
+              </View>
+            </View>
+          </View>
+          <PeriodCard
+            periodDayMonth={periodDayMonths}
+            daysBetween={daysBetween}
+            isPeriodEnded={isPeriodEnded}
+            periodDayMonths={periodDayMonths}
+            prevPeriodData={prevPeriodData}
+          />
+
+          <View style={styles.tagContainer}>
+            <ScrollView
+              horizontal={true}
+              contentContainerStyle={{
+                alignItems: "center",
+                paddingHorizontal: 10,
+              }}
+            >
+              {periodDayMonths.map((periodDay, ind) => (
+                <TouchableOpacity
+                  onPress={() => handleDateSelect(periodDay)}
+                  style={[
+                    styles.tag,
+                    {
+                      backgroundColor:
+                        selectedDay === periodDay
+                          ? COLORS.lightPrimary
+                          : "transparent",
+                      marginLeft: ind === 0 ? -10 : 5,
+                      marginRight: ind === periodDayMonths.length - 1 ? 0 : 5,
+                    },
+                  ]}
+                  key={ind}
+                >
+                  <CustomText
+                    label={periodDay}
+                    customStyle={{
+                      color: COLORS.primary,
+                      fontFamily: "DMSansBold",
+                    }}
+                  />
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+          <PeriodData selectedDay={selectedDay} />
+          <FeelingData selectedDay={selectedDay} />
+          <SymptomsData selectedDay={selectedDay} />
         </View>
-        <PeriodData selectedDay={selectedDay} />
-        <FeelingData selectedDay={selectedDay} />
-        <SymptomsData selectedDay={selectedDay} />
       </ScrollView>
     </SafeAreaView>
   );

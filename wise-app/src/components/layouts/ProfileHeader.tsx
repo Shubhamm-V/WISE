@@ -1,16 +1,31 @@
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View, Alert } from "react-native";
 import React from "react";
 import { COLORS } from "@/src/constants/colors";
 import CustomText from "../custom-widgets/CustomText";
-import LinearGradient from "react-native-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useAuth } from "@/src/context/authContext";
 import { router } from "expo-router";
+
 const ProfileHeader = () => {
   const { logout, user } = useAuth();
+
   const handleLogout = async () => {
-    await logout();
+    Alert.alert("Confirm Logout", "Are you sure you want to log out?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Logout",
+        onPress: async () => {
+          await logout();
+        },
+        style: "destructive",
+      },
+    ]);
   };
+
   return (
     <LinearGradient
       colors={[COLORS.lightPrimary, COLORS.light]}
@@ -71,8 +86,8 @@ const styles = StyleSheet.create({
     color: COLORS.dark,
   },
   nameTextStyle: {
-    color: COLORS.dark,
-    fontFamily: "DMSansRegular",
+    color: COLORS.title,
+    fontFamily: "DMSansBold",
     fontSize: 18,
     marginTop: 10,
     lineHeight: 20,

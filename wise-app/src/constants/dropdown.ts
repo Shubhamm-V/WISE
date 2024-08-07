@@ -1,15 +1,3 @@
-export const LANGUAGES: string[] = [
-  "हिन्दी",
-  "English",
-  "मराठी",
-  "ગુજરાતી",
-  "ਪੰਜਾਬੀ",
-  "বাংলা",
-  "తెలుగు",
-  "தமிழ்",
-  "ಕನ್ನಡ",
-];
-
 export const STATES: string[] = [
   "Andhra Pradesh",
   "Arunachal Pradesh",
@@ -54,15 +42,3 @@ export const DISTANCE = [
 ];
 
 // languageMap.ts
-
-export const languageMap: { [key: string]: string } = {
-  हिन्दी: "hi",
-  English: "en",
-  मराठी: "mr",
-  ગુજરાતી: "gu",
-  ਪੰਜਾਬੀ: "pa",
-  বাংলা: "bn",
-  తెలుగు: "te",
-  தமிழ்: "ta",
-  ಕನ್ನಡ: "kn",
-};

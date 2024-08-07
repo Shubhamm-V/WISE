@@ -1,14 +1,11 @@
-import { StatusBar, StyleSheet, View } from "react-native";
+import { StatusBar, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Slot, useRouter, useSegments } from "expo-router";
 import { AuthContextProvider, useAuth } from "../context/authContext";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { FONTS } from "../constants/fonts";
-import { Provider } from "react-redux";
 import { store } from "../redux/store";
-import { I18nextProvider } from "react-i18next";
-import i18n from "@/i18n";
 import { getAuth } from "firebase/auth";
 import { COLORS } from "../constants/colors";
 import { RootSiblingParent } from "react-native-root-siblings";
@@ -18,7 +15,7 @@ import "expo-dev-client";
 SplashScreen.preventAutoHideAsync();
 
 const MainLayout = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   const router = useRouter();
   const segments = useSegments();
   const [fontsLoaded, fontError] = useFonts(FONTS);
@@ -80,14 +77,10 @@ const MainLayout = () => {
 
   return (
     <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
-      <I18nextProvider i18n={i18n}>
-        <Provider store={store}>
-          <RootSiblingParent>
-            <Slot />
-            <StatusBar barStyle="dark-content" backgroundColor={COLORS.light} />
-          </RootSiblingParent>
-        </Provider>
-      </I18nextProvider>
+      <RootSiblingParent>
+        <Slot />
+        <StatusBar barStyle="dark-content" backgroundColor={COLORS.light} />
+      </RootSiblingParent>
     </View>
   );
 };

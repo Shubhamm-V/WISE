@@ -10,12 +10,11 @@ import { Input } from "@rneui/themed";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Formik } from "formik";
 import CustomButton from "@/src/components/custom-widgets/CustomButton";
-import { languageMap, LANGUAGES, STATES } from "@/src/constants/dropdown";
+import { STATES } from "@/src/constants/dropdown";
 import { useAuth } from "@/src/context/authContext";
 import { db } from "@/firebaseConfig";
 import { getDoc, setDoc, doc } from "firebase/firestore";
 import Loading from "@/src/components/custom-widgets/Loading";
-import { useTranslation } from "react-i18next";
 
 const detailsSchema = object({
   name: string()
@@ -38,10 +37,7 @@ interface PersonalInfo {
 }
 
 const Profile: React.FC = () => {
-  const { t, i18n } = useTranslation();
   const [selectedState, setSelectedState] = useState<string>("Select a State");
-  const [selectedLanguage, setSelectedLanguage] =
-    useState<string>("Select a Language");
   const [isEditing, setEditing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [initialValues, setInitialValues] = useState<PersonalInfo>({
@@ -52,11 +48,6 @@ const Profile: React.FC = () => {
     city: "",
   });
   const { user, setUser } = useAuth();
-
-  const handleSelectLanguage = (item: string, index: number) => {
-    setSelectedLanguage(item);
-    i18n.changeLanguage(languageMap[item]);
-  };
 
   const handleSelectState = (item: string, index: number) => {
     setSelectedState(item);
@@ -125,12 +116,19 @@ const Profile: React.FC = () => {
               label="Personal Information"
               customStyle={styles.title}
             />
-            <TouchableOpacity onPress={() => setEditing((prev) => !prev)}>
+            <TouchableOpacity
+              style={{ flexDirection: "row", gap: 4, alignItems: "center" }}
+              onPress={() => setEditing((prev) => !prev)}
+            >
+              <CustomText
+                label="Edit"
+                customStyle={{ color: COLORS.primary, fontSize: 16 }}
+              />
               <Icon
                 name="create-outline"
-                size={28}
+                size={20}
                 color={COLORS.primary}
-                style={{ fontWeight: "bold", paddingRight: 10 }}
+                style={{ fontWeight: "bold", paddingRight: 10, marginTop: -3 }}
               />
             </TouchableOpacity>
           </View>
@@ -286,6 +284,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "2.5%",
     fontFamily: "DMSansBold",
     paddingVertical: 15,
+    color: COLORS.title,
   },
   container: {
     justifyContent: "center",
