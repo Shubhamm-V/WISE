@@ -67,7 +67,6 @@ const App = () => {
         `${user.userId}-periodNotificationId`,
         notificationId
       );
-      Toast.show("Period reminder has been set");
     } catch (error) {
       console.error("Error setting period reminder:", error);
       Toast.show("Failed to set period reminder");
