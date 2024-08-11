@@ -14,19 +14,34 @@ import AddBooklet from "./pages/booklets/AddBooklet";
 import PostedBooklets from "./pages/booklets/PostedBooklets";
 
 function App() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user, isAdminVerified, setIsAdminVerified } =
+    useAuth();
 
   return (
     <Routes>
+      {/* Public Routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+
+      {/* Protected Routes */}
       <Route
         path="/"
         element={
-          isAuthenticated ? <DashLayoutWithAuth /> : <Navigate to="/login" />
+          isAuthenticated ? (
+            <DashLayoutWithAuth
+              userId={user.userId}
+              isAdminVerified={isAdminVerified}
+              setIsAdminVerified={setIsAdminVerified}
+            />
+          ) : (
+            <Navigate to="/login" replace />
+          )
         }
       >
-        <Route index element={<Navigate to={"add-hospital"} replace />} />
+        {/* Default route for non-admin users */}
+        <Route index element={<Navigate to="add-hospital" replace />} />
+
+        {/* Protected Routes */}
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="users" element={<Users />} />
         <Route path="add-hospital" element={<AddHospital />} />
@@ -41,7 +56,16 @@ function App() {
   );
 }
 
-function DashLayoutWithAuth() {
+function DashLayoutWithAuth({
+  userId,
+  isAdminVerified,
+  setIsAdminVerified,
+}: any) {
+  if (userId === process.env.REACT_APP_ADMIN_ID && !isAdminVerified) {
+    setIsAdminVerified(true);
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return (
     <DashLayout>
       <Outlet />
