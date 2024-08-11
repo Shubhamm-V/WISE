@@ -1,4 +1,4 @@
-import {
+import React, {
   createContext,
   useContext,
   useEffect,
@@ -17,10 +17,12 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 interface AuthContextProps {
   user: any;
   isAuthenticated: boolean;
+  isAdminVerified: boolean;
   login: (email: string, password: string) => Promise<{}>;
   logout: () => Promise<{}>;
   signup: (email: string, password: string, name: string) => Promise<{}>;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsAdminVerified: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -36,6 +38,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
 }) => {
   const [user, setUser] = useState<any>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAdminVerified, setIsAdminVerified] = useState<boolean>(false);
 
   useEffect(() => {
     // Simulate authentication check
@@ -123,6 +126,8 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
         signup,
         logout,
         setIsAuthenticated,
+        isAdminVerified,
+        setIsAdminVerified,
       }}
     >
       {children}

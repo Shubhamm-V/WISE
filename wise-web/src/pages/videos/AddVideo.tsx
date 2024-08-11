@@ -142,7 +142,6 @@ const AddVideo: React.FC<VideoProps> = ({ videoData, onUpdate }) => {
           >
             <Input.TextArea placeholder="Enter video description" rows={4} />
           </Form.Item>
-          =
           <Row gutter={30}>
             <Col span={12} xs={24} sm={12} md={12} lg={8}>
               <Form.Item<VideoData>
