@@ -34,6 +34,7 @@ import {
 import { router } from "expo-router";
 import { useAuth } from "../context/authContext";
 import Loading from "../components/custom-widgets/Loading";
+import { error } from "console";
 
 let loginSchema = object({
   email: string()
@@ -126,8 +127,11 @@ const Login = () => {
     if (!response.success) {
       let { msg } = response;
       console.log(response.message);
-      if (msg && !msg.includes("(auth/invalid-credential)"))
+      if (msg && msg.includes("auth/invalid-credential"))
         Alert.alert("Invalid email or password");
+      else if (response.msg.includes("network-request-failed"))
+        Alert.alert("Can't Login", "Please check internet connection");
+      else Alert.alert("Something went wrong", msg);
     }
   };
 

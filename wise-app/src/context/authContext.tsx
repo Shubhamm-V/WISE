@@ -6,7 +6,6 @@ import {
   ReactNode,
 } from "react";
 import {
-  AuthError,
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
@@ -29,6 +28,8 @@ interface AuthContextProps {
   signup: (email: string, password: string, name: string) => Promise<{}>;
   isGoogleLogin: boolean;
   setIsGoogleLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  flag: boolean;
+  setFlag: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -44,6 +45,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
 }) => {
   const [user, setUser] = useState<any>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [flag, setFlag] = useState<boolean>(false);
   const [isGoogleLogin, setIsGoogleLogin] = useState<boolean>(false);
 
   useEffect(() => {
@@ -119,9 +121,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
         data: response?.user,
       };
     } catch (err: any) {
-      let msg = err.message;
-      if (msg.includes("(auth/email-already-in-use)"))
-        Alert.alert("Email is already in use");
       return {
         success: false,
         msg: err.message,
@@ -141,6 +140,8 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
         logout,
         isGoogleLogin,
         setIsGoogleLogin,
+        flag,
+        setFlag,
       }}
     >
       {children}

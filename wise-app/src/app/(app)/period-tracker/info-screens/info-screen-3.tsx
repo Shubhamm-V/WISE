@@ -125,6 +125,17 @@ const App = () => {
     router.push("/period-tracker");
   };
 
+  const today = new Date();
+  const maxYear = today.getFullYear();
+  const maxMonth = String(today.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+  const maxDay = String(today.getDate()).padStart(2, "0");
+
+  const fortyDaysAgo = new Date(today);
+  fortyDaysAgo.setDate(today.getDate() - 40);
+
+  const minYear = fortyDaysAgo.getFullYear();
+  const minMonth = String(fortyDaysAgo.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+  const minDay = String(fortyDaysAgo.getDate()).padStart(2, "0");
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
@@ -149,6 +160,8 @@ const App = () => {
               },
             }}
             theme={CALANDER_THEME}
+            maxDate={`${maxYear}-${maxMonth}-${maxDay}`}
+            minDate={`${minYear}-${minMonth}-${minDay}`}
           />
         </View>
         <View style={styles.reminderContainer}>

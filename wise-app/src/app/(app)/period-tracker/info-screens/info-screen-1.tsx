@@ -1,16 +1,30 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { BackHandler, Image, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Slider from "@react-native-community/slider";
 import CustomText from "@/src/components/custom-widgets/CustomText";
 import { COLORS } from "@/src/constants/colors";
 import CustomButton from "@/src/components/custom-widgets/CustomButton";
 import { router, useLocalSearchParams } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "@/src/context/authContext";
 
 const InfoScreen1 = () => {
   const [value, setValue] = useState(28);
   const params = useLocalSearchParams();
+  const { setFlag } = useAuth();
+  useEffect(() => {
+    const backAction = () => {
+      setFlag((prev) => !prev);
+      return false;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const handleInfoOne = async () => {
     router.push({
       pathname: "/period-tracker/info-screens/info-screen-2",

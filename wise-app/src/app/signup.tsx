@@ -111,7 +111,14 @@ const SignUp = () => {
     setLoading(false);
     console.log("Got Signup  Result ", response);
     if (!response.success) {
-      Alert.alert("Sign Up", response.msg);
+      if (response.msg.includes("email-already-in-use"))
+        Alert.alert(
+          "Email is already in use",
+          "Please login or try with another email"
+        );
+      else if (response.msg.includes("network-request-failed"))
+        Alert.alert("Can't Sign Up", "Please check internet connection");
+      else Alert.alert("Sign Up", response.msg);
     }
   };
 

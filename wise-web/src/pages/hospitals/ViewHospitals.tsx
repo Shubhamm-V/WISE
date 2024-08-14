@@ -48,7 +48,6 @@ const Users = (props: Props) => {
           userId: user?.userId,
           ...doc.data(),
         })) as HospitalData[];
-        console.log("HOSPITALDATA : ", hospitalsData);
         setDataSource(hospitalsData);
       } catch (error) {
         console.error("Error fetching hospital data: ", error);
@@ -56,7 +55,7 @@ const Users = (props: Props) => {
     };
 
     getInfo();
-  }, [user]);
+  }, [dataSource]);
 
   const handleEdit = (record: HospitalData) => {
     setEditHospitalData(record);

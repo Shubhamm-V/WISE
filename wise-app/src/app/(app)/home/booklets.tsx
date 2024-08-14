@@ -119,12 +119,7 @@ const Booklets = (props: Props) => {
               renderItem={({ item }) => (
                 <View style={styles.card}>
                   <View style={{ width: "70%" }}>
-                    <CustomText
-                      label={
-                        item.title +
-                        "I am here too conquer the world and I'm sure that I will do it"
-                      }
-                    />
+                    <CustomText label={item.title} />
                   </View>
                   <TouchableOpacity
                     onPress={() => handleOpenLink(item.url)}

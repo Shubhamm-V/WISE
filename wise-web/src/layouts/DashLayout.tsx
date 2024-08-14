@@ -114,7 +114,11 @@ const DashLayout: React.FC<LayoutProps> = ({ children }) => {
         collapsible={!showSideBar}
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
-        style={{ display: showSideBar ? "none" : "block" }}
+        style={{
+          display: showSideBar ? "none" : "block",
+          height: "100vh",
+          overflow: "hidden",
+        }}
       >
         <h1 style={{ color: "#fff", padding: 10, textAlign: "center" }}>
           WISE - {isAdmin ? "Admin" : "Hospital"}
