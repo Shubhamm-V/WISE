@@ -5,6 +5,7 @@ import CustomText from "../../custom-widgets/CustomText";
 import { LinearGradient } from "expo-linear-gradient";
 import CustomButton from "../../custom-widgets/CustomButton";
 import { router } from "expo-router";
+import { useAuth } from "@/src/context/authContext";
 
 const cardsData = [
   {
@@ -24,6 +25,7 @@ const cardsData = [
 ];
 
 const TrackCards = () => {
+  const { setFlag } = useAuth();
   return (
     <View style={styles.cardContainer}>
       {cardsData.map((card, index) => (
@@ -65,7 +67,10 @@ const TrackCards = () => {
               </View>
               <View style={{ alignItems: "center", marginTop: 10 }}>
                 <CustomButton
-                  onPress={() => router.navigate(card.path)}
+                  onPress={() => {
+                    if (index == 0) setFlag((prev) => !prev);
+                    router.navigate(card.path);
+                  }}
                   label={card.buttonLabel}
                   customStyle={{
                     paddingVertical: 6,

@@ -5,7 +5,6 @@ import { AuthContextProvider, useAuth } from "../context/authContext";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { FONTS } from "../constants/fonts";
-import { store } from "../redux/store";
 import { getAuth } from "firebase/auth";
 import { COLORS } from "../constants/colors";
 import { RootSiblingParent } from "react-native-root-siblings";

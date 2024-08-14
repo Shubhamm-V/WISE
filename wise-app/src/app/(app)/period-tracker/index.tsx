@@ -3,7 +3,13 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Calendar } from "react-native-calendars";
 import { CALANDER_THEME, COLORS } from "@/src/constants/colors";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  BackHandler,
+} from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import CustomText from "@/src/components/custom-widgets/CustomText";
 import {
@@ -44,7 +50,7 @@ interface MarkedDates {
 
 const TrackMenstrualCycle = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
-  const { user } = useAuth();
+  const { user, flag } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const [allPeriodDataString, setAllPeriodString] = useState<string | null>("");
   const [prevPeriodData, setPrevPeriodData] = useState<PrevCycleDetails>({
@@ -86,7 +92,7 @@ const TrackMenstrualCycle = () => {
       setLoading(false);
     };
     fetchCycleDetails();
-  }, []);
+  }, [flag]);
 
   useEffect(() => {
     const fetchMarkedDates = async () => {
