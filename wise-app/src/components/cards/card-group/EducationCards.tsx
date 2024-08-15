@@ -15,7 +15,7 @@ const cardsData = [
   {
     label: "Read Booklets",
     imageSource: require("../../../../assets/images/illustrations/education/booklet-card.png"),
-    link: "/home/booklets",
+    link: "/booklets",
   },
 ];
 

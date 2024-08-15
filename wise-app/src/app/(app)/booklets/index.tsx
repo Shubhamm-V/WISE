@@ -13,7 +13,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { COLORS } from "@/src/constants/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomText from "@/src/components/custom-widgets/CustomText";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import Loading from "@/src/components/custom-widgets/Loading";
 
 export type Booklet = {
@@ -32,27 +32,34 @@ const Booklets = (props: Props) => {
 
   useEffect(() => {
     const getInfo = async () => {
-      const querySnapshot = await getDocs(collection(db, "booklets"));
-      const allBookletData: Booklet[] = [];
+      try {
+        const q = query(
+          collection(db, "booklets"),
+          orderBy("timestamp", "desc")
+        );
+        const querySnapshot = await getDocs(q);
+        const allBookletData: Booklet[] = [];
 
-      querySnapshot.forEach((doc) => {
-        let data = doc.data();
-        allBookletData.push({
-          id: doc.id,
-          url: data?.url,
-          title: data?.title,
+        querySnapshot.forEach((doc) => {
+          let data = doc.data();
+          allBookletData.push({
+            id: doc.id,
+            url: data?.url,
+            title: data?.title,
+          });
         });
-      });
-      setAllBooklets(allBookletData);
-      setTempAllBooklets(allBookletData);
-      setIsLoaded(true);
+
+        setAllBooklets(allBookletData);
+        setTempAllBooklets(allBookletData);
+        setIsLoaded(true);
+      } catch (error) {
+        console.error("Error fetching booklets: ", error);
+      } finally {
+        setLoading(false);
+      }
     };
-    try {
-      getInfo();
-      setLoading(false);
-    } catch {
-      setLoading(false);
-    }
+
+    getInfo();
   }, []);
 
   const handleOpenLink = (url: string) => {
@@ -119,7 +126,13 @@ const Booklets = (props: Props) => {
               renderItem={({ item }) => (
                 <View style={styles.card}>
                   <View style={{ width: "70%" }}>
-                    <CustomText label={item.title} />
+                    <CustomText
+                      label={
+                        item.title.length > 120
+                          ? `${item.title.substring(0, 60)}...`
+                          : item.title
+                      }
+                    />
                   </View>
                   <TouchableOpacity
                     onPress={() => handleOpenLink(item.url)}
@@ -175,6 +188,8 @@ const styles = StyleSheet.create({
   },
   card: {
     padding: 10,
+    marginVertical: 2,
+    height: 70,
     borderColor: "lightgray",
     flexDirection: "row",
     alignItems: "center",

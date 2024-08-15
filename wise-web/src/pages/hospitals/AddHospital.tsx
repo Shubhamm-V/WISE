@@ -11,8 +11,14 @@ import {
   Select,
   Modal,
 } from "antd";
-import { useNavigate } from "react-router-dom";
-import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  addDoc,
+  collection,
+  updateDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { STATES } from "../../constants/states";
 import { useAuth } from "../../context/authContext";
 import { db } from "../../firebaseConfig";
@@ -117,6 +123,7 @@ const AddHospital: React.FC<HospitalProps> = ({ hospitalData, onUpdate }) => {
         await addDoc(collection(db, "hospitals"), {
           ...values,
           userId: user.userId,
+          timestamp: serverTimestamp(),
         });
         openNotification("Hospital added successfully");
       }
@@ -229,27 +236,63 @@ const AddHospital: React.FC<HospitalProps> = ({ hospitalData, onUpdate }) => {
                 md={12}
                 style={{ display: "flex", alignItems: "center" }}
               >
-                <Form.Item<HospitalData>
-                  name="position"
-                  valuePropName="checked"
-                >
-                  <Checkbox
-                    checked={initialFormValues.position}
-                    onChange={() => {
-                      setInitialFormValues((prevValues) => ({
-                        ...prevValues,
-                        position: !prevValues.position,
-                      }));
-                    }}
+                {window.innerWidth >= 575 ? (
+                  <div>
+                    {" "}
+                    <div style={{ marginLeft: 15 }}>
+                      <label style={{ fontSize: 15 }}>
+                        Add hospital from mobile device to automatically set
+                        your most accurate current location or find latitude and
+                        langitude on google maps.
+                      </label>
+                      <Link
+                        to="https://www.youtube.com/watch?v=vkrg4rqKfVU"
+                        target="_blank"
+                      >
+                        <Button type="link">How to find?</Button>
+                      </Link>
+                    </div>
+                    <Button
+                      type="link"
+                      onClick={() => setShowWhyLocation(true)}
+                    >
+                      Why we need it?
+                    </Button>
+                  </div>
+                ) : (
+                  <Form.Item<HospitalData>
+                    name="position"
+                    valuePropName="checked"
                   >
-                    <label style={{ fontSize: 16 }}>
-                      Set latitude and longitude of your current location
-                    </label>
-                  </Checkbox>
-                  <Button type="link" onClick={() => setShowWhyLocation(true)}>
-                    Why we need it?
-                  </Button>
-                </Form.Item>
+                    <Checkbox
+                      checked={initialFormValues.position}
+                      onChange={() => {
+                        setInitialFormValues((prevValues) => ({
+                          ...prevValues,
+                          position: !prevValues.position,
+                        }));
+                      }}
+                    >
+                      <label style={{ fontSize: 16 }}>
+                        Set latitude and longitude of your current location
+                        (Make sure your location is precise)
+                      </label>
+                    </Checkbox>
+
+                    <Button
+                      type="link"
+                      onClick={() => setShowWhyLocation(true)}
+                    >
+                      Why we need it?
+                    </Button>
+                    <Link
+                      to="https://www.youtube.com/watch?v=vkrg4rqKfVU"
+                      target="_blank"
+                    >
+                      <Button type="link">How to find?</Button>
+                    </Link>
+                  </Form.Item>
+                )}
               </Col>
             )}
           </Row>

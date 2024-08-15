@@ -24,16 +24,23 @@ export const TABS: Tab[] = [
     icon: "calendar-clear-outline",
     focusIcon: "calendar-clear",
   },
-  {
-    name: "hospitals",
-    title: "Hospitals",
-    icon: "medkit-outline",
-    focusIcon: "medkit",
-  },
+
   {
     name: "videos",
     title: "Videos",
     icon: "videocam-outline",
     focusIcon: "videocam",
+  },
+  {
+    name: "booklets",
+    title: "Booklets",
+    icon: "book-outline",
+    focusIcon: "book",
+  },
+  {
+    name: "hospitals",
+    title: "Hospitals",
+    icon: "medkit-outline",
+    focusIcon: "medkit",
   },
 ];

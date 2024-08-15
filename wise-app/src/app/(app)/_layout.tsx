@@ -21,7 +21,7 @@ const AppLayout: React.FC = () => {
         };
       }}
     >
-      {TABS.map((tab) => (
+      {TABS.map((tab, ind) => (
         <Tabs.Screen
           key={tab.name}
           name={tab.name}
@@ -29,8 +29,9 @@ const AppLayout: React.FC = () => {
             tabBarInactiveTintColor: COLORS.dark,
             tabBarIcon: ({ color, focused }) => (
               <Icon
-                size={28}
+                size={ind == 3 ? 32 : 28}
                 name={focused ? tab.focusIcon : tab.icon}
+                style={{ marginTop: ind == 3 ? -1 : 0 }}
                 color={color}
               />
             ),

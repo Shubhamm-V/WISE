@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import type { FormProps } from "antd";
 import { Button, notification, Col, Form, Input, Row, Select } from "antd";
 import { useNavigate } from "react-router-dom";
-import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  updateDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { useAuth } from "../../context/authContext";
 import { db } from "../../firebaseConfig";
 import { BookletData } from "../../constants/table_columns";
@@ -61,6 +67,7 @@ const AddBooklet: React.FC<BookletProps> = ({ bookletData, onUpdate }) => {
         await addDoc(collection(db, "booklets"), {
           ...values,
           userId: user.userId,
+          timestamp: serverTimestamp(),
         });
         openNotification("Booklets added successfully");
       }

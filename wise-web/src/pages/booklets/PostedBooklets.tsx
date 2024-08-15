@@ -1,6 +1,13 @@
 import { Col, Row, Table, Button, Modal, notification, Input } from "antd";
 import { useEffect, useState } from "react";
-import { getDocs, collection, deleteDoc, doc } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  deleteDoc,
+  doc,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import {
   EditOutlined,
   DeleteOutlined,
@@ -31,7 +38,8 @@ const PostedBooklets = (props: Props) => {
 
   useEffect(() => {
     const getInfo = async () => {
-      const querySnapshot = await getDocs(collection(db, "booklets"));
+      const q = query(collection(db, "booklets"), orderBy("timestamp", "desc"));
+      const querySnapshot = await getDocs(q);
       const allBookletData: BookletData[] = [];
 
       querySnapshot.forEach((doc) => {
@@ -42,7 +50,7 @@ const PostedBooklets = (props: Props) => {
           title: data?.title,
         });
       });
-      console.log("BOOKLET DATA : ", allBookletData);
+
       setDataSource(allBookletData);
     };
 

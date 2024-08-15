@@ -15,7 +15,9 @@ import {
   collection,
   deleteDoc,
   doc,
+  query,
   setDoc,
+  orderBy,
 } from "firebase/firestore";
 import {
   EditOutlined,
@@ -50,7 +52,9 @@ const AllUserHospitals = (props: Props) => {
 
   useEffect(() => {
     const getInfo = async () => {
-      const querySnapshot = await getDocs(collection(db, "hospitals"));
+      // Modify the query to order by 'timestamp' in descending order
+      const q = query(collection(db, "hospitals"));
+      const querySnapshot = await getDocs(q);
       const allHospitalData: HospitalData[] = [];
 
       querySnapshot.forEach((doc) => {

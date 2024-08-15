@@ -116,8 +116,6 @@ const DashLayout: React.FC<LayoutProps> = ({ children }) => {
         onCollapse={(value) => setCollapsed(value)}
         style={{
           display: showSideBar ? "none" : "block",
-          height: "100vh",
-          overflow: "hidden",
         }}
       >
         <h1 style={{ color: "#fff", padding: 10, textAlign: "center" }}>

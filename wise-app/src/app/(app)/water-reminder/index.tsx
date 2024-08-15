@@ -46,8 +46,9 @@ const getData = async (key: any, setValue: any) => {
 
 async function setWaterReminder(hours: number) {
   const permission = await Notifications.requestPermissionsAsync();
-  const seconds = hours * 20;
-  if (permission.status === "granted") {
+  const seconds = hours * 3600;
+  //@ts-ignore
+  if (permission?.status === "granted") {
     const notificationId = await Notifications.scheduleNotificationAsync({
       content: {
         title: "💧 Water Reminder",

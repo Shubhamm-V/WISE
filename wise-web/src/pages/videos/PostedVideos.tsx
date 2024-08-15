@@ -1,6 +1,13 @@
 import { Col, Row, Table, Button, Modal, notification, Input } from "antd";
 import { useEffect, useState } from "react";
-import { getDocs, collection, deleteDoc, doc } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  deleteDoc,
+  doc,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import {
   EditOutlined,
   DeleteOutlined,
@@ -33,7 +40,11 @@ const AllVideos = (props: Props) => {
 
   useEffect(() => {
     const getInfo = async () => {
-      const querySnapshot = await getDocs(collection(db, "videos"));
+      // Create a query that orders the documents by the 'timestamp' field in descending order
+      const q = query(collection(db, "videos"), orderBy("timestamp", "desc"));
+
+      // Fetch the documents according to the query
+      const querySnapshot = await getDocs(q);
       const allVideoData: VideoData[] = [];
 
       querySnapshot.forEach((doc) => {

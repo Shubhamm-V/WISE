@@ -10,40 +10,55 @@ const DoctorCard = () => {
     );
   };
   return (
-    <View style={styles.card}>
-      <View
-        style={{
-          width: "40%",
-          justifyContent: "flex-start",
-        }}
-      >
-        <Image
-          style={styles.image}
-          source={require("../../../assets/images/illustrations/hospitals/doctor.png")}
-        />
-      </View>
-      <View style={{ width: "60%" }}>
-        <CustomText
-          label="Are you a doctor?"
-          customStyle={{
-            fontSize: 15,
-            color: COLORS.primary,
-            fontFamily: "DMSansBold",
+    <>
+      <View style={styles.card}>
+        <View
+          style={{
+            width: "40%",
+            justifyContent: "flex-start",
           }}
-        />
-        <CustomText
-          label="Register your hospital now and connect with local patients."
-          customStyle={styles.slogan}
-        />
-        <View style={{ alignItems: "center" }}>
-          <CustomButton
-            label="Register your hospital"
-            onPress={handleOpenHospital}
-            customStyle={{ margin: 5, padding: 7, width: "100%" }}
+        >
+          <Image
+            style={styles.image}
+            source={require("../../../assets/images/illustrations/hospitals/doctor.png")}
           />
         </View>
+        <View style={{ width: "60%" }}>
+          <CustomText
+            label="Are you a doctor?"
+            customStyle={{
+              fontSize: 15,
+              color: COLORS.primary,
+              fontFamily: "DMSansBold",
+            }}
+          />
+          <CustomText
+            label="Register your hospital now and connect with local patients."
+            customStyle={styles.slogan}
+          />
+          <View style={{ alignItems: "center" }}>
+            <CustomButton
+              label="Register your hospital"
+              onPress={handleOpenHospital}
+              customStyle={{ margin: 5, padding: 7, width: "100%" }}
+            />
+          </View>
+        </View>
       </View>
-    </View>
+      <View style={{ alignItems: "center", marginVertical: 20 }}>
+        <CustomText
+          label="from"
+          customStyle={{
+            fontSize: 16,
+            color: COLORS.primary,
+          }}
+        />
+        <Image
+          style={styles.developersImage}
+          source={require("../../../assets/images/illustrations/education/developers.png")}
+        />
+      </View>
+    </>
   );
 };
 
@@ -71,5 +86,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     fontFamily: "DMSansItalic",
     color: COLORS.dark,
+  },
+  developersImage: {
+    width: 300,
+    height: 50,
   },
 });

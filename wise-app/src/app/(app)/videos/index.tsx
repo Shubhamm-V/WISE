@@ -13,7 +13,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { COLORS } from "@/src/constants/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomText from "@/src/components/custom-widgets/CustomText";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import Loading from "@/src/components/custom-widgets/Loading";
 
 export type YoutubeVideo = {
@@ -45,38 +45,42 @@ const EducationalVideos = (props: Props) => {
 
   useEffect(() => {
     const getInfo = async () => {
-      const querySnapshot = await getDocs(collection(db, "videos"));
-      const allVideoData: YoutubeVideo[] = [];
+      try {
+        // Modify the query to order by 'timestamp' in descending order
+        const q = query(collection(db, "videos"), orderBy("timestamp", "desc"));
+        const querySnapshot = await getDocs(q);
+        const allVideoData: YoutubeVideo[] = [];
 
-      querySnapshot.forEach((doc) => {
-        let data = doc.data();
-        allVideoData.push({
-          id: doc.id,
-          url: data?.url,
-          title: data?.title,
-          thumbnail: data?.thumbnail,
-          description: data?.description,
-          category: data?.category,
+        querySnapshot.forEach((doc) => {
+          let data = doc.data();
+          allVideoData.push({
+            id: doc.id,
+            url: data?.url,
+            title: data?.title,
+            thumbnail: data?.thumbnail,
+            description: data?.description,
+            category: data?.category,
+          });
         });
-      });
 
-      const filterVideos: YoutubeVideo[] = allVideoData.map((video) => {
-        return {
-          ...video,
-          videoId: getVideoID(video?.url) || "",
-        };
-      });
+        const filterVideos: YoutubeVideo[] = allVideoData.map((video) => {
+          return {
+            ...video,
+            videoId: getVideoID(video?.url) || "",
+          };
+        });
 
-      setAllVideos(filterVideos);
-      setTempAllVideos(filterVideos);
-      setIsLoaded(true);
+        setAllVideos(filterVideos);
+        setTempAllVideos(filterVideos);
+        setIsLoaded(true);
+      } catch (error) {
+        console.error("Error fetching videos: ", error);
+      } finally {
+        setLoading(false);
+      }
     };
-    try {
-      getInfo();
-      setLoading(false);
-    } catch {
-      setLoading(false);
-    }
+
+    getInfo();
   }, []);
 
   if (loading || !isLoaded) return <Loading />;

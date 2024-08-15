@@ -5,6 +5,7 @@ import {
   query,
   where,
   collection,
+  orderBy,
   deleteDoc,
   doc,
 } from "firebase/firestore";
@@ -40,7 +41,13 @@ const Users = (props: Props) => {
     const getInfo = async () => {
       try {
         const hospitalsRef = collection(db, "hospitals");
-        const q = query(hospitalsRef, where("userId", "==", user?.userId));
+
+        const q = query(
+          hospitalsRef,
+          where("userId", "==", user?.userId),
+          orderBy("timestamp", "desc")
+        );
+
         const querySnapshot = await getDocs(q);
 
         const hospitalsData = querySnapshot.docs.map((doc) => ({
@@ -48,6 +55,7 @@ const Users = (props: Props) => {
           userId: user?.userId,
           ...doc.data(),
         })) as HospitalData[];
+
         setDataSource(hospitalsData);
       } catch (error) {
         console.error("Error fetching hospital data: ", error);

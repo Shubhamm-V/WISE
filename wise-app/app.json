@@ -21,19 +21,12 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "notification": {
-        "icon": "./assets/images/icon.png"
-      },
       "package": "com.shubhammv.wiseapp"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
-    },
-    "notification": {
-      "icon": "./assets/images/notification.png",
-      "color": "#ffffff"
     },
     "plugins": [
       "expo-router",
@@ -42,6 +35,13 @@
         "expo-location",
         {
           "locationAlwaysAndWhenInUsePermission": "Allow WISE to access your location."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/notification.png",
+          "color": "#ffffff"
         }
       ]
     ],

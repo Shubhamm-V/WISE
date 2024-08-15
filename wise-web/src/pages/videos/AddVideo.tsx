@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import type { FormProps } from "antd";
-import { Button, notification, Col, Form, Input, Row, Select } from "antd";
+import { Button, notification, Col, Form, Input, Row } from "antd";
 import { useNavigate } from "react-router-dom";
-import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  updateDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { useAuth } from "../../context/authContext";
 import { db } from "../../firebaseConfig";
 import { VideoData } from "../../constants/table_columns";
@@ -55,7 +61,9 @@ const AddVideo: React.FC<VideoProps> = ({ videoData, onUpdate }) => {
 
   const onFinish: FormProps<VideoData>["onFinish"] = async (values) => {
     setLoading(true);
-    const videoId = getVideoID(values?.url);
+    const videoId = values?.url.includes("youtube.com/shorts")
+      ? values?.url?.split("/").pop()?.split("?")[0]
+      : getVideoID(values?.url);
     values = {
       ...values,
       thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
@@ -73,6 +81,7 @@ const AddVideo: React.FC<VideoProps> = ({ videoData, onUpdate }) => {
         await addDoc(collection(db, "videos"), {
           ...values,
           userId: user.userId,
+          timestamp: serverTimestamp(),
         });
         setTimeout(() => {
           openNotification("Video added successfully");
