@@ -42,11 +42,7 @@ const Users = (props: Props) => {
       try {
         const hospitalsRef = collection(db, "hospitals");
 
-        const q = query(
-          hospitalsRef,
-          where("userId", "==", user?.userId),
-          orderBy("timestamp", "desc")
-        );
+        const q = query(hospitalsRef, where("userId", "==", user?.userId));
 
         const querySnapshot = await getDocs(q);
 
