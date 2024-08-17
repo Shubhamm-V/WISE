@@ -41,9 +41,7 @@ const Users = (props: Props) => {
     const getInfo = async () => {
       try {
         const hospitalsRef = collection(db, "hospitals");
-
         const q = query(hospitalsRef, where("userId", "==", user?.userId));
-
         const querySnapshot = await getDocs(q);
 
         const hospitalsData = querySnapshot.docs.map((doc) => ({
@@ -51,7 +49,6 @@ const Users = (props: Props) => {
           userId: user?.userId,
           ...doc.data(),
         })) as HospitalData[];
-
         setDataSource(hospitalsData);
       } catch (error) {
         console.error("Error fetching hospital data: ", error);
@@ -59,7 +56,7 @@ const Users = (props: Props) => {
     };
 
     getInfo();
-  }, [dataSource]);
+  }, []);
 
   const handleEdit = (record: HospitalData) => {
     setEditHospitalData(record);
