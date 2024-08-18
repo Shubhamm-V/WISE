@@ -34,6 +34,7 @@ const App = () => {
 
   async function setPeriodReminder() {
     try {
+      //@ts-ignore
       const { status } = await Notifications.requestPermissionsAsync();
       if (status !== "granted") {
         Toast.show("Permission to send notifications was denied");
@@ -42,7 +43,7 @@ const App = () => {
       const startDate = new Date(selected);
       const nextPeriodDate = new Date(startDate);
       nextPeriodDate.setDate(
-        startDate.getDate() + parseInt(params?.cycleLength as string)
+        startDate.getDate() + parseInt(params?.cycleLength as string) - 1
       );
       const day = nextPeriodDate.getUTCDate();
       const month = nextPeriodDate.getUTCMonth();

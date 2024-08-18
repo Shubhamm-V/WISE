@@ -29,7 +29,7 @@ const AppLayout: React.FC = () => {
             tabBarInactiveTintColor: COLORS.dark,
             tabBarIcon: ({ color, focused }) => (
               <Icon
-                size={ind == 3 ? 32 : 28}
+                size={ind == 3 ? 26 : 24}
                 name={focused ? tab.focusIcon : tab.icon}
                 style={{ marginTop: ind == 3 ? -1 : 0 }}
                 color={color}

@@ -194,6 +194,18 @@ const TrackMenstrualCycle = () => {
       endPeriodString = dateString;
     }
 
+    const todayDate = getFormattedDate();
+
+    const totalBetweenDays = calculateDaysBetween(todayDate, periodDates[0]);
+    if (daysBetween === "") setDaysBetween(totalBetweenDays.toString());
+
+    markedDates[todayDate] = {
+      marked: true,
+      //@ts-ignore
+      dotColor: "transparent",
+      color: COLORS.lightPrimary,
+    };
+
     if (Object.keys(markedDates).length > 0) {
       const firstDay = Object.keys(markedDates)[0];
       if (!markedDates[firstDay].startingDay) {
@@ -206,18 +218,6 @@ const TrackMenstrualCycle = () => {
         markedDates[endPeriodString].endingDay = true;
       }
     }
-
-    const todayDate = getFormattedDate();
-
-    const totalBetweenDays = calculateDaysBetween(todayDate, periodDates[0]);
-    if (daysBetween === "") setDaysBetween(totalBetweenDays.toString());
-
-    markedDates[todayDate] = {
-      marked: true,
-      //@ts-ignore
-      dotColor: "transparent",
-      color: COLORS.lightPrimary,
-    };
 
     const formattedPeriods = periodDates.map(getDateMonth);
     if (periodDayMonths.length === 0) setPeriodDayMonths(formattedPeriods);

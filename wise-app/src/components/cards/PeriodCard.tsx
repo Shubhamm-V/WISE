@@ -31,7 +31,7 @@ const PeriodCard: FC<PeriodProps> = ({
           label={
             isPeriodEnded
               ? "Period is ended"
-              : parseInt(daysBetween) >= 0
+              : parseInt(daysBetween) > 0
               ? "Next Period"
               : "Period is ongoing"
           }
@@ -73,7 +73,7 @@ const PeriodCard: FC<PeriodProps> = ({
                 />
                 <CustomText
                   label={
-                    parseInt(daysBetween) >= 0
+                    parseInt(daysBetween) > 0
                       ? `${daysBetween} Days Left`
                       : `Day ${Math.abs(parseInt(daysBetween)) + 1} of period`
                   }
