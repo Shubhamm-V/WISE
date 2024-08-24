@@ -14,7 +14,7 @@ import CustomText from "@/src/components/custom-widgets/CustomText";
 import { Formik } from "formik";
 import Icon from "react-native-vector-icons/Ionicons";
 import auth from "@react-native-firebase/auth";
-import { db } from "@/firebaseConfig";
+import { CLIENT_ID, db } from "@/firebaseConfig";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 //context API
 
@@ -56,13 +56,10 @@ const Login = () => {
   const { login } = useAuth();
   const [initializing, setInitializing] = useState(true);
   const { setUser, setIsAuthenticated, user, setIsGoogleLogin } = useAuth();
-  const [language, setLanguage] = useState("English");
-  const [choosedLanguage, setchoosedLanguage] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   GoogleSignin.configure({
-    webClientId:
-      "999945649944-8he22f9ddebl6n1qbet3uc8lr5hgatdu.apps.googleusercontent.com",
+    webClientId: CLIENT_ID,
   });
 
   const updateUserData = async (userId: any) => {
@@ -134,9 +131,6 @@ const Login = () => {
       else Alert.alert("Something went wrong", msg);
     }
   };
-
-  if (!choosedLanguage) {
-  }
 
   if (loading) {
     return <Loading />;

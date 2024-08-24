@@ -38,7 +38,7 @@ const Beliefs = () => {
           </h3>
 
           <div className="text-center sm:text-start">
-            <Link href={"https://wisefordoctors.netlify.app"}>
+            <Link href={"https://app.wisewomenhealth.in"}>
               <button className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary border border-primary hover:bg-darkprimary">
                 Register Hospital
               </button>

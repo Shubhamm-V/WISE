@@ -5,7 +5,7 @@ import CustomText from "../custom-widgets/CustomText";
 import CustomButton from "../custom-widgets/CustomButton";
 const DoctorCard = () => {
   const handleOpenHospital = () => {
-    Linking.openURL("https://wisefordoctors.netlify.app").catch((err) =>
+    Linking.openURL("https://app.wisewomenhealth.in").catch((err) =>
       console.error("Error opening link:", err)
     );
   };
@@ -25,7 +25,7 @@ const DoctorCard = () => {
         </View>
         <View style={{ width: "60%" }}>
           <CustomText
-            label="Are you a doctor?"
+            label="Register nearby hospital"
             customStyle={{
               fontSize: 15,
               color: COLORS.primary,
@@ -33,12 +33,12 @@ const DoctorCard = () => {
             }}
           />
           <CustomText
-            label="Register your hospital now and connect with local patients."
+            label="Register nearby hospital and help others in emergency"
             customStyle={styles.slogan}
           />
           <View style={{ alignItems: "center" }}>
             <CustomButton
-              label="Register your hospital"
+              label="Register hospital"
               onPress={handleOpenHospital}
               customStyle={{ margin: 5, padding: 7, width: "100%" }}
             />
