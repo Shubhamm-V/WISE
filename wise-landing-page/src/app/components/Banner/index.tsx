@@ -26,7 +26,7 @@ const Banner = () => {
               </button>
             </div>
             <div className="my-7 text-center lg:text-start">
-              <Link href={"https://wisefordoctors.netlify.app"}>
+              <Link href={"https://app.wisewomenhealth.in"}>
                 <button className="text-sm border-2 md:text-xl font-semibold hover:shadow-xl bg-white text-primary py-3 px-6 md:py-3 md:px-4  rounded-lg hover:bg-lightprimary">
                   Register Hospital
                 </button>
