@@ -15,8 +15,7 @@ import { COLORS } from "@/src/constants/colors";
 const VideoScreen = () => {
   const params: any = useLocalSearchParams();
 
-  const isYouTubeShort = (url: string) =>
-    url.includes("youtube.com/shorts") || url.includes("youtu.be");
+  const isYouTubeShort = (url: string) => url.includes("youtube.com/shorts");
 
   const getVideoUrl = () => {
     if (isYouTubeShort(params.url)) {

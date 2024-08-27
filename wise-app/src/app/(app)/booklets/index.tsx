@@ -163,7 +163,7 @@ const Booklets = (props: Props) => {
             <View style={{ width: "80%" }}>
               <CustomText
                 customStyle={{ textAlign: "center" }}
-                label="Sorry..! No videos found"
+                label="Sorry..! No booklets found"
               />
             </View>
           </View>

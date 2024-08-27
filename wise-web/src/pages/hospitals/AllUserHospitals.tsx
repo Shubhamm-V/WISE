@@ -101,7 +101,6 @@ const AllUserHospitals = (props: Props) => {
 
   const handleApprove = async (hospital: HospitalData, isApproved: boolean) => {
     delete hospital.position;
-    console.log("Hospital : ", hospital);
     await setDoc(doc(db, "hospitals", hospital.id), {
       ...hospital,
       approved: isApproved ? false : true,
@@ -152,6 +151,7 @@ const AllUserHospitals = (props: Props) => {
         (item) => item.id === updatedHospital.id
       );
       if (index !== -1) {
+        updatedHospital.approved = prevDataSource[index].approved;
         const newDataSource = [...prevDataSource];
         newDataSource[index] = updatedHospital;
         return newDataSource;

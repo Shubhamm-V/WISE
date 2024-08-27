@@ -112,7 +112,6 @@ const AddHospital: React.FC<HospitalProps> = ({ hospitalData, onUpdate }) => {
       if (!user) {
         throw new Error("User is not authenticated");
       }
-      console.log("USER ID : ", user.userId);
       if (hospitalData?.id) {
         const hospitalDocRef = doc(db, "hospitals", hospitalData.id);
         await updateDoc(hospitalDocRef, values);
@@ -126,11 +125,11 @@ const AddHospital: React.FC<HospitalProps> = ({ hospitalData, onUpdate }) => {
           timestamp: serverTimestamp(),
         });
         openNotification("Hospital added successfully");
+        setTimeout(() => {
+          navigate("/view-hospitals");
+        }, 1500);
       }
       setLoading(false);
-      setTimeout(() => {
-        navigate("/view-hospitals");
-      }, 1500);
     } catch (err: any) {
       openNotification("Something went wrong: " + err.message);
       setLoading(false);

@@ -166,7 +166,7 @@ const DashLayout: React.FC<LayoutProps> = ({ children }) => {
         </Content>
         <Footer style={{ padding: "7px" }}>
           <Card style={{ textAlign: "center" }}>
-            WISE ©{new Date().getFullYear()} Created by WISE
+            WISE Copyright ©{new Date().getFullYear()}
           </Card>
         </Footer>
       </Layout>

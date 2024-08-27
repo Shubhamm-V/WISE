@@ -97,6 +97,7 @@ const Users = (props: Props) => {
         (item) => item.id === updatedHospital.id
       );
       if (index !== -1) {
+        updatedHospital.approved = prevDataSource[index].approved;
         const newDataSource = [...prevDataSource];
         newDataSource[index] = updatedHospital;
         return newDataSource;

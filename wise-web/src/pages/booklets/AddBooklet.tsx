@@ -69,7 +69,9 @@ const AddBooklet: React.FC<BookletProps> = ({ bookletData, onUpdate }) => {
           userId: user.userId,
           timestamp: serverTimestamp(),
         });
-        openNotification("Booklets added successfully");
+        setTimeout(() => {
+          openNotification("Booklets added successfully");
+        }, 1000);
       }
       setLoading(false);
       setTimeout(() => {
