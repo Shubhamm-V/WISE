@@ -18,7 +18,7 @@ const FAQ = () => {
             {({ open }) => (
               <>
                 <Disclosure.Button className="flex w-full justify-between rounded-lg px-4 py-2 text-left text-2xl font-medium">
-                  <span>Question 1</span>
+                  <span>Is WISE free to use?</span>
                   <ChevronUpIcon
                     className={`${
                       !open ? "rotate-180 transform" : ""
@@ -26,7 +26,7 @@ const FAQ = () => {
                   />
                 </Disclosure.Button>
                 <Disclosure.Panel className="px-4 pt-4 pb-2 text-base text-black font-normal opacity-50">
-                  Answer 1
+                  Yes, it's completely free to use with no limitations.
                 </Disclosure.Panel>
               </>
             )}
@@ -38,15 +38,18 @@ const FAQ = () => {
             {({ open }) => (
               <>
                 <Disclosure.Button className="flex w-full justify-between rounded-lg px-4 py-2 text-left text-2xl font-medium">
-                  <span>Question 2</span>
+                  <span>
+                    How much time it takes to approve registered hospital?
+                  </span>
                   <ChevronUpIcon
                     className={`${
-                      open ? "rotate-180 transform" : ""
+                      !open ? "rotate-180 transform" : ""
                     } h-5 w-5 text-purple-500`}
                   />
                 </Disclosure.Button>
                 <Disclosure.Panel className="px-4 pt-4 pb-2 text-base text-black font-normal opacity-50">
-                  Answer 2
+                  It can take upto 1 week to approve hospital, after approval
+                  your hospitaldetails will be listed on app.
                 </Disclosure.Panel>
               </>
             )}
@@ -58,15 +61,16 @@ const FAQ = () => {
             {({ open }) => (
               <>
                 <Disclosure.Button className="flex w-full justify-between rounded-lg px-4 py-2 text-left text-2xl font-medium">
-                  <span>Question 3</span>
+                  <span>Do I need internet connection to use app?</span>
                   <ChevronUpIcon
                     className={`${
-                      open ? "rotate-180 transform" : ""
+                      !open ? "rotate-180 transform" : ""
                     } h-5 w-5 text-purple-500`}
                   />
                 </Disclosure.Button>
                 <Disclosure.Panel className="px-4 pt-4 pb-2 text-base text-black font-normal opacity-50">
-                  Answer 3
+                  Yes, you need inter connection but very minimal unless you
+                  watching educational videos.
                 </Disclosure.Panel>
               </>
             )}

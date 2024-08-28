@@ -20,8 +20,12 @@ const postData: DataType[] = [
     imgSrc: "/images/featured/feat2.png",
   },
   {
-    heading: "Access nearby hospitals",
+    heading: "Health Education",
     imgSrc: "/images/featured/feat3.png",
+  },
+  {
+    heading: "Access nearby hospitals",
+    imgSrc: "/images/featured/feat4.png",
   },
   // {
   //   heading: "Learn by videos",

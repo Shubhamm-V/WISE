@@ -1,5 +1,5 @@
 .privacyContainer {
-  padding-inline: 8%;
+  padding-inline: 10%;
   padding-block: 2%;
 }
 
@@ -10,4 +10,11 @@ li {
 
 strong {
   font-size: 20px;
+}
+
+@media (max-width: 576px) {
+  .privacyContainer {
+    padding-inline: 8%;
+    padding-block: 2%;
+  }
 }

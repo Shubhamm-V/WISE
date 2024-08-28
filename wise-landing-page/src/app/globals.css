@@ -394,3 +394,8 @@ html {
     display: none;
   }
 }
+
+.iconImage {
+  height: 41px;
+  width: 41px;
+}
