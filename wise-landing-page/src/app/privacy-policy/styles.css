@@ -1,0 +1,13 @@
+.privacyContainer {
+  padding-inline: 8%;
+  padding-block: 2%;
+}
+
+li {
+  line-height: 1.5;
+  margin-block: 5px;
+}
+
+strong {
+  font-size: 20px;
+}

@@ -113,14 +113,14 @@ const footer = () => {
               </h3>
             </div>
             <div className="flex justify-center md:justify-end">
-              <Link href="/">
+              <Link href="/privacy-policy">
                 <h3 className="text-offwhite pr-6">Privacy policy</h3>
               </Link>
-              <Link href="/">
+              {/* <Link href="/">
                 <h3 className="text-offwhite pl-6 border-solid border-l border-footer">
                   Terms & conditions
                 </h3>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
