@@ -40,13 +40,13 @@ const Navbar = () => {
               <div className="flex flex-shrink-0 items-center border-right">
                 <Link
                   href="/"
-                  className="text-2xl flex sm:text-4xl font-semibold text-black"
+                  className="text-4xl flex sm:text-4xl font-semibold text-black"
                 >
                   <Image
                     src="/images/icon.png"
                     alt="app-icon"
-                    height={window.innerWidth > 576 ? 41 : 30}
-                    width={window.innerWidth > 576 ? 41 : 30}
+                    height={41}
+                    width={41}
                   />
                   <label className="text-primary mt-0">WISE</label>
                 </Link>
