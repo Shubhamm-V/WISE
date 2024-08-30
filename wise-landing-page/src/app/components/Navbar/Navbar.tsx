@@ -83,7 +83,7 @@ const Navbar = () => {
 
             <div className="block lg:hidden">
               <Bars3Icon
-                className="block h-6 w-6"
+                className="block h-10 w-10"
                 aria-hidden="true"
                 onClick={() => setIsOpen(true)}
               />
