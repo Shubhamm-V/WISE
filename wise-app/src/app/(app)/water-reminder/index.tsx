@@ -18,8 +18,12 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Dialog } from "@rneui/themed";
 import Toast from "react-native-root-toast";
 import { Input } from "@rneui/themed";
+import { Switch } from "@rneui/themed";
 const amounts = [250, 500, 750, 1000, 1500];
-
+const toastStyle = {
+  backgroundColor: COLORS.light,
+  textColor: COLORS.dark,
+};
 // Async Storage
 const storeData = async (value: any, key = "@amount") => {
   try {
@@ -33,7 +37,6 @@ const getData = async (key: any, setValue: any) => {
   try {
     const value = await AsyncStorage.getItem(key);
     if (value !== null) {
-      console.log(value);
       setValue(Number(value));
     }
   } catch (e) {
@@ -44,7 +47,7 @@ const getData = async (key: any, setValue: any) => {
 
 // Notifications
 
-async function setWaterReminder(hours: number) {
+async function setWaterReminder(hours: number, doRepeat: boolean) {
   const permission = await Notifications.requestPermissionsAsync();
   const seconds = hours * 3600;
   //@ts-ignore
@@ -56,36 +59,38 @@ async function setWaterReminder(hours: number) {
         subtitle: "Your body needs water!",
       },
       trigger: {
-        repeats: false,
+        repeats: doRepeat,
         seconds, // Convert hours to seconds
       },
     });
     await AsyncStorage.setItem("waterNotificationId", notificationId);
-    Toast.show("Water reminder has been set");
+    Toast.show("Water reminder has been set", toastStyle);
   } else {
-    Toast.show("Permission to send notifications was denied");
+    Toast.show("Permission to send notifications was denied", toastStyle);
   }
 }
 
-// async function cancelWaterReminder() {
-//   try {
-//     const notificationId = await AsyncStorage.getItem("waterNotificationId");
-//     if (notificationId) {
-//       await Notifications.cancelScheduledNotificationAsync(notificationId);
+async function cancelWaterReminder() {
+  try {
+    const notificationId = await AsyncStorage.getItem("waterNotificationId");
+    if (notificationId) {
+      await Notifications.cancelScheduledNotificationAsync(notificationId);
 
-//       Toast.show(`Reminder has been cancelled`);
-//     } else {
-//       // console.log("No notification ID found.");
-//     }
-//   } catch (error) {
-//     console.error("Error cancelling notification:", error);
-//   }
-// }
-
-async function checkScheduledNotifications() {
+      Toast.show(`Reminder has been cancelled`, toastStyle);
+    } else {
+      // console.log("No notification ID found.");
+    }
+  } catch (error) {
+    console.error("Error cancelling notification:", error);
+  }
+}
+async function checkScheduledNotifications(waterNotificationId: string) {
   const scheduledNotifications =
     await Notifications.getAllScheduledNotificationsAsync();
-  return scheduledNotifications;
+  const hasWaterNotification = scheduledNotifications.some((notification) => {
+    return notification.identifier === waterNotificationId;
+  });
+  return hasWaterNotification;
 }
 
 export default function App() {
@@ -96,6 +101,7 @@ export default function App() {
   const [isDialogVisible, setIsDialogVisible] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
   const [hours, setHours] = useState("");
+  const [checkedRepeated, setCheckedRepeated] = useState(false);
   const [isNotificationScheduled, setIsNotificationScheduled] = useState(false);
 
   // Progress Bar Animation
@@ -110,12 +116,12 @@ export default function App() {
     getData("@goal", setWaterGoal);
 
     const checkNotifications = async () => {
-      const notifications = await checkScheduledNotifications();
-      if (notifications.length > 0) {
-        setIsNotificationScheduled(true);
-      } else {
-        setIsNotificationScheduled(false);
-      }
+      const notificationId = await AsyncStorage.getItem("waterNotificationId");
+      const isWaterNotificationScheduled = await checkScheduledNotifications(
+        notificationId as string
+      );
+
+      setIsNotificationScheduled(isWaterNotificationScheduled);
     };
 
     checkNotifications();
@@ -302,11 +308,34 @@ export default function App() {
               alignItems: "center",
             }}
           >
-            <CustomButton
-              onPress={() => setIsDialogVisible(true)}
-              customStyle={{ width: "100%" }}
-              label="Set water reminder"
-            />
+            {isNotificationScheduled ? (
+              <CustomButton
+                onPress={() => {
+                  cancelWaterReminder();
+                  setIsNotificationScheduled(false);
+                }}
+                label="Cancel reminder"
+                customStyle={[
+                  styles.buttonStyle,
+                  {
+                    borderWidth: 1,
+                    width: "97.5%",
+                    borderColor: COLORS.lightPrimary,
+                    backgroundColor: COLORS.light,
+                  },
+                ]}
+                customTextStyle={{
+                  color: COLORS.primary,
+                  fontFamily: "DMSansSemiBold",
+                }}
+              />
+            ) : (
+              <CustomButton
+                onPress={() => setIsDialogVisible(true)}
+                customStyle={{ width: "100%" }}
+                label="Set water reminder"
+              />
+            )}
           </View>
 
           <Dialog
@@ -343,7 +372,27 @@ export default function App() {
                   // errorMessage="Please select range from 1-24 hours"
                 />
               </View>
-
+              {hours && (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    paddingHorizontal: 20,
+                    gap: 8,
+                    alignItems: "center",
+                  }}
+                >
+                  <Switch
+                    style={styles.switch}
+                    value={checkedRepeated}
+                    color={COLORS.primary}
+                    onValueChange={(value) => setCheckedRepeated(value)}
+                  />
+                  <CustomText
+                    label={`Repeat reminder after every ${hours} hours`}
+                    customStyle={{ fontSize: 14, paddingRight: 13 }}
+                  />
+                </View>
+              )}
               <View
                 style={{
                   display: "flex",
@@ -356,7 +405,7 @@ export default function App() {
                 <CustomButton
                   isDisabled={hours.length == 0}
                   onPress={() => {
-                    setWaterReminder(parseInt(hours));
+                    setWaterReminder(parseInt(hours), checkedRepeated);
                     setIsNotificationScheduled(true);
                     setIsDialogVisible(false);
                   }}
@@ -450,6 +499,9 @@ const styles = StyleSheet.create({
     color: COLORS.dark,
     fontFamily: "DMSansBold",
     marginVertical: 15,
+  },
+  switch: {
+    marginLeft: -15,
   },
   goalHeader: {
     paddingHorizontal: 7,
