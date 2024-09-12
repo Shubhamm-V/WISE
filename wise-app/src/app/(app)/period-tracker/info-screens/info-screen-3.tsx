@@ -12,6 +12,10 @@ import Icon from "react-native-vector-icons/Ionicons";
 import * as Notifications from "expo-notifications";
 import Toast from "react-native-root-toast";
 import { useAuth } from "@/src/context/authContext";
+const toastStyle = {
+  backgroundColor: COLORS.light,
+  textColor: COLORS.dark,
+};
 
 const App = () => {
   const [selected, setSelected] = useState<string>("");
@@ -37,7 +41,7 @@ const App = () => {
       //@ts-ignore
       const { status } = await Notifications.requestPermissionsAsync();
       if (status !== "granted") {
-        Toast.show("Permission to send notifications was denied");
+        Toast.show("Permission to send notifications was denied", toastStyle);
         return;
       }
       const startDate = new Date(selected);
@@ -70,7 +74,7 @@ const App = () => {
       );
     } catch (error) {
       console.error("Error setting period reminder:", error);
-      Toast.show("Failed to set period reminder");
+      Toast.show("Failed to set period reminder", toastStyle);
     }
   }
 

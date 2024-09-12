@@ -128,8 +128,8 @@ const Booklets = (props: Props) => {
                   <View style={{ width: "70%" }}>
                     <CustomText
                       label={
-                        item.title.length > 120
-                          ? `${item.title.substring(0, 60)}...`
+                        item.title.length > 50
+                          ? `${item.title.substring(0, 50)}...`
                           : item.title
                       }
                     />
