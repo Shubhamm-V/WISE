@@ -18,17 +18,13 @@ const HospitalCard: React.FC<ChildProps> = ({ hospitalData }) => {
       <View
         style={{
           flexDirection: "row",
+          alignItems: "center",
           gap: 3,
           padding: 5,
+          marginBottom: 5,
         }}
       >
-        <View
-          style={{
-            borderWidth: 1,
-            borderColor: COLORS.primary,
-            borderRadius: 10,
-          }}
-        >
+        <View>
           <Image
             style={styles.image}
             source={require("../../../assets/images/illustrations/hospitals/hospital.png")}
@@ -119,6 +115,7 @@ const styles = StyleSheet.create({
 
   cardContent: {
     display: "flex",
+    flex: 1,
     justifyContent: "center",
     marginLeft: 7,
     width: "100%",
@@ -148,6 +145,10 @@ const styles = StyleSheet.create({
   image: {
     height: 24,
     width: 24,
+    borderWidth: 1,
+    borderColor: COLORS.primary,
+    borderRadius: 5,
+    padding: 10,
   },
   mapLabel: {
     textAlign: "center",
