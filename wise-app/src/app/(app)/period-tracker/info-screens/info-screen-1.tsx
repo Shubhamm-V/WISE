@@ -1,5 +1,6 @@
 import { BackHandler, Image, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { useFocusEffect } from "expo-router";
+import React, { useCallback, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Slider from "@react-native-community/slider";
 import CustomText from "@/src/components/custom-widgets/CustomText";
@@ -12,19 +13,21 @@ const InfoScreen1 = () => {
   const [value, setValue] = useState(28);
   const params = useLocalSearchParams();
   const { setFlag } = useAuth();
-  useEffect(() => {
-    const backAction = () => {
-      setFlag((prev) => !prev);
-      return false;
-    };
+  useFocusEffect(
+    useCallback(() => {
+      const backAction = () => {
+        setFlag((prev) => !prev);
+        return false;
+      };
 
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+      );
 
-    return () => backHandler.remove();
-  }, []);
+      return () => backHandler.remove();
+    }, [])
+  );
   const handleInfoOne = async () => {
     router.push({
       pathname: "/period-tracker/info-screens/info-screen-2",
