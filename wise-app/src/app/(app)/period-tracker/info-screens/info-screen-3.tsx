@@ -123,9 +123,9 @@ const App = () => {
       }
     }
 
-    if (params.previousPeriodDayMonths) {
-      await removePeriodLogs(params.previousPeriodDayMonths as string);
-    }
+    // if (params.previousPeriodDayMonths) {
+    //   await removePeriodLogs(params.previousPeriodDayMonths as string);
+    // }
 
     router.push("/period-tracker");
   };

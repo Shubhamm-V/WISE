@@ -304,7 +304,7 @@ export default function App() {
           <View
             style={{
               width: "100%",
-              paddingVertical: 20,
+              paddingTop: 20,
               alignItems: "center",
             }}
           >
