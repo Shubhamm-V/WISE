@@ -51,7 +51,11 @@ const Contactusform = () => {
                     </button>
                 </div> */}
         <div className="hidden lg:block">
-          <Link href="/">
+          <a
+            href="https://play.google.com/store/apps/details?id=com.shubhammv.wiseapp"
+            target="_blank"
+          >
+            {" "}
             <button
               type="button"
               className="flex flex-row gap-2 align-middle text-xl font-semibold bg-transparent py-4 lg:px-8 navbutton rounded-full hover:bg-darkprimary hover:text-white"
@@ -64,7 +68,7 @@ const Contactusform = () => {
               />
               <div>Install WISE</div>
             </button>
-          </Link>
+          </a>
         </div>
       </div>
 

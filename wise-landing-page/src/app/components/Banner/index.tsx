@@ -20,11 +20,16 @@ const Banner = () => {
           </div>
           <div className="flex gap-3 justify-center sm:justify-start">
             {" "}
-            <div className="my-7 text-center lg:text-start">
-              <button className="text-sm md:text-xl font-semibold hover:shadow-xl bg-primary text-white py-3 px-6 md:py-3 md:px-4 rounded-lg hover:bg-darkprimary">
-                Install WISE
-              </button>
-            </div>
+            <a
+              href="https://play.google.com/store/apps/details?id=com.shubhammv.wiseapp"
+              target="_blank"
+            >
+              <div className="my-7 text-center lg:text-start">
+                <button className="text-sm md:text-xl font-semibold hover:shadow-xl bg-primary text-white py-3 px-6 md:py-3 md:px-4 rounded-lg hover:bg-darkprimary">
+                  Install WISE
+                </button>
+              </div>
+            </a>
             <div className="my-7 text-center lg:text-start">
               <Link href={"https://app.wisewomenhealth.in"}>
                 <button className="text-sm border-2 md:text-xl font-semibold hover:shadow-xl bg-white text-primary py-3 px-6 md:py-3 md:px-4  rounded-lg hover:bg-lightprimary">

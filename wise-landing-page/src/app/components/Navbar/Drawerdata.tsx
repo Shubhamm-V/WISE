@@ -43,7 +43,11 @@ const Data = () => {
               </Link>
             ))}
             <div className="mt-4"></div>
-            <Link href="/">
+            <a
+              href="https://play.google.com/store/apps/details?id=com.shubhammv.wiseapp"
+              target="_blank"
+            >
+              {" "}
               <button
                 type="button"
                 className="flex flex-row gap-2 align-middle text-sm font-semibold bg-transparent py-2 px-8 lg:px-8 navbutton rounded-lg hover:bg-darkprimary hover:text-white"
@@ -56,7 +60,7 @@ const Data = () => {
                 />
                 <div>Install WISE</div>
               </button>
-            </Link>
+            </a>
             {/* <Contactusform /> */}
           </div>
         </div>

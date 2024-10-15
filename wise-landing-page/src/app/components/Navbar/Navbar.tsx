@@ -28,25 +28,9 @@ function classNames(...classes: string[]) {
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showNotification, setShowNotification] = useState(true);
 
   return (
     <>
-      {showNotification && (
-        <div className=" bg-lightprimary">
-          <div className="mx-auto max-w-7xl p-3 flex justify-between lg:px-8">
-            <label className="text-primary text-sm font-semibold lg:text-base">
-              The app is currently in closed testing and will be published on
-              the Play Store in mid-October
-            </label>
-            <XMarkIcon
-              color="#461A71"
-              className="cursor-pointer font-bold h-10 w-10 lg:h-6 lg:w-6"
-              onClick={() => setShowNotification((prev) => !prev)}
-            />
-          </div>
-        </div>
-      )}
       <Disclosure as="nav" className="navbar">
         <>
           <div className="mx-auto max-w-7xl p-3 md:p-4 lg:px-8">
