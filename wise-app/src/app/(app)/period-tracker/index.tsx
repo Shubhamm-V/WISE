@@ -238,6 +238,7 @@ const TrackMenstrualCycle = () => {
     }
     if (selectedDay.length === 0) setSelectedDay(formattedPeriods[0]);
     markedDates = { ...previousPeriodsRange, ...markedDates };
+
     return markedDates;
   };
 
@@ -280,7 +281,8 @@ const TrackMenstrualCycle = () => {
               <Calendar
                 style={{ borderRadius: 5 }}
                 onDayPress={(day: any) => {
-                  setSelectedDate(day.dateString);
+                  const selectedDateMonth = getDateMonth(day.dateString);
+                  setSelectedDate(selectedDateMonth);
                 }}
                 theme={{ ...CALANDER_THEME, textDayFontSize: 14 }}
                 markingType={"period"}
@@ -325,44 +327,88 @@ const TrackMenstrualCycle = () => {
             prevPeriodData={prevPeriodData}
           />
 
-          <View style={styles.tagContainer}>
-            <ScrollView
-              horizontal={true}
-              contentContainerStyle={{
-                alignItems: "center",
-                paddingHorizontal: 10,
-              }}
-            >
-              {periodDayMonths.map((periodDay, ind) => (
+          {selectedDate === "" ? (
+            <View>
+              <View style={styles.tagContainer}>
+                <ScrollView
+                  horizontal={true}
+                  contentContainerStyle={{
+                    alignItems: "center",
+                    paddingHorizontal: 10,
+                  }}
+                >
+                  {periodDayMonths.map((periodDay, ind) => (
+                    <TouchableOpacity
+                      onPress={() => handleDateSelect(periodDay)}
+                      style={[
+                        styles.tag,
+                        {
+                          backgroundColor:
+                            selectedDay === periodDay
+                              ? COLORS.lightPrimary
+                              : "transparent",
+                          marginLeft: ind === 0 ? -10 : 5,
+                          marginRight:
+                            ind === periodDayMonths.length - 1 ? 0 : 5,
+                        },
+                      ]}
+                      key={ind}
+                    >
+                      <CustomText
+                        label={periodDay}
+                        customStyle={{
+                          color: COLORS.primary,
+                          fontFamily: "DMSansBold",
+                        }}
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+              <PeriodData selectedDay={selectedDay} />
+              <FeelingData selectedDay={selectedDay} />
+              <SymptomsData selectedDay={selectedDay} />
+            </View>
+          ) : (
+            <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <TouchableOpacity
-                  onPress={() => handleDateSelect(periodDay)}
                   style={[
                     styles.tag,
                     {
-                      backgroundColor:
-                        selectedDay === periodDay
-                          ? COLORS.lightPrimary
-                          : "transparent",
-                      marginLeft: ind === 0 ? -10 : 5,
-                      marginRight: ind === periodDayMonths.length - 1 ? 0 : 5,
+                      marginHorizontal: 5,
+                      paddingVertical: 7,
+                      alignItems: "center",
+                      width: "35%",
                     },
                   ]}
-                  key={ind}
                 >
                   <CustomText
-                    label={periodDay}
+                    label={selectedDate}
                     customStyle={{
                       color: COLORS.primary,
                       fontFamily: "DMSansBold",
                     }}
                   />
                 </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-          <PeriodData selectedDay={selectedDay} />
-          <FeelingData selectedDay={selectedDay} />
-          <SymptomsData selectedDay={selectedDay} />
+                <TouchableOpacity onPress={() => setSelectedDate("")}>
+                  <CustomText
+                    label="Period dates"
+                    customStyle={styles.currentDatesLabel}
+                  />
+                </TouchableOpacity>
+              </View>
+              <PeriodData selectedDay={selectedDate} />
+              <FeelingData selectedDay={selectedDate} />
+              <SymptomsData selectedDay={selectedDate} />
+            </View>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -432,6 +478,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "33%",
     gap: 5,
+  },
+  currentDatesLabel: {
+    color: COLORS.primary,
+    fontFamily: "DMSansBold",
+    fontSize: 19,
+    padding: 10,
+    textDecorationLine: "underline",
   },
   markInfo: {
     flexDirection: "row",
